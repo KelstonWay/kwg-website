@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Manrope', sans-serif;
+    background-color: #f9f9f9;
+    color: #1a1c1c;
+    margin: 0;
+  }
+}
+
+@layer utilities {
+  .shape-arch {
+    border-radius: 9999px 9999px 0 0;
+  }
+  .shape-pill {
+    border-radius: 9999px;
+  }
+  .organic-shape-1 {
+    border-top-left-radius: 1000px;
+    border-top-right-radius: 1000px;
+  }
+  .organic-shape-2 {
+    border-top-left-radius: 1000px;
+    border-top-right-radius: 200px;
+    border-bottom-right-radius: 100px;
+  }
+  .organic-shape-3 {
+    border-top-left-radius: 800px;
+    border-bottom-right-radius: 800px;
+    border-top-right-radius: 100px;
+    border-bottom-left-radius: 100px;
+  }
+  .glass-panel {
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.7);
+  }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+  }
+}
