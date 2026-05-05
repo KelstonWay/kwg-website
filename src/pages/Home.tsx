@@ -117,33 +117,33 @@ export default function Home() {
 
       {/* Live availability strip */}
       {preview.length > 0 && (
-        <section className="px-8 md:px-32 py-20">
-          <div className="flex justify-between items-end mb-16">
+        <section className="px-8 md:px-32 py-16">
+          <div className="flex justify-between items-center mb-8">
             <div>
-              <span className="font-label-caps text-label-caps text-secondary uppercase tracking-widest block mb-2">Weekly Live Inventory</span>
+              <span className="font-label-caps text-label-caps text-secondary uppercase tracking-widest block mb-1">Weekly Live Inventory</span>
               <h2 className="font-['Newsreader'] text-headline-xl text-on-surface">Available for Immediate Load</h2>
             </div>
-            <Link to="/availability" className="font-button text-button text-primary flex items-center gap-2 group">
+            <Link to="/availability" className="font-button text-button text-primary flex items-center gap-2 group flex-shrink-0 ml-8">
               Full Catalog <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {preview.map((item, i) => (
-              <div key={item.id} className={`group cursor-pointer ${i === 1 ? 'md:mt-8' : ''}`}>
-                <div className={`aspect-[4/5] overflow-hidden ${CARD_SHAPES[i]} border border-outline-variant/10 mb-6 bg-white transition-transform duration-500 group-hover:-translate-y-2`}>
+              <div key={item.id} className={`group cursor-pointer ${i === 1 ? 'md:mt-4' : ''}`}>
+                <div className={`aspect-[4/3] overflow-hidden ${CARD_SHAPES[i]} border border-outline-variant/10 mb-4 bg-white transition-transform duration-500 group-hover:-translate-y-1`}>
                   <img
                     src={item.photo_url ?? HERO_IMG}
                     alt={item.plant_name}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex justify-between items-start px-2">
+                <div className="flex justify-between items-center px-1">
                   <div>
-                    <h3 className="font-['Newsreader'] italic text-xl text-on-surface group-hover:text-primary transition-colors">{item.plant_name}</h3>
-                    <p className="font-body-md text-stone-500">Qty: {item.qty_available} Available</p>
+                    <h3 className="font-['Newsreader'] italic text-base text-on-surface group-hover:text-primary transition-colors">{item.plant_name}</h3>
+                    <p className="font-body-md text-stone-500 text-sm">{item.qty_available} available</p>
                   </div>
                   {item.unit_price && (
-                    <span className="font-label-caps text-on-secondary-fixed-variant bg-secondary-fixed px-3 py-1 rounded-full">${item.unit_price.toFixed(2)}</span>
+                    <span className="font-label-caps text-xs text-on-secondary-fixed-variant bg-secondary-fixed px-2 py-1 rounded-full flex-shrink-0">${item.unit_price.toFixed(2)}</span>
                   )}
                 </div>
               </div>
