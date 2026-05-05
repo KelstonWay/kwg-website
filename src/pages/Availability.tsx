@@ -30,11 +30,15 @@ export default function Availability() {
 
       const { data } = await supabase
         .from('availability_release_items')
-        .select('*')
+        .select('*, plants(name, sku, size)')
         .eq('release_id', release.id)
         .gt('qty_available', 0)
-        .order('plant_name')
-      if (data) setItems(data as AvailabilityItem[])
+      if (data) setItems(data.map((i: any) => ({
+        ...i,
+        plant_name: i.plants?.name ?? '',
+        plant_sku: i.plants?.sku ?? '',
+        plant_size: i.plants?.size ?? '',
+      })) as AvailabilityItem[])
       setLoading(false)
     }
     load()

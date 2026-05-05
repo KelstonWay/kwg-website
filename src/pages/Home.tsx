@@ -27,11 +27,16 @@ export default function Home() {
 
       const { data: items } = await supabase
         .from('availability_release_items')
-        .select('*')
+        .select('*, plants(name, sku, size)')
         .eq('release_id', release.id)
         .gt('qty_available', 0)
         .limit(3)
-      if (items) setPreview(items as AvailabilityItem[])
+      if (items) setPreview(items.map((i: any) => ({
+        ...i,
+        plant_name: i.plants?.name ?? '',
+        plant_sku: i.plants?.sku ?? '',
+        plant_size: i.plants?.size ?? '',
+      })) as AvailabilityItem[])
     }
     load()
   }, [])
