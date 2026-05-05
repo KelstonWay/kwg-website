@@ -126,26 +126,26 @@ export default function Home() {
               Full Catalog <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {preview.map((item) => (
-              <div key={item.id} className="group cursor-pointer">
-                <div className="aspect-[4/5] overflow-hidden rounded-xl border border-outline-variant/10 mb-6 bg-surface-container transition-transform duration-500 group-hover:-translate-y-2">
+              <Link key={item.id} to="/availability" className="group cursor-pointer">
+                <div className="aspect-[4/5] overflow-hidden rounded-xl border border-outline-variant/10 mb-4 bg-surface-container transition-transform duration-500 group-hover:-translate-y-1">
                   <img
                     src={item.photo_url ?? HERO_IMG}
                     alt={item.plant_name}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex justify-between items-start px-2">
+                <div className="flex justify-between items-start px-1">
                   <div>
-                    <h3 className="font-['Newsreader'] italic text-xl text-on-surface group-hover:text-primary transition-colors">{item.plant_name}</h3>
-                    <p className="font-body-md text-stone-500 text-sm mt-0.5">{item.plant_size} · {item.qty_available} available</p>
+                    <h3 className="font-['Newsreader'] italic text-base text-on-surface group-hover:text-primary transition-colors">{item.plant_name}</h3>
+                    <p className="font-body-md text-stone-500 text-xs mt-0.5">{item.plant_size} · {item.qty_available} available</p>
                   </div>
                   {item.unit_price && (
-                    <span className="font-label-caps text-xs text-on-secondary-fixed-variant bg-secondary-fixed px-3 py-1 rounded-full flex-shrink-0 mt-1">${item.unit_price.toFixed(2)}</span>
+                    <span className="font-label-caps text-[10px] text-on-secondary-fixed-variant bg-secondary-fixed px-2 py-0.5 rounded-full flex-shrink-0 mt-1">${item.unit_price.toFixed(2)}</span>
                   )}
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
