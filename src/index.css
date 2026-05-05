@@ -15,6 +15,11 @@
   .shape-arch {
     border-radius: 9999px 9999px 0 0;
   }
+  .shape-card {
+    border-radius: 12px 12px 8px 8px;
+    border-top-left-radius: 80px;
+    border-top-right-radius: 80px;
+  }
   .shape-pill {
     border-radius: 9999px;
   }

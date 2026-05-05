@@ -8,7 +8,6 @@ const HERO_IMG2 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuC5rJsZj0s
 const BENTO_IMG = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDbYPDSXshUOu9E_hnQV5Z4_7LkjpIZcLe8fY90esgAr2IY_28Yy0z7pKsd9WmnY04Gj1HMD0nPt8QluMp8FhTkeB0p0kG1F8U-S0qGUmWouffHDXXmjQ2Ua4LyS-0vVPGiJAmkLnqLvAyb2ST1n510dkeH2rzm_3HJrkK3LJEXypc69hE25r4aOo404JVxMKkNTx6KbMi_LzNgIRWrI6ERgEp9tbg7kHBlz_mF5e0u7yN6QxlgE8pG3bagvE_BUSPOUYqcKIUsaOgo'
 const BENTO_IMG2 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuAwql5SlXI1Bl5XhtGUgOJtqJxcfH8FMhRqlV1vtmCLrqmHsQFwqxEZXwz2kpV5mtJqHESLDDVb00XpKC4-zAsnt1c6JqgDPU8nNrd9MxcenUwA6RZU9GNNO2RY3glxFSC-qyUegSqpTJxPeiDX-XJrSXSVt5oC8Rsdpf8QzKwzB-iR8xxSb9NEg7lXAWaB0k63pjjjyPZmUtHh9lU4DlYzut59U4dLXzXjfmic5ZLjbuNBRX1I-4UfxlUg-k8Bmhno160Blg6b6Fyx'
 
-const CARD_SHAPES = ['shape-arch', 'shape-pill', 'organic-shape-3']
 
 export default function Home() {
   const [preview, setPreview] = useState<AvailabilityItem[]>([])
@@ -128,9 +127,9 @@ export default function Home() {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {preview.map((item, i) => (
-              <div key={item.id} className={`group cursor-pointer ${i === 1 ? 'md:mt-4' : ''}`}>
-                <div className={`aspect-[4/3] overflow-hidden ${CARD_SHAPES[i]} border border-outline-variant/10 mb-4 bg-white transition-transform duration-500 group-hover:-translate-y-1`}>
+            {preview.map((item) => (
+              <div key={item.id} className="group cursor-pointer">
+                <div className="aspect-[4/3] overflow-hidden shape-card border border-outline-variant/10 mb-4 bg-white transition-transform duration-500 group-hover:-translate-y-1">
                   <img
                     src={item.photo_url ?? HERO_IMG}
                     alt={item.plant_name}
