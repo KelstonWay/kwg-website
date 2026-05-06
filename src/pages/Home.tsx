@@ -62,25 +62,25 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="px-8 md:px-32 py-20 flex flex-col md:grid md:grid-cols-12 gap-16 items-center overflow-hidden">
+      <section className="px-5 md:px-32 py-12 md:py-20 flex flex-col md:grid md:grid-cols-12 gap-10 md:gap-16 items-center overflow-hidden">
         <div className="md:col-span-6 z-10">
           <span className="font-label-caps text-label-caps text-secondary mb-4 block">PREMIUM B2B NURSERY SOLUTIONS</span>
-          <h1 className="font-['Newsreader'] text-display-lg text-on-surface mb-8">
+          <h1 className="font-['Newsreader'] text-3xl md:text-display-lg text-on-surface mb-6 md:mb-8">
             Elevating <span className="italic text-primary">Commercial Landscapes</span> through horticultural excellence.
           </h1>
-          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-lg mb-10 leading-relaxed">
+          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-lg mb-8 md:mb-10 leading-relaxed text-sm md:text-base">
             Kelston Way provides garden centers and landscape professionals with a curated supply of rare cultivars and resilient Hill Country species at scale.
           </p>
-          <div className="flex gap-4 flex-wrap">
-            <Link to="/availability" className="px-8 py-4 bg-primary text-on-primary font-button text-button rounded-sm hover:bg-primary-container transition-all duration-300">
+          <div className="flex gap-3 md:gap-4 flex-wrap">
+            <Link to="/availability" className="px-6 md:px-8 py-3 md:py-4 bg-primary text-on-primary font-button text-button rounded-sm hover:bg-primary-container transition-all duration-300 text-sm">
               View Catalog
             </Link>
-            <a href="#inquire" className="px-8 py-4 border border-secondary text-secondary font-button text-button rounded-sm hover:bg-secondary-container/20 transition-all duration-300">
+            <a href="#inquire" className="px-6 md:px-8 py-3 md:py-4 border border-secondary text-secondary font-button text-button rounded-sm hover:bg-secondary-container/20 transition-all duration-300 text-sm">
               Inquire for Wholesale
             </a>
           </div>
         </div>
-        <div className="md:col-span-6 relative h-[600px] w-full">
+        <div className="md:col-span-6 relative h-[260px] md:h-[600px] w-full">
           <div className="absolute top-0 right-0 w-3/4 h-[400px] shape-arch overflow-hidden border border-outline-variant/20 shadow-sm">
             <img src={HERO_IMG} alt="Commercial greenhouse interior" className="w-full h-full object-cover" />
           </div>
@@ -91,7 +91,7 @@ export default function Home() {
       </section>
 
       {/* Services */}
-      <section className="px-8 md:px-32 py-24 bg-stone-100">
+      <section className="px-5 md:px-32 py-16 md:py-24 bg-stone-100">
         <div className="max-w-4xl mb-16">
           <span className="font-label-caps text-label-caps text-secondary mb-4 block">PROFESSIONAL SERVICES</span>
           <h2 className="font-['Newsreader'] text-headline-xl text-on-surface">Built for Professionals</h2>
@@ -116,7 +116,7 @@ export default function Home() {
 
       {/* Live availability strip */}
       {preview.length > 0 && (
-        <section className="px-8 md:px-32 py-16">
+        <section className="px-5 md:px-32 py-12 md:py-16">
           <div className="flex justify-between items-center mb-8">
             <div>
               <span className="font-label-caps text-label-caps text-secondary uppercase tracking-widest block mb-1">Weekly Live Inventory</span>
@@ -152,7 +152,7 @@ export default function Home() {
       )}
 
       {/* Bento */}
-      <section className="px-8 md:px-32 py-20 bg-stone-50">
+      <section className="px-5 md:px-32 py-14 md:py-20 bg-stone-50">
         <div className="text-center mb-20 max-w-2xl mx-auto">
           <span className="font-label-caps text-label-caps text-secondary mb-4 block">OUR FACILITY</span>
           <h2 className="font-['Newsreader'] text-headline-xl mb-6">Nursery Operations</h2>
@@ -197,7 +197,7 @@ export default function Home() {
       </section>
 
       {/* Wholesale Inquiry */}
-      <section id="inquire" className="px-8 md:px-32 py-32 bg-primary text-on-primary">
+      <section id="inquire" className="px-5 md:px-32 py-16 md:py-32 bg-primary text-on-primary">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-16">
           <div className="md:w-1/2">
             <h2 className="font-['Newsreader'] text-headline-xl mb-6">Request Wholesale <span className="italic opacity-80">Access</span></h2>

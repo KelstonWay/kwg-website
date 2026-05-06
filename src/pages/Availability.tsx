@@ -196,12 +196,12 @@ export default function Availability() {
         </div>
       )}
 
-      <div className={`px-8 md:px-32 py-12 ${orderMode ? 'pb-32' : ''}`}>
+      <div className={`px-4 md:px-32 py-8 md:py-12 ${orderMode ? 'pb-32' : ''}`}>
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
             <span className="font-label-caps text-label-caps text-secondary mb-1 block">LIVE AVAILABILITY</span>
-            <h1 className="font-['Newsreader'] text-headline-xl text-on-surface">Current Stock</h1>
+            <h1 className="font-['Newsreader'] text-2xl md:text-headline-xl text-on-surface">Current Stock</h1>
             {publishedAt && (
               <p className="font-body-md text-on-surface-variant text-sm mt-1">
                 Updated {new Date(publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
@@ -248,26 +248,26 @@ export default function Availability() {
         )}
 
         {/* Filter + search bar */}
-        <div className="bg-white border border-outline-variant/50 rounded-xl p-3 mb-4 flex flex-wrap items-center gap-3">
+        <div className="bg-white border border-outline-variant/50 rounded-xl p-3 mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
           {/* Search */}
-          <div className="relative">
+          <div className="relative flex-shrink-0">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
             <input
               type="text"
               placeholder="Search plants..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="bg-surface-container-low border-none rounded-lg py-1.5 pl-9 pr-3 text-sm font-body-md w-44 focus:outline-none focus:ring-1 focus:ring-primary"
+              className="bg-surface-container-low border-none rounded-lg py-1.5 pl-9 pr-3 text-sm font-body-md w-full sm:w-44 focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
-          <div className="w-px h-5 bg-outline-variant hidden sm:block" />
-          {/* Category chips */}
-          <div className="flex gap-1.5 flex-wrap">
+          <div className="w-px h-5 bg-outline-variant hidden sm:block flex-shrink-0" />
+          {/* Category chips — horizontal scroll on mobile */}
+          <div className="flex gap-1.5 overflow-x-auto pb-0.5 flex-nowrap sm:flex-wrap flex-1 min-w-0 scrollbar-none">
             {FILTERS.map(f => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-3 py-1 rounded-full font-button text-button transition-all text-xs ${
+                className={`flex-shrink-0 px-3 py-1 rounded-full font-button text-button transition-all text-xs ${
                   filter === f
                     ? 'bg-primary text-on-primary'
                     : 'border border-outline-variant text-on-surface-variant hover:border-primary'
@@ -277,7 +277,7 @@ export default function Availability() {
               </button>
             ))}
           </div>
-          <div className="ml-auto font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest hidden sm:block">
+          <div className="ml-auto font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest hidden sm:block flex-shrink-0">
             {filtered.length} of {items.length}
           </div>
         </div>
@@ -409,12 +409,12 @@ export default function Availability() {
           orderLines.length > 0 ? 'translate-y-0' : 'translate-y-full'
         }`}>
           {items.some(i => parseInt(qtys[i.id] ?? '') > i.qty_available) && (
-            <div className="bg-secondary-fixed text-on-secondary-fixed px-8 md:px-32 py-2 flex items-center gap-2">
+            <div className="bg-secondary-fixed text-on-secondary-fixed px-4 md:px-32 py-2 flex items-center gap-2">
               <span className="material-symbols-outlined text-[16px]">warning</span>
               <p className="font-body-md text-xs">Some quantities exceed available stock — we'll reach out to confirm before fulfilling.</p>
             </div>
           )}
-          <div className="bg-primary text-on-primary px-8 md:px-32 py-4 flex items-center justify-between shadow-2xl">
+          <div className="bg-primary text-on-primary px-4 md:px-32 py-4 flex items-center justify-between shadow-2xl">
             <div className="flex items-center gap-6">
               <div>
                 <p className="font-label-caps text-[10px] text-on-primary/70 uppercase tracking-widest">Your Order</p>

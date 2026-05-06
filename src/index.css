@@ -42,6 +42,13 @@
     backdrop-filter: blur(8px);
     background: rgba(255, 255, 255, 0.7);
   }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
   .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     font-family: 'Material Symbols Outlined';
