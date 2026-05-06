@@ -20,7 +20,7 @@ export default function Nav() {
         </Link>
         <nav className="hidden md:flex gap-8">
           <Link to="/availability" className="font-['Newsreader'] italic text-lg text-stone-500 hover:text-emerald-700 transition-colors duration-300">
-            Wholesale Catalog
+            Availability
           </Link>
           <Link to="/our-story" className="font-['Newsreader'] italic text-lg text-stone-500 hover:text-emerald-700 transition-colors duration-300">
             Our Story

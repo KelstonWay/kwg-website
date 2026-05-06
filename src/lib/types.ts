@@ -9,6 +9,7 @@ export interface AvailabilityItem {
   photo_url: string | null
   grade: 1 | 2 | 3 | null
   release_id: string
+  notes: string | null
 }
 
 export interface CartItem {
