@@ -15,8 +15,8 @@ export default function Nav() {
   return (
     <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 md:px-20 h-24 bg-white/90 backdrop-blur-md border-b border-emerald-100/50 transition-all duration-300">
       <div className="flex items-center gap-12">
-        <Link to="/" className="font-['Newsreader'] text-2xl font-semibold tracking-tight text-emerald-900 italic">
-          Kelston Way
+        <Link to="/">
+          <img src="/logo-cropped.png" alt="Kelston Way" className="h-16 w-auto" />
         </Link>
         <nav className="hidden md:flex gap-8">
           <Link to="/availability" className="font-['Newsreader'] italic text-lg text-stone-500 hover:text-emerald-700 transition-colors duration-300">

@@ -115,21 +115,19 @@ export default function Availability() {
         </div>
       )}
 
-      {/* Item bottom sheet */}
+      {/* Item card modal */}
       {selected && (
-        <div className="fixed inset-0 z-40 flex flex-col justify-end" onClick={() => setSelected(null)}>
-          <div className="absolute inset-0 bg-black/40" />
+        <div className="fixed inset-0 z-40 flex items-center justify-center p-6" onClick={() => setSelected(null)}>
+          <div className="absolute inset-0 bg-black/50" />
           <div
-            className="relative bg-white rounded-t-2xl shadow-2xl max-w-lg w-full mx-auto p-6 pb-10"
+            className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8"
             onClick={e => e.stopPropagation()}
           >
-            {/* Drag handle */}
-            <div className="w-10 h-1 bg-outline-variant rounded-full mx-auto mb-5" />
 
             {/* Photo */}
             {selected.photo_url ? (
               <div
-                className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-5 cursor-zoom-in"
+                className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-4 cursor-zoom-in"
                 onClick={() => setLightbox(selected.photo_url!)}
               >
                 <img src={selected.photo_url} alt={selected.plant_name} className="w-full h-full object-cover" />
@@ -372,17 +370,24 @@ export default function Availability() {
                           <input
                             type="number"
                             min="0"
-                            max={item.qty_available}
                             placeholder="0"
                             value={qty}
                             disabled={!item.unit_price}
                             onChange={e => setQtys(prev => ({ ...prev, [item.id]: e.target.value }))}
                             className={`w-20 text-center border rounded-lg px-2 py-1.5 text-sm font-body-md focus:outline-none transition-colors disabled:opacity-30 ${
-                              isSelected
+                              parseInt(qty) > item.qty_available
+                                ? 'border-amber-400 bg-secondary-fixed/40 text-amber-800 font-semibold'
+                                : isSelected
                                 ? 'border-primary bg-primary-fixed/30 text-primary font-semibold'
                                 : 'border-outline-variant focus:border-primary'
                             }`}
                           />
+                          {parseInt(qty) > item.qty_available && (
+                            <div className="flex items-center justify-center gap-1 mt-1">
+                              <span className="material-symbols-outlined text-amber-600 text-[13px]">warning</span>
+                              <span className="font-label-caps text-[9px] text-amber-700 leading-tight">Exceeds stock</span>
+                            </div>
+                          )}
                         </td>
                       ) : (
                         <td className="py-2 pr-4 rounded-r-xl text-right">
@@ -403,6 +408,12 @@ export default function Availability() {
         <div className={`fixed bottom-0 left-0 right-0 z-40 transition-all duration-300 ${
           orderLines.length > 0 ? 'translate-y-0' : 'translate-y-full'
         }`}>
+          {items.some(i => parseInt(qtys[i.id] ?? '') > i.qty_available) && (
+            <div className="bg-secondary-fixed text-on-secondary-fixed px-8 md:px-32 py-2 flex items-center gap-2">
+              <span className="material-symbols-outlined text-[16px]">warning</span>
+              <p className="font-body-md text-xs">Some quantities exceed available stock — we'll reach out to confirm before fulfilling.</p>
+            </div>
+          )}
           <div className="bg-primary text-on-primary px-8 md:px-32 py-4 flex items-center justify-between shadow-2xl">
             <div className="flex items-center gap-6">
               <div>
