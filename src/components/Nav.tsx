@@ -37,10 +37,10 @@ export default function Nav() {
                 <Link
                   key={to}
                   to={to}
-                  className={`px-4 py-1.5 rounded-full font-button text-button text-sm transition-all duration-200 ${
+                  className={`px-3 py-1.5 font-button text-sm transition-all duration-200 ${
                     active
-                      ? 'bg-secondary text-on-secondary font-semibold'
-                      : 'bg-secondary/70 text-on-secondary hover:bg-secondary'
+                      ? 'text-on-surface font-semibold border-b border-on-surface'
+                      : 'text-on-surface-variant hover:text-on-surface'
                   }`}
                 >
                   {label}
@@ -92,10 +92,10 @@ export default function Nav() {
                 <Link
                   key={to}
                   to={to}
-                  className={`px-4 py-3 rounded-xl font-button text-button transition-all ${
+                  className={`px-4 py-3 font-button text-button transition-all ${
                     active
-                      ? 'bg-secondary text-on-secondary font-semibold'
-                      : 'text-on-surface hover:bg-surface-container'
+                      ? 'text-on-surface font-semibold'
+                      : 'text-on-surface-variant hover:text-on-surface'
                   }`}
                 >
                   {label}
