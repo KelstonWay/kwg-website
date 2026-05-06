@@ -119,7 +119,7 @@ export default function Order() {
         <h2 className="font-['Newsreader'] text-headline-md text-on-surface mb-4">Your order is empty</h2>
         <p className="font-body-md text-on-surface-variant mb-8">Browse our current availability to add items.</p>
         <a href="/availability" className="px-8 py-4 bg-primary text-on-primary font-button text-button rounded-sm hover:bg-primary-container transition-all">
-          View Catalog
+          View Availability
         </a>
       </div>
     )

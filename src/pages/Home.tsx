@@ -73,7 +73,7 @@ export default function Home() {
           </p>
           <div className="flex gap-3 md:gap-4 flex-wrap">
             <Link to="/availability" className="px-6 md:px-8 py-3 md:py-4 bg-primary text-on-primary font-button text-button rounded-sm hover:bg-primary-container transition-all duration-300 text-sm">
-              View Catalog
+              View Availability
             </Link>
             <a href="#inquire" className="px-6 md:px-8 py-3 md:py-4 border border-secondary text-secondary font-button text-button rounded-sm hover:bg-secondary-container/20 transition-all duration-300 text-sm">
               Inquire for Wholesale
@@ -123,7 +123,7 @@ export default function Home() {
               <h2 className="font-['Newsreader'] text-headline-xl text-on-surface">Available for Immediate Load</h2>
             </div>
             <Link to="/availability" className="font-button text-button text-primary flex items-center gap-2 group flex-shrink-0 ml-8">
-              Full Catalog <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+              Full Availability <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

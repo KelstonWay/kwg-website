@@ -21,7 +21,7 @@ export default function Footer() {
         <div className="md:col-span-2">
           <h4 className="font-label-caps text-label-caps text-on-surface mb-6">WHOLESALE</h4>
           <ul className="space-y-4">
-            <li><Link to="/availability" className="font-['Newsreader'] text-base text-stone-600 hover:text-emerald-800 transition-opacity opacity-80 hover:opacity-100">Current Catalog</Link></li>
+            <li><Link to="/availability" className="font-['Newsreader'] text-base text-stone-600 hover:text-emerald-800 transition-opacity opacity-80 hover:opacity-100">Current Availability</Link></li>
             <li><Link to="/order" className="font-['Newsreader'] text-base text-stone-600 hover:text-emerald-800 transition-opacity opacity-80 hover:opacity-100">Place an Order</Link></li>
           </ul>
         </div>
