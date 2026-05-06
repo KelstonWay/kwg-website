@@ -22,7 +22,7 @@ export default function App() {
       <ScrollToTop />
       <div className="min-h-screen bg-background text-on-background flex flex-col">
         <Nav />
-        <main className="flex-1 pt-24">
+        <main className="flex-1 pt-16">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/availability" element={<Availability />} />

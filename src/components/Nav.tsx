@@ -1,10 +1,18 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { cartCount } from '../lib/cart'
+
+const NAV_LINKS = [
+  { to: '/', label: 'Home' },
+  { to: '/availability', label: 'Availability' },
+  { to: '/our-story', label: 'Our Story' },
+  { to: '/contact', label: 'Contact' },
+]
 
 export default function Nav() {
   const [count, setCount] = useState(cartCount())
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   useEffect(() => {
     const update = () => setCount(cartCount())
@@ -13,21 +21,28 @@ export default function Nav() {
   }, [])
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 md:px-20 h-24 bg-white/90 backdrop-blur-md border-b border-emerald-100/50 transition-all duration-300">
-      <div className="flex items-center gap-12">
+    <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 md:px-20 h-16 bg-white/90 backdrop-blur-md border-b border-emerald-100/50 transition-all duration-300">
+      <div className="flex items-center gap-8">
         <Link to="/">
-          <img src="/logo-cropped.png" alt="Kelston Way" className="h-16 w-auto" />
+          <img src="/logo-cropped.png" alt="Kelston Way" className="h-11 w-auto" />
         </Link>
-        <nav className="hidden md:flex gap-8">
-          <Link to="/availability" className="font-['Newsreader'] italic text-lg text-stone-500 hover:text-emerald-700 transition-colors duration-300">
-            Availability
-          </Link>
-          <Link to="/our-story" className="font-['Newsreader'] italic text-lg text-stone-500 hover:text-emerald-700 transition-colors duration-300">
-            Our Story
-          </Link>
-          <Link to="/contact" className="font-['Newsreader'] italic text-lg text-stone-500 hover:text-emerald-700 transition-colors duration-300">
-            Contact
-          </Link>
+        <nav className="hidden md:flex gap-2">
+          {NAV_LINKS.map(({ to, label }) => {
+            const active = to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(to + '/')
+            return (
+              <Link
+                key={to}
+                to={to}
+                className={`px-4 py-1.5 rounded-full font-button text-button text-sm transition-all duration-200 ${
+                  active
+                    ? 'bg-secondary text-on-secondary font-semibold'
+                    : 'bg-secondary/70 text-on-secondary hover:bg-secondary'
+                }`}
+              >
+                {label}
+              </Link>
+            )
+          })}
         </nav>
       </div>
       <div className="flex items-center gap-4">
@@ -45,7 +60,7 @@ export default function Nav() {
         </button>
         <Link
           to="/availability"
-          className="px-6 py-3 bg-primary text-on-primary font-button text-button rounded-sm hover:bg-primary-container transition-all duration-300"
+          className="px-6 py-3 bg-secondary text-on-secondary font-button text-button font-semibold rounded-sm hover:opacity-90 transition-all duration-300"
         >
           Order Now
         </Link>
