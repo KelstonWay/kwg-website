@@ -18,6 +18,7 @@ export default function Availability() {
   const [search, setSearch] = useState('')
   const [sortField, setSortField] = useState<'name' | 'size' | 'qty' | 'price' | null>(null)
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
+  const [showDownload, setShowDownload] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -75,6 +76,64 @@ export default function Availability() {
   })
   const totalUnits = orderLines.reduce((s, i) => s + (parseInt(qtys[i.id]) || 0), 0)
   const totalPrice = orderLines.reduce((s, i) => s + (parseInt(qtys[i.id]) || 0) * (i.unit_price ?? 0), 0)
+
+  function downloadCSV() {
+    const rows = [
+      ['Plant Name', 'Item #', 'Size', 'Qty Available', 'Unit Price', 'Notes'],
+      ...filtered.map(i => [
+        i.plant_name,
+        i.plant_sku,
+        i.plant_size,
+        i.qty_available,
+        i.unit_price ?? '',
+        i.notes ?? '',
+      ]),
+    ]
+    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `kelston-way-availability-${new Date().toISOString().slice(0,10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+    setShowDownload(false)
+  }
+
+  function downloadPDF() {
+    const dateStr = publishedAt ? new Date(publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''
+    const rows = filtered.map(i => `
+      <tr>
+        <td>${i.plant_name}</td>
+        <td>${i.plant_sku}</td>
+        <td>${i.plant_size}</td>
+        <td>${i.qty_available.toLocaleString()}</td>
+        <td>${i.unit_price ? `$${i.unit_price.toFixed(2)}` : '—'}</td>
+        <td>${i.notes ?? ''}</td>
+      </tr>`).join('')
+    const html = `<!DOCTYPE html><html><head><title>Kelston Way — Availability</title>
+    <style>
+      body { font-family: Georgia, serif; color: #1a1c1c; padding: 40px; }
+      h1 { font-size: 28px; margin-bottom: 4px; }
+      p { color: #666; font-size: 13px; margin-bottom: 24px; }
+      table { width: 100%; border-collapse: collapse; font-size: 13px; }
+      th { text-align: left; border-bottom: 2px solid #4c614c; padding: 8px 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #4c614c; }
+      td { padding: 8px 6px; border-bottom: 1px solid #eee; }
+      @media print { body { padding: 20px; } }
+    </style></head><body>
+    <h1>Kelston Way Greenhouse</h1>
+    <p>Current Availability — ${dateStr}</p>
+    <table><thead><tr><th>Plant</th><th>Item #</th><th>Size</th><th>Qty</th><th>Price</th><th>Notes</th></tr></thead>
+    <tbody>${rows}</tbody></table>
+    </body></html>`
+    const w = window.open('', '_blank')
+    if (!w) return
+    w.document.write(html)
+    w.document.close()
+    w.focus()
+    setTimeout(() => { w.print() }, 400)
+    setShowDownload(false)
+  }
 
   function handleSort(field: 'name' | 'size' | 'qty' | 'price') {
     if (sortField === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc')
@@ -226,14 +285,37 @@ export default function Availability() {
                 Cancel Order
               </button>
             )}
-            <a
-              href="#"
-              onClick={e => e.preventDefault()}
-              className="font-button text-button text-primary border border-primary px-5 py-2.5 hover:bg-primary hover:text-on-primary transition-all rounded-sm flex items-center gap-2"
-            >
-              <span className="material-symbols-outlined text-lg">download</span>
-              <span className="hidden md:inline">Download List</span>
-            </a>
+            <div className="relative">
+              <button
+                onClick={() => setShowDownload(v => !v)}
+                className="font-button text-button text-primary border border-primary px-5 py-2.5 hover:bg-primary hover:text-on-primary transition-all rounded-sm flex items-center gap-2"
+              >
+                <span className="material-symbols-outlined text-lg">download</span>
+                <span className="hidden md:inline">Download List</span>
+              </button>
+              {showDownload && (
+                <>
+                  <div className="fixed inset-0 z-30" onClick={() => setShowDownload(false)} />
+                  <div className="absolute right-0 top-full mt-2 bg-white border border-outline-variant/50 rounded-xl shadow-lg z-40 overflow-hidden min-w-[180px]">
+                    <button
+                      onClick={downloadPDF}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm font-button text-on-surface hover:bg-surface-container transition-colors text-left"
+                    >
+                      <span className="material-symbols-outlined text-lg text-primary">picture_as_pdf</span>
+                      Download PDF
+                    </button>
+                    <div className="h-px bg-outline-variant/30 mx-3" />
+                    <button
+                      onClick={downloadCSV}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm font-button text-on-surface hover:bg-surface-container transition-colors text-left"
+                    >
+                      <span className="material-symbols-outlined text-lg text-primary">table_chart</span>
+                      Download Excel (.csv)
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
