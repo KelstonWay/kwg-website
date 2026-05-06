@@ -13,7 +13,7 @@ export default function OurStory() {
             Rooted in the <span className="italic text-primary">Texas Hill Country</span>
           </h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-            Kelston Way Greenhouse is a family-built operation rising from 5 acres of Central Texas land. Founded by Art, Samuel, and Titus Vanwingerden, we're building one of the region's premier commercial greenhouses — targeting a January 2027 opening.
+            Kelston Way Greenhouse is a family-built operation rising from 5 acres of Central Texas land. Founded by Art, Titus, and Samuel Vanwingerden, we're building one of the region's premier commercial greenhouses — targeting a January 2027 opening.
           </p>
         </div>
       </section>
