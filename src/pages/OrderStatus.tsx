@@ -25,13 +25,19 @@ export default function OrderStatus() {
   const [confirmed, setConfirmed] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const isOwner = token && order && token === order.confirm_token
-
   useEffect(() => {
     async function load() {
       if (!id) return
-      const { data: o } = await supabase.from('wholesale_orders').select('*').eq('id', id).single()
-      const { data: its } = await supabase.from('wholesale_order_items').select('*').eq('order_id', id)
+      // Never select confirm_token — server verifies it
+      const { data: o } = await supabase
+        .from('wholesale_orders')
+        .select('id, created_at, business_name, contact_name, email, phone, notes, status, total_units, total_price')
+        .eq('id', id)
+        .single()
+      const { data: its } = await supabase
+        .from('wholesale_order_items')
+        .select('*')
+        .eq('order_id', id)
       if (o) setOrder(o as WholesaleOrder)
       if (its) setItems(its as OrderItem[])
       setLoading(false)
@@ -40,33 +46,21 @@ export default function OrderStatus() {
   }, [id])
 
   async function handleConfirm() {
-    if (!order || !isOwner) return
+    if (!order || !token) return
     setConfirming(true)
     setError(null)
 
-    const { error: updateErr } = await supabase
-      .from('wholesale_orders')
-      .update({ status: 'confirmed' })
-      .eq('id', order.id)
+    const res = await fetch('/api/confirm-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId: order.id, token }),
+    })
 
-    if (updateErr) {
-      setError('Failed to confirm order. Please try again.')
+    const data = await res.json()
+    if (!res.ok) {
+      setError(data.error ?? 'Failed to confirm order. Please try again.')
       setConfirming(false)
       return
-    }
-
-    const resendKey = import.meta.env.VITE_RESEND_API_KEY
-    if (resendKey) {
-      await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          from: 'orders@kelstonway.com',
-          to: order.email,
-          subject: 'Your Kelston Way Order is Confirmed',
-          html: `<h2>Order Confirmed</h2><p>Hi ${order.contact_name},</p><p>Your wholesale order has been confirmed. We'll be in touch shortly with your invoice.</p><p>Order ref: <strong>${order.id.slice(0, 8).toUpperCase()}</strong></p><p>— Kelston Way Greenhouse</p>`,
-        }),
-      })
     }
 
     setOrder(o => o ? { ...o, status: 'confirmed' } : o)
@@ -149,7 +143,7 @@ export default function OrderStatus() {
         </div>
       </div>
 
-      {isOwner && order.status === 'pending' && (
+      {token && order.status === 'pending' && (
         <div className="p-8 border border-primary/30 bg-primary/5 rounded-sm">
           <h3 className="font-['Newsreader'] text-xl text-on-surface mb-3">Confirm This Order</h3>
           <p className="font-body-md text-on-surface-variant mb-6">

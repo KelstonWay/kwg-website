@@ -42,18 +42,10 @@ export default function Home() {
 
   async function handleInquiry(e: React.FormEvent) {
     e.preventDefault()
-    const resendKey = import.meta.env.VITE_RESEND_API_KEY
-    const samuelEmail = import.meta.env.VITE_SAMUEL_EMAIL
-    if (!resendKey) { setSubmitted(true); return }
-    await fetch('https://api.resend.com/emails', {
+    await fetch('/api/send-inquiry', {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: 'orders@kelstonway.com',
-        to: samuelEmail,
-        subject: `Wholesale Access Request — ${email}`,
-        html: `<p>New wholesale inquiry from: <strong>${email}</strong></p>`,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
     })
     setSubmitted(true)
     setEmail('')

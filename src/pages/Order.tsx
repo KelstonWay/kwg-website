@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getCart, updateQty, removeFromCart, cartTotal, clearCart } from '../lib/cart'
-import { supabase } from '../lib/supabase'
 import type { CartItem } from '../lib/types'
 
 export default function Order() {
@@ -36,73 +35,22 @@ export default function Order() {
     setError(null)
 
     try {
-      const totalUnits = items.reduce((s, i) => s + i.qty, 0)
-      const totalPrice = cartTotal()
-      const { data: order, error: orderErr } = await supabase
-        .from('wholesale_orders')
-        .insert({
-          business_name: form.business_name,
-          contact_name: form.contact_name,
-          email: form.email,
-          phone: form.phone || null,
-          notes: form.notes || null,
-          total_units: totalUnits,
-          total_price: totalPrice,
-        })
-        .select('id, confirm_token')
-        .single()
+      // Send only IDs + quantities — server re-prices from DB
+      const res = await fetch('/api/submit-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: items.map(i => ({ release_item_id: i.release_item_id, qty: i.qty })),
+          contact: form,
+        }),
+      })
 
-      if (orderErr || !order) throw new Error(orderErr?.message ?? 'Failed to create order')
-
-      await supabase.from('wholesale_order_items').insert(
-        items.map(i => ({
-          order_id: order.id,
-          release_item_id: i.release_item_id,
-          plant_id: i.plant_id,
-          plant_name: i.plant_name,
-          plant_sku: i.plant_sku,
-          plant_size: i.plant_size,
-          unit_price: i.unit_price,
-          qty_requested: i.qty,
-          line_total: i.qty * i.unit_price,
-        }))
-      )
-
-      const resendKey = import.meta.env.VITE_RESEND_API_KEY
-      const samuelEmail = import.meta.env.VITE_SAMUEL_EMAIL
-      const confirmUrl = `https://kelstonway.com/order/${order.id}?token=${order.confirm_token}`
-      const itemsHtml = items.map(i =>
-        `<tr><td>${i.plant_name}</td><td>${i.plant_size}</td><td>${i.qty}</td><td>$${i.unit_price.toFixed(2)}</td><td>$${(i.qty * i.unit_price).toFixed(2)}</td></tr>`
-      ).join('')
-
-      if (resendKey) {
-        await Promise.all([
-          fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              from: 'orders@kelstonway.com',
-              to: form.email,
-              subject: 'Order Received — Kelston Way Greenhouse',
-              html: `<h2>Thank you, ${form.contact_name}!</h2><p>We've received your wholesale order (ref: <strong>${order.id.slice(0, 8).toUpperCase()}</strong>) and will be in touch within 1 business day.</p><p>— Kelston Way Greenhouse</p>`,
-            }),
-          }),
-          fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              from: 'orders@kelstonway.com',
-              to: samuelEmail,
-              subject: `New Wholesale Order — ${form.business_name} — $${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
-              html: `<h2>New Order from ${form.business_name}</h2><p><strong>Contact:</strong> ${form.contact_name} &lt;${form.email}&gt;<br/><strong>Phone:</strong> ${form.phone || 'N/A'}<br/><strong>Notes:</strong> ${form.notes || 'N/A'}</p><table border="1" cellpadding="6"><thead><tr><th>Plant</th><th>Size</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>${itemsHtml}</tbody></table><p><strong>Total: ${totalUnits} units / $${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></p><p><a href="${confirmUrl}">✅ Confirm This Order</a></p>`,
-            }),
-          }),
-        ])
-      }
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? 'Failed to submit order')
 
       clearCart()
       window.dispatchEvent(new Event('cart-updated'))
-      navigate('/order/confirmed', { state: { orderId: order.id, email: form.email } })
+      navigate('/order/confirmed', { state: { orderId: data.orderId, email: data.email } })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
       setSubmitting(false)

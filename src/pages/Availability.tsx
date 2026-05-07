@@ -100,16 +100,20 @@ export default function Availability() {
     setShowDownload(false)
   }
 
+  function esc(s: string) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+  }
+
   function downloadPDF() {
     const dateStr = publishedAt ? new Date(publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''
     const rows = filtered.map(i => `
       <tr>
-        <td>${i.plant_name}</td>
-        <td>${i.plant_sku}</td>
-        <td>${i.plant_size}</td>
+        <td>${esc(i.plant_name)}</td>
+        <td>${esc(i.plant_sku)}</td>
+        <td>${esc(i.plant_size)}</td>
         <td>${i.qty_available.toLocaleString()}</td>
         <td>${i.unit_price ? `$${i.unit_price.toFixed(2)}` : '—'}</td>
-        <td>${i.notes ?? ''}</td>
+        <td>${esc(i.notes ?? '')}</td>
       </tr>`).join('')
     const html = `<!DOCTYPE html><html><head><title>Kelston Way — Availability</title>
     <style>

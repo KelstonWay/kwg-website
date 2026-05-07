@@ -11,22 +11,13 @@ export default function Contact() {
     setSending(true)
     setError(null)
 
-    const resendKey = import.meta.env.VITE_RESEND_API_KEY
-    const samuelEmail = import.meta.env.VITE_SAMUEL_EMAIL
-
     try {
-      if (resendKey) {
-        await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            from: 'orders@kelstonway.com',
-            to: samuelEmail,
-            subject: `Contact Form — ${form.name} (${form.business || 'No business'})`,
-            html: `<p><strong>Name:</strong> ${form.name}<br/><strong>Email:</strong> ${form.email}<br/><strong>Business:</strong> ${form.business || 'N/A'}</p><p><strong>Message:</strong><br/>${form.message}</p>`,
-          }),
-        })
-      }
+      const res = await fetch('/api/send-contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) throw new Error()
       setSent(true)
     } catch {
       setError('Something went wrong. Please email us directly at samuel@kelstonway.com')
