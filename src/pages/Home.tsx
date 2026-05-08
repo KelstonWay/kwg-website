@@ -28,6 +28,8 @@ export default function Home() {
         .from('availability_release_items')
         .select('*, plants(name, sku, size)')
         .eq('release_id', release.id)
+        .eq('is_cover', true)
+        .eq('website_visible', true)
         .gt('qty_available', 0)
         .limit(3)
       if (items) setPreview(items.map((i: any) => ({

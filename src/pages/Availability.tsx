@@ -37,6 +37,7 @@ export default function Availability() {
         .from('availability_release_items')
         .select('*, plants(name, sku, size)')
         .eq('release_id', release.id)
+        .eq('website_visible', true)
         .gt('qty_available', 0)
       if (data) setItems(data.map((i: any) => ({
         ...i,
