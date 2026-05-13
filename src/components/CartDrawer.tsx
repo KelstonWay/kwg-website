@@ -63,7 +63,7 @@ export default function CartDrawer({ open, onClose }: Props) {
                     min="1"
                     value={item.qty}
                     onChange={e => handleQty(item.release_item_id, parseInt(e.target.value) || 1)}
-                    className="w-16 border border-outline-variant rounded px-2 py-1 text-sm font-body-md text-center focus:outline-none focus:border-primary"
+                    className="w-16 border border-outline-variant rounded px-2 py-1 text-base font-body-md text-center focus:outline-none focus:border-primary"
                   />
                   <span className="font-body-md text-sm text-on-surface-variant">
                     × ${item.unit_price.toFixed(2)}
