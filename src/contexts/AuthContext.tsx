@@ -5,31 +5,41 @@ import { supabase } from '../lib/supabase'
 interface AuthContextValue {
   user: User | null
   session: Session | null
+  loading: boolean
   signOut: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   session: null,
+  loading: true,
   signOut: async () => {},
 })
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    let ignore = false
+
     supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session)
-      setUser(data.session?.user ?? null)
+      if (!ignore) {
+        setSession(data.session)
+        setUser(data.session?.user ?? null)
+        setLoading(false)
+      }
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       setUser(session?.user ?? null)
+      setLoading(false)
+      ignore = true
     })
 
-    return () => subscription.unsubscribe()
+    return () => { ignore = true; subscription.unsubscribe() }
   }, [])
 
   async function signOut() {
@@ -37,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, signOut }}>
       {children}
     </AuthContext.Provider>
   )
