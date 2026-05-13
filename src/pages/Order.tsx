@@ -62,7 +62,7 @@ export default function Order() {
 
   if (items.length === 0) {
     return (
-      <div className="px-8 md:px-32 py-32 text-center">
+      <div className="px-5 md:px-8 lg:px-32 py-32 text-center">
         <span className="material-symbols-outlined text-5xl text-outline mb-6 block">shopping_bag</span>
         <h2 className="font-['Newsreader'] text-headline-md text-on-surface mb-4">Your order is empty</h2>
         <p className="font-body-md text-on-surface-variant mb-8">Browse our current availability to add items.</p>
