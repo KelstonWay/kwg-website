@@ -11,7 +11,6 @@ import OrderStatus from './pages/OrderStatus'
 import OurStory from './pages/OurStory'
 import Contact from './pages/Contact'
 import Account from './pages/Account'
-import FloatingContact from './components/FloatingContact'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -38,7 +37,6 @@ export default function App() {
               <Route path="/account" element={<Account />} />
             </Routes>
           </main>
-          <FloatingContact />
           <Footer />
         </div>
       </AuthProvider>

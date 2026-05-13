@@ -27,7 +27,7 @@ export default function Contact() {
   }
 
   return (
-    <div className="px-8 md:px-32 py-20">
+    <div className="px-5 md:px-32 py-20">
       <div className="max-w-2xl mx-auto">
         <span className="font-label-caps text-label-caps text-secondary mb-4 block">GET IN TOUCH</span>
         <h1 className="font-['Newsreader'] text-headline-xl text-on-surface mb-4">Contact Us</h1>

@@ -124,10 +124,10 @@ export default function Home() {
               Full Availability <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
             </Link>
           </div>
-          <div className="flex overflow-x-auto gap-4 snap-x snap-mandatory pb-2 -mx-5 px-5 md:mx-0 md:px-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0">
+          <div className="flex overflow-x-auto gap-4 snap-x snap-mandatory pb-2 -mx-5 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0">
             {preview.map((item) => (
               <Link key={item.id} to="/availability" className="group cursor-pointer flex-shrink-0 w-40 snap-start md:w-auto">
-                <div className="aspect-[3/4] overflow-hidden rounded-sm border border-outline-variant/10 mb-3 bg-surface-container transition-transform duration-500 group-hover:-translate-y-1">
+                <div className="aspect-[3/4] overflow-hidden rounded-lg border border-outline-variant/10 mb-3 bg-surface-container transition-transform duration-500 group-hover:-translate-y-1">
                   <img
                     src={item.photo_url ?? HERO_IMG}
                     alt={item.plant_name}
@@ -148,7 +148,7 @@ export default function Home() {
             {/* View more tile — mobile only */}
             <Link
               to="/availability"
-              className="md:hidden flex-shrink-0 w-40 snap-start aspect-[3/4] flex flex-col items-center justify-center rounded-sm border border-outline-variant/30 bg-surface-container text-primary hover:bg-primary-fixed/10 transition-colors"
+              className="md:hidden flex-shrink-0 w-40 snap-start aspect-[3/4] flex flex-col items-center justify-center rounded-lg border border-outline-variant/30 bg-surface-container text-primary hover:bg-primary-fixed/10 transition-colors"
             >
               <span className="material-symbols-outlined text-3xl mb-2">arrow_forward</span>
               <span className="font-button text-sm">View more</span>

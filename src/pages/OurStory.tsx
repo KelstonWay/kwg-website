@@ -1,88 +1,185 @@
-const STORY_IMG = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDbYPDSXshUOu9E_hnQV5Z4_7LkjpIZcLe8fY90esgAr2IY_28Yy0z7pKsd9WmnY04Gj1HMD0nPt8QluMp8FhTkeB0p0kG1F8U-S0qGUmWouffHDXXmjQ2Ua4LyS-0vVPGiJAmkLnqLvAyb2ST1n510dkeH2rzm_3HJrkK3LJEXypc69hE25r4aOo404JVxMKkNTx6KbMi_LzNgIRWrI6ERgEp9tbg7kHBlz_mF5e0u7yN6QxlgE8pG3bagvE_BUSPOUYqcKIUsaOgo'
-const PLANT_IMG = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCjB22ircdBlx_GNILQ0gN3O2iXgRUuHSyAJj6ZSmDePRGwJ5mGmcGE9sfUdHMqqAm0LOzt4oysl82KFgkln5SH7ZAwIgZbVRfOhbeFbvFLEQU9vanMu90dWnBqcloaNPLDt4rSG5n8Tr2Pf9ydIZh78rv9b-N_d9SpN9y_00Lu5unBcDsnZEHwjgZ4dEyadWZ2kz2WfR_X9neWbPyUMjKDWGe6q_8mHQRRA4zrWuxi2josl46BzYYsn8dGSEAfSl_CsXgFJrJ-m7d1'
-const INTERIOR_IMG = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBQbt2VoYYBqxHvsq5QvXXFYASV40EayHM3-1fXg0xfYnchnOInLgi85-7uqssxZ1mxfL4Vwr7765nJ1sYq31odEAqfof4id_df9QX6lwpxAPMeRZOMD3za7mTQG9dF_HV7o2so9UdfmbAPDH721msx5LGUx5vb5eYRPOmAvMfNvD_jUxlvjtPGesLUwFny-mBKa-MHJysOyG12oYy5rOecFX9XWJBFFEXvkuatgOQmLs7suUDH6ZV1XKIqLhPzXK4TerX4IZTI8WgP'
+import { Link } from 'react-router-dom'
+
+const HERO_IMG    = '/photos/story-hero.webp'
+const STORY_IMG   = '/photos/story.webp'
+const LOCATION_IMG = '/photos/location.webp'
 
 export default function OurStory() {
   return (
     <>
       {/* Hero */}
-      <section className="px-8 md:px-32 py-20">
-        <div className="max-w-3xl">
-          <span className="font-label-caps text-label-caps text-secondary mb-4 block">OUR STORY</span>
-          <h1 className="font-['Newsreader'] text-display-lg text-on-surface mb-8">
-            Rooted in the <span className="italic text-primary">Texas Hill Country</span>
-          </h1>
-          <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-            Kelston Way Greenhouse is a family-built operation rising from 5 acres of Central Texas land. Founded by Art, Titus, and Samuel Vanwingerden, we're building one of the region's premier commercial greenhouses — targeting a January 2027 opening.
-          </p>
-        </div>
-      </section>
-
-      {/* Image + text */}
-      <section className="px-8 md:px-32 py-20 bg-stone-50">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-          <div className="relative h-[500px]">
-            <div className="absolute top-0 left-0 w-3/4 h-[350px] shape-arch overflow-hidden border border-outline-variant/20 shadow-sm">
-              <img src={STORY_IMG} alt="Greenhouse facility" className="w-full h-full object-cover" />
-            </div>
-            <div className="absolute bottom-0 right-0 w-1/2 h-[250px] shape-pill overflow-hidden border border-outline-variant/20 shadow-sm">
-              <img src={PLANT_IMG} alt="Plants" className="w-full h-full object-cover" />
-            </div>
-          </div>
+      <section className="px-5 md:px-16 py-20 md:py-28 bg-stone-50">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 items-center">
           <div>
-            <span className="font-label-caps text-label-caps text-secondary mb-4 block">OUR PHILOSOPHY</span>
-            <h2 className="font-['Newsreader'] text-headline-xl text-on-surface mb-6">Quality at Commercial Scale</h2>
-            <p className="font-body-lg text-on-surface-variant mb-6 leading-relaxed">
-              We believe that wholesale doesn't have to mean generic. Every variety we grow is selected for its commercial viability and botanical distinction — rare aroids, drought-tolerant Hill Country species, and consistent top-shelf stock.
+            <span className="font-label-caps text-label-caps text-primary mb-5 block">
+              Oglesby, Texas · Est. 2027
+            </span>
+            <h1 className="font-['Newsreader'] text-4xl md:text-[58px] font-light leading-[1.08] text-on-surface mb-6">
+              We've been growing plants <em className="italic text-primary font-normal">our whole lives.</em>
+            </h1>
+            <p className="font-body-lg text-body-lg text-secondary leading-relaxed max-w-lg mb-10 font-light">
+              Kelston Way is a family greenhouse in Oglesby, Texas. We grow annuals, perennials, and seasonal color for garden centers and landscapers. If you want to buy plants, we want to sell to you.
             </p>
-            <p className="font-body-lg text-on-surface-variant leading-relaxed">
-              Our 5-acre facility in Oglesby, Texas is designed from the ground up for professional buyers — efficient loading bays, climate-controlled growing zones, and a team that understands your timeline.
-            </p>
+            <div className="flex gap-4 flex-wrap">
+              <Link to="/availability" className="px-8 py-3.5 bg-primary text-on-primary font-button text-button rounded-sm hover:opacity-90 transition-all duration-300">
+                View Availability
+              </Link>
+              <a href="#inquire" className="px-8 py-3.5 border border-primary text-primary font-button text-button rounded-sm hover:bg-primary/5 transition-all duration-300">
+                Wholesale Inquiry
+              </a>
+            </div>
+          </div>
+          <div className="h-[340px] md:h-[420px] rounded-xl overflow-hidden border border-outline-variant/20 shadow-sm bg-stone-200">
+            <img src={HERO_IMG} alt="Kelston Way Greenhouse" className="w-full h-full object-cover object-center" fetchPriority="high" loading="eager" />
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="px-8 md:px-32 py-24">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            { stat: '5 Acres', label: 'Greenhouse Footprint' },
-            { stat: 'Jan 2027', label: 'Opening Date' },
-            { stat: '3rd Gen', label: 'Nursery Family' },
-            { stat: 'Central TX', label: 'Hill Country Location' },
-          ].map(({ stat, label }) => (
-            <div key={label} className="p-8 border border-outline-variant/30">
-              <p className="font-['Newsreader'] text-4xl text-primary mb-2">{stat}</p>
-              <p className="font-label-caps text-label-caps text-on-surface-variant">{label}</p>
+      {/* Story */}
+      <section className="px-5 md:px-16 py-20 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="pb-3 border-b border-outline-variant/40 mb-12">
+            <span className="font-label-caps text-[10px] font-medium tracking-[0.25em] uppercase text-on-surface-variant">Our Story</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 items-start">
+            <div className="h-[300px] md:h-[360px] rounded-xl overflow-hidden border border-outline-variant/20 shadow-sm bg-stone-200">
+              <img src={STORY_IMG} alt="Kelston Way story" className="w-full h-full object-cover object-bottom" loading="lazy" />
             </div>
-          ))}
+            <div>
+              <h2 className="font-['Newsreader'] text-3xl md:text-[42px] font-light leading-[1.15] text-on-surface mb-6">
+                Greenhouses are all we've <em className="italic text-primary font-normal">ever known.</em>
+              </h2>
+              <p className="font-body-lg text-secondary leading-relaxed font-light mb-5">
+                Art, Titus, and Samuel Vanwingerden grew up in the greenhouse business. It's what our family does. We started Kelston Way because we knew we could grow quality plants and build real relationships with the people we sell to.
+              </p>
+              <p className="font-body-lg text-secondary leading-relaxed font-light">
+                Our faith in Jesus Christ is the most important thing to us — it shapes how we work, how we treat people, and what we're building at Kelston Way. We want to run a business we're proud of, that serves our customers well and honors God in the process.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Bento gallery */}
-      <section className="px-8 md:px-32 py-20 bg-stone-50">
-        <div className="text-center mb-16 max-w-2xl mx-auto">
-          <span className="font-label-caps text-label-caps text-secondary mb-4 block">THE FAMILY</span>
-          <h2 className="font-['Newsreader'] text-headline-xl mb-6">Built Together</h2>
-          <div className="w-12 h-[1px] bg-secondary mx-auto" />
+      {/* Pillars */}
+      <section className="px-5 md:px-16 py-20 md:py-24 bg-stone-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="pb-3 border-b border-outline-variant/40 mb-12">
+            <span className="font-label-caps text-[10px] font-medium tracking-[0.25em] uppercase text-on-surface-variant">What We Stand For</span>
+          </div>
+          <h2 className="font-['Newsreader'] text-3xl md:text-[42px] font-light leading-[1.15] text-on-surface mb-12">
+            What we <em className="italic text-primary font-normal">stand for.</em>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                icon: 'potted_plant',
+                title: 'Good Plants',
+                body: 'We grow plants we\'re proud to sell. If it\'s not good, it doesn\'t go out the door. Your reputation is on the line too — we take that seriously.',
+              },
+              {
+                icon: 'handshake',
+                title: 'Straight Talk',
+                body: 'We\'ll tell you what we have, what\'s coming, and what we don\'t have. No runaround. If you email us, we\'ll get back to you.',
+              },
+              {
+                icon: 'location_on',
+                title: 'Grown in Texas',
+                body: 'Our plants are grown in central Texas, acclimated to the heat, and ready for your customers the day they arrive.',
+              },
+            ].map(({ icon, title, body }) => (
+              <div key={title} className="bg-white border border-outline-variant/30 rounded-sm p-8">
+                <span className="material-symbols-outlined text-primary text-3xl mb-4 block">{icon}</span>
+                <h3 className="font-['Newsreader'] text-xl text-on-surface mb-3">{title}</h3>
+                <p className="font-body-md text-secondary text-sm leading-relaxed font-light">{body}</p>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-auto md:h-[600px]">
-          <div className="relative overflow-hidden bg-stone-100 rounded-sm">
-            <img src={STORY_IMG} alt="Facility overview" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-            <div className="absolute bottom-8 left-8 text-white">
-              <h3 className="font-['Newsreader'] text-3xl mb-2">The Facility</h3>
-              <p className="font-body-md opacity-80">Oglesby, Coryell County, Texas</p>
+      </section>
+
+      {/* Team */}
+      <section className="px-5 md:px-16 py-20 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="pb-3 border-b border-outline-variant/40 mb-12">
+            <span className="font-label-caps text-[10px] font-medium tracking-[0.25em] uppercase text-on-surface-variant">The Family</span>
+          </div>
+          <h2 className="font-['Newsreader'] text-3xl md:text-[42px] font-light leading-[1.15] text-on-surface mb-12">
+            The people behind <em className="italic text-primary font-normal">every plant.</em>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                initials: 'AV',
+                name: 'Art Vanwingerden',
+                role: 'Founder & CEO',
+                bio: 'Decades of greenhouse expertise. Art brings the vision, the relationships, and the standards that define Kelston Way.',
+              },
+              {
+                initials: 'TV',
+                name: 'Titus Vanwingerden',
+                role: 'Co-Founder & COO',
+                bio: 'Hands-on from day one. Titus leads operations — production, growing schedules, and making sure every plant that leaves meets our standard.',
+              },
+              {
+                initials: 'SV',
+                name: 'Samuel Vanwingerden',
+                role: 'Co-Founder & CFO',
+                bio: 'Data-driven and detail-oriented. Samuel manages the financial strategy, operations planning, and business systems.',
+              },
+            ].map(({ initials, name, role, bio }) => (
+              <div key={name} className="text-center">
+                <div className="w-28 h-28 rounded-full bg-secondary-container border-2 border-outline-variant/30 mx-auto mb-5 flex items-center justify-center">
+                  <span className="font-['Newsreader'] text-2xl text-on-surface">{initials}</span>
+                </div>
+                <h3 className="font-['Newsreader'] text-xl text-on-surface mb-1">{name}</h3>
+                <p className="font-label-caps text-[10px] tracking-widest uppercase text-primary mb-3">{role}</p>
+                <p className="font-body-md text-secondary text-sm leading-relaxed font-light max-w-[260px] mx-auto">{bio}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Location */}
+      <section className="px-5 md:px-16 py-20 md:py-24 bg-secondary-container/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="pb-3 border-b border-outline-variant/40 mb-12">
+            <span className="font-label-caps text-[10px] font-medium tracking-[0.25em] uppercase text-on-surface-variant">Find Us</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 items-center">
+            <div>
+              <h2 className="font-['Newsreader'] text-3xl md:text-[42px] font-light leading-[1.15] text-on-surface mb-8">
+                Five acres in the <em className="italic text-primary font-normal">heart of Texas.</em>
+              </h2>
+              <div className="space-y-4 font-body-md text-sm text-secondary font-light leading-loose">
+                <div><p className="font-medium text-on-surface text-sm mb-0.5">Address</p><p>Oglesby, Coryell County<br />Texas, United States</p></div>
+                <div><p className="font-medium text-on-surface text-sm mb-0.5">Opening</p><p>January 1, 2027</p></div>
+                <div><p className="font-medium text-on-surface text-sm mb-0.5">Contact</p><p>samuel@kelstonway.com<br />kelstonway.com</p></div>
+              </div>
+            </div>
+            <div className="h-[280px] md:h-[300px] rounded-xl overflow-hidden border border-outline-variant/20 shadow-sm bg-stone-200">
+              <img src={LOCATION_IMG} alt="Kelston Way location" className="w-full h-full object-cover" loading="lazy" />
             </div>
           </div>
-          <div className="relative overflow-hidden bg-emerald-50 rounded-sm">
-            <img src={INTERIOR_IMG} alt="Greenhouse interior" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-            <div className="absolute bottom-8 left-8 text-white">
-              <h3 className="font-['Newsreader'] text-3xl mb-2">The Vision</h3>
-              <p className="font-body-md opacity-80">Professional grade from day one</p>
-            </div>
-          </div>
+        </div>
+      </section>
+
+      {/* CTA Band */}
+      <section id="inquire" className="px-5 md:px-16 py-20 bg-primary text-on-primary text-center">
+        <span className="font-label-caps text-[10px] tracking-[0.3em] uppercase text-primary-fixed/70 block mb-4">Wholesale Partners</span>
+        <h2 className="font-['Newsreader'] text-3xl md:text-[44px] font-light leading-[1.15] mb-4">
+          Want to buy from us?
+        </h2>
+        <p className="font-body-lg text-primary-fixed/80 font-light mb-10 max-w-xl mx-auto">
+          We're opening January 2027. If you're a garden center or landscaper looking for a reliable grower, reach out now and we'll get you set up early.
+        </p>
+        <div className="flex gap-4 justify-center flex-wrap">
+          <Link to="/contact" className="px-8 py-3.5 bg-secondary-container text-secondary font-button text-button rounded-sm hover:opacity-90 transition-all duration-300">
+            Request Wholesale Access
+          </Link>
+          <Link to="/availability" className="px-8 py-3.5 border border-white/40 text-white font-button text-button rounded-sm hover:bg-white/10 transition-all duration-300">
+            View Plant Availability
+          </Link>
         </div>
       </section>
     </>
