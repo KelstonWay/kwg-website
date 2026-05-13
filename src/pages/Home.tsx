@@ -85,7 +85,7 @@ export default function Home() {
               <img src={HERO_IMG} alt="Kelston Way greenhouse interior" className="w-full h-full object-cover object-bottom" fetchPriority="high" loading="eager" />
             </div>
             <div className="absolute bottom-0 left-0 w-1/2 h-[300px] shape-pill overflow-hidden border border-outline-variant/20 shadow-sm z-20 bg-stone-100">
-              <img src={HERO_IMG2} alt="Greenhouse plant detail" className="w-full h-full object-cover" fetchPriority="high" loading="eager" />
+              <img src={HERO_IMG2} alt="Greenhouse plant detail" className="w-full h-full object-cover" loading="lazy" />
             </div>
           </div>
         </div>
