@@ -38,6 +38,19 @@ export interface WholesaleOrder {
   confirm_token: string
 }
 
+export interface WholesaleOrderItem {
+  id: string
+  order_id: string
+  plant_name: string
+  plant_sku: string
+  plant_size: string
+  plant_id: string
+  unit_price: number
+  qty_requested: number
+  line_total: number
+  release_item_id: string
+}
+
 export interface CurrentRelease {
   id: string
   published_at: string
