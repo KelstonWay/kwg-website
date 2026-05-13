@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { cartCount } from '../lib/cart'
+import { useAuth } from '../contexts/AuthContext'
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/availability', label: 'Availability' },
   { to: '/our-story', label: 'Our Story' },
   { to: '/contact', label: 'Contact' },
+  { to: '/account', label: 'Account' },
 ]
 
 export default function Nav() {
@@ -14,6 +16,7 @@ export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { user } = useAuth()
 
   useEffect(() => {
     const update = () => setCount(cartCount())
@@ -25,7 +28,7 @@ export default function Nav() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-5 md:px-20 h-16 bg-white/90 backdrop-blur-md border-b border-emerald-100/50 transition-all duration-300">
+      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-5 md:px-20 h-16 bg-white/90 backdrop-blur-md border-b border-outline-variant/30 transition-all duration-300">
         <div className="flex items-center gap-6">
           <Link to="/">
             <img src="/logo-cropped.png" alt="Kelston Way" className="h-11 w-auto" />
@@ -50,6 +53,18 @@ export default function Nav() {
           </nav>
         </div>
         <div className="flex items-center gap-2">
+          <Link
+            to="/account"
+            className="hover:bg-surface-container transition-all duration-300 p-2.5 rounded-full relative"
+            aria-label="Account"
+          >
+            <span className="material-symbols-outlined text-on-surface-variant">
+              {user ? 'account_circle' : 'person'}
+            </span>
+            {user && (
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />
+            )}
+          </Link>
           <button
             onClick={() => navigate('/order')}
             className="relative hover:bg-surface-container transition-all duration-300 p-2.5 rounded-full"
@@ -104,7 +119,7 @@ export default function Nav() {
             })}
             <Link
               to="/availability"
-              className="mt-2 px-4 py-3 bg-secondary text-on-secondary font-button text-button font-semibold rounded-xl text-center hover:opacity-90 transition-all"
+              className="mt-2 px-4 py-3 bg-secondary text-on-secondary font-button text-button font-semibold rounded-sm text-center hover:opacity-90 transition-all"
             >
               Order Now
             </Link>
