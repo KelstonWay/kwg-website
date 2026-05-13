@@ -119,11 +119,8 @@ export default function Home() {
       {preview.length > 0 && (
         <section className="px-5 md:px-32 py-12 md:py-16">
           <div className="flex justify-between items-center mb-8">
-            <div>
-              <span className="font-label-caps text-label-caps text-secondary uppercase tracking-widest block mb-1">Current Availability</span>
-              <h2 className="font-['Newsreader'] text-headline-xl text-on-surface">What We Have This Week</h2>
-            </div>
-            <Link to="/availability" className="font-button text-button text-primary flex items-center gap-2 group flex-shrink-0 ml-8">
+            <h2 className="font-['Newsreader'] text-headline-xl text-on-surface">Available Now</h2>
+            <Link to="/availability" className="font-button text-button text-primary flex items-center gap-2 group flex-shrink-0 ml-8 hidden md:flex">
               Full Availability <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
             </Link>
           </div>
@@ -148,6 +145,14 @@ export default function Home() {
                 </div>
               </Link>
             ))}
+            {/* View more tile — mobile only */}
+            <Link
+              to="/availability"
+              className="md:hidden flex-shrink-0 w-40 snap-start aspect-[3/4] flex flex-col items-center justify-center rounded-sm border border-outline-variant/30 bg-surface-container text-primary hover:bg-primary-fixed/10 transition-colors"
+            >
+              <span className="material-symbols-outlined text-3xl mb-2">arrow_forward</span>
+              <span className="font-button text-sm">View more</span>
+            </Link>
           </div>
         </section>
       )}
