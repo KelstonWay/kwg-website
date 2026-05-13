@@ -132,7 +132,8 @@ function ReorderButton({ orderId }: { orderId: string }) {
 
     if (!release) { setLoading(false); navigate('/availability'); return }
 
-    const plantIds = items.map((i: any) => i.plant_id)
+    const typedItems = items as WholesaleOrderItem[]
+    const plantIds = typedItems.map(i => i.plant_id)
     const { data: currentItems } = await supabase
       .from('availability_release_items')
       .select('id, plant_id, unit_price, qty_available')
@@ -140,14 +141,15 @@ function ReorderButton({ orderId }: { orderId: string }) {
       .in('plant_id', plantIds)
       .gt('qty_available', 0)
 
+    type CurrentItem = { id: string; plant_id: string; unit_price: number; qty_available: number }
     const availableByPlantId = Object.fromEntries(
-      (currentItems ?? []).map((ci: any) => [ci.plant_id, ci])
+      (currentItems as CurrentItem[] ?? []).map(ci => [ci.plant_id, ci])
     )
 
     let added = 0
     let skipped = 0
 
-    for (const item of items as WholesaleOrderItem[]) {
+    for (const item of typedItems) {
       const current = availableByPlantId[item.plant_id]
       if (!current) { skipped++; continue }
 
