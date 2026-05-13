@@ -76,8 +76,8 @@ export default function Home() {
         </div>
         <div className="md:col-span-6 w-full">
           {/* Mobile: single full-width arch image */}
-          <div className="md:hidden relative h-[240px] shape-arch overflow-hidden border border-outline-variant/20 shadow-sm bg-stone-200">
-            <img src={HERO_IMG} alt="Kelston Way greenhouse interior" className="w-full h-full object-cover object-bottom" fetchPriority="high" loading="eager" />
+          <div className="md:hidden relative h-[240px] rounded-xl overflow-hidden border border-outline-variant/20 shadow-sm bg-stone-200">
+            <img src={HERO_IMG} alt="Kelston Way greenhouse interior" className="w-full h-full object-cover object-center" fetchPriority="high" loading="eager" />
           </div>
           {/* Desktop: overlapping arch + pill layout */}
           <div className="hidden md:block relative h-[600px]">
