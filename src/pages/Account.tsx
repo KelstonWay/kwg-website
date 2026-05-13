@@ -57,8 +57,11 @@ function AccountLogin() {
         <div className="max-w-md w-full text-center">
           <span className="material-symbols-outlined text-4xl text-primary mb-4 block">mark_email_read</span>
           <h1 className="font-['Newsreader'] text-headline-lg text-on-surface mb-3">Check your email</h1>
-          <p className="font-body-md text-on-surface-variant">
+          <p className="font-body-md text-on-surface-variant mb-2">
             We sent a sign-in link to <strong>{email}</strong>. Click it to access your account.
+          </p>
+          <p className="font-body-md text-sm text-on-surface-variant/70">
+            Don't see it? Check your junk or spam folder.
           </p>
         </div>
       </div>
