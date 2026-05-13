@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
 
-const HIDDEN_PATHS = ['/order', '/order/confirmed']
+const HIDDEN_PATHS = ['/order']
 
 export default function FloatingContact() {
   const { pathname } = useLocation()
