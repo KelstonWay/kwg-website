@@ -74,7 +74,7 @@ export default function Order() {
   }
 
   return (
-    <div className="px-8 md:px-32 py-16">
+    <div className="px-5 md:px-8 lg:px-32 py-12 md:py-16">
       <span className="font-label-caps text-label-caps text-secondary mb-3 block">WHOLESALE ORDER</span>
       <h1 className="font-['Newsreader'] text-headline-xl text-on-surface mb-12">Review Your Order</h1>
 
@@ -84,30 +84,34 @@ export default function Order() {
           <h2 className="font-['Newsreader'] italic text-headline-md border-b border-outline-variant pb-6 mb-8">Your Selection</h2>
           <div className="space-y-6">
             {items.map(item => (
-              <div key={item.release_item_id} className="flex items-center gap-6 py-4 border-b border-outline-variant/20">
-                {item.photo_url && (
-                  <div className="w-16 h-20 organic-shape-1 overflow-hidden flex-shrink-0 bg-surface-container">
-                    <img src={item.photo_url} alt={item.plant_name} className="w-full h-full object-cover" />
+              <div key={item.release_item_id} className="py-4 border-b border-outline-variant/20">
+                {/* Row 1: photo + name */}
+                <div className="flex items-start gap-4 mb-3">
+                  {item.photo_url && (
+                    <div className="w-14 h-[72px] organic-shape-1 overflow-hidden flex-shrink-0 bg-surface-container">
+                      <img src={item.photo_url} alt={item.plant_name} className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-['Newsreader'] italic text-on-surface">{item.plant_name}</p>
+                    <p className="font-body-md text-sm text-on-surface-variant">{item.plant_size} · {item.plant_sku}</p>
                   </div>
-                )}
-                <div className="flex-1 min-w-0">
-                  <p className="font-['Newsreader'] italic text-on-surface">{item.plant_name}</p>
-                  <p className="font-body-md text-sm text-on-surface-variant">{item.plant_size} · {item.plant_sku}</p>
                 </div>
-                <div className="flex items-center gap-3 flex-shrink-0">
+                {/* Row 2: qty + unit price + line total + delete */}
+                <div className="flex items-center gap-3">
                   <input
                     type="number"
                     min="1"
                     value={item.qty}
                     onChange={e => handleQty(item.release_item_id, parseInt(e.target.value) || 1)}
-                    className="w-20 border border-outline-variant rounded px-2 py-1.5 text-sm font-body-md text-center focus:outline-none focus:border-primary"
+                    className="w-16 border border-outline-variant rounded px-2 py-1.5 text-base font-body-md text-center focus:outline-none focus:border-primary"
                   />
-                  <span className="font-body-md text-sm text-on-surface-variant w-20 text-right">× ${item.unit_price.toFixed(2)}</span>
-                  <span className="font-body-md font-medium text-on-surface w-20 text-right">${(item.qty * item.unit_price).toFixed(2)}</span>
+                  <span className="font-body-md text-sm text-on-surface-variant">× ${item.unit_price.toFixed(2)}</span>
+                  <span className="font-body-md font-medium text-on-surface ml-auto">${(item.qty * item.unit_price).toFixed(2)}</span>
+                  <button onClick={() => handleRemove(item.release_item_id)} className="p-1.5 hover:bg-error-container rounded transition-colors">
+                    <span className="material-symbols-outlined text-error text-lg">delete</span>
+                  </button>
                 </div>
-                <button onClick={() => handleRemove(item.release_item_id)} className="p-1.5 hover:bg-error-container rounded transition-colors flex-shrink-0">
-                  <span className="material-symbols-outlined text-error text-lg">delete</span>
-                </button>
               </div>
             ))}
           </div>
