@@ -127,10 +127,10 @@ export default function Home() {
               Full Availability <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex overflow-x-auto gap-4 snap-x snap-mandatory pb-2 -mx-5 px-5 md:mx-0 md:px-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0">
             {preview.map((item) => (
-              <Link key={item.id} to="/availability" className="group cursor-pointer">
-                <div className="aspect-[4/5] overflow-hidden rounded-sm border border-outline-variant/10 mb-4 bg-surface-container transition-transform duration-500 group-hover:-translate-y-1">
+              <Link key={item.id} to="/availability" className="group cursor-pointer flex-shrink-0 w-40 snap-start md:w-auto">
+                <div className="aspect-[3/4] overflow-hidden rounded-sm border border-outline-variant/10 mb-3 bg-surface-container transition-transform duration-500 group-hover:-translate-y-1">
                   <img
                     src={item.photo_url ?? HERO_IMG}
                     alt={item.plant_name}
