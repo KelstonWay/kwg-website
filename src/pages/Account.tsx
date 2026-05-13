@@ -1,68 +1,36 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { addToCart } from '../lib/cart'
 import type { WholesaleOrder, WholesaleOrderItem } from '../lib/types'
 
-export default function Account() {
-  const { user, loading } = useAuth()
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <span className="material-symbols-outlined text-4xl text-outline animate-spin">progress_activity</span>
-      </div>
-    )
-  }
-
-  if (user) {
-    return <AccountDashboard />
-  }
-
-  return <AccountLogin />
-}
-
-function AccountLogin() {
-  const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
+function SetNewPassword() {
+  const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [done, setDone] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (password !== confirm) { setError('Passwords do not match.'); return }
+    if (password.length < 8) { setError('Password must be at least 8 characters.'); return }
     setLoading(true)
     setError(null)
-
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/account`,
-      },
-    })
-
-    if (error) {
-      setError(error.message)
-      setLoading(false)
-      return
-    }
-
-    setSent(true)
+    const { error } = await supabase.auth.updateUser({ password })
+    if (error) { setError(error.message); setLoading(false); return }
+    setDone(true)
     setLoading(false)
   }
 
-  if (sent) {
+  if (done) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-5">
         <div className="max-w-md w-full text-center">
-          <span className="material-symbols-outlined text-4xl text-primary mb-4 block">mark_email_read</span>
-          <h1 className="font-['Newsreader'] text-headline-lg text-on-surface mb-3">Check your email</h1>
-          <p className="font-body-md text-on-surface-variant mb-2">
-            We sent a sign-in link to <strong>{email}</strong>. Click it to access your account.
-          </p>
-          <p className="font-body-md text-sm text-on-surface-variant/70">
-            Don't see it? Check your junk or spam folder.
-          </p>
+          <span className="material-symbols-outlined text-4xl text-primary mb-4 block">check_circle</span>
+          <h1 className="font-['Newsreader'] text-headline-lg text-on-surface mb-3">Password set.</h1>
+          <p className="font-body-md text-on-surface-variant">You're signed in. <Link to="/account" className="text-primary hover:underline">Go to your account</Link>.</p>
         </div>
       </div>
     )
@@ -72,16 +40,134 @@ function AccountLogin() {
     <div className="min-h-[80vh] flex items-center justify-center px-5">
       <div className="max-w-md w-full">
         <span className="font-label-caps text-label-caps text-secondary mb-3 block">ACCOUNT</span>
-        <h1 className="font-['Newsreader'] text-headline-xl text-on-surface mb-2">Sign in</h1>
-        <p className="font-body-md text-on-surface-variant mb-8">
-          Enter your email and we'll send you a sign-in link. No password needed.
-        </p>
+        <h1 className="font-['Newsreader'] text-headline-xl text-on-surface mb-8">Set a new password</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="New password"
+            className="w-full px-4 py-3 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors"
+          />
+          <input
+            type="password"
+            required
+            value={confirm}
+            onChange={e => setConfirm(e.target.value)}
+            placeholder="Confirm password"
+            className="w-full px-4 py-3 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors"
+          />
+          {error && <p className="font-body-md text-sm text-error">{error}</p>}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3.5 bg-primary text-on-primary font-button text-button rounded-sm hover:opacity-90 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Saving...' : 'Set password'}
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+export default function Account() {
+  const { user, loading, resettingPassword } = useAuth()
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <span className="material-symbols-outlined text-4xl text-outline animate-spin">progress_activity</span>
+      </div>
+    )
+  }
+
+  if (resettingPassword) return <SetNewPassword />
+  if (user) return <AccountDashboard />
+  return <AccountLogin />
+}
+
+function AccountLogin() {
+  const [mode, setMode] = useState<'signin' | 'signup' | 'reset'>('signin')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [done, setDone] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    if (mode === 'signin') {
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) { setError(error.message); setLoading(false) }
+    } else if (mode === 'signup') {
+      const { error } = await supabase.auth.signUp({ email, password })
+      if (error) { setError(error.message); setLoading(false); return }
+      setDone(true)
+      setLoading(false)
+    } else {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/account`,
+      })
+      if (error) { setError(error.message); setLoading(false); return }
+      setDone(true)
+      setLoading(false)
+    }
+  }
+
+  function switchMode(next: 'signin' | 'signup' | 'reset') {
+    setMode(next)
+    setError(null)
+    setPassword('')
+    setDone(false)
+  }
+
+  if (done && mode === 'signup') {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center px-5">
+        <div className="max-w-md w-full text-center">
+          <span className="material-symbols-outlined text-4xl text-primary mb-4 block">mark_email_read</span>
+          <h1 className="font-['Newsreader'] text-headline-lg text-on-surface mb-3">Check your email</h1>
+          <p className="font-body-md text-on-surface-variant">
+            We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  if (done && mode === 'reset') {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center px-5">
+        <div className="max-w-md w-full text-center">
+          <span className="material-symbols-outlined text-4xl text-primary mb-4 block">mark_email_read</span>
+          <h1 className="font-['Newsreader'] text-headline-lg text-on-surface mb-3">Check your email</h1>
+          <p className="font-body-md text-on-surface-variant mb-4">
+            We sent a password reset link to <strong>{email}</strong>. Click it to set a new password.
+          </p>
+          <button onClick={() => switchMode('signin')} className="font-button text-sm text-primary hover:underline">
+            Back to sign in
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center px-5">
+      <div className="max-w-md w-full">
+        <span className="font-label-caps text-label-caps text-secondary mb-3 block">ACCOUNT</span>
+        <h1 className="font-['Newsreader'] text-headline-xl text-on-surface mb-8">
+          {mode === 'signin' ? 'Sign in' : mode === 'signup' ? 'Create account' : 'Reset password'}
+        </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="font-label-caps text-label-caps text-on-surface-variant block mb-2">
-              Email address
-            </label>
+            <label className="font-label-caps text-label-caps text-on-surface-variant block mb-2">Email</label>
             <input
               type="email"
               required
@@ -91,19 +177,50 @@ function AccountLogin() {
               className="w-full px-4 py-3 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors"
             />
           </div>
-
-          {error && (
-            <p className="font-body-md text-sm text-error">{error}</p>
+          {mode !== 'reset' && (
+            <div>
+              <label className="font-label-caps text-label-caps text-on-surface-variant block mb-2">Password</label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full px-4 py-3 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors"
+              />
+            </div>
           )}
+
+          {error && <p className="font-body-md text-sm text-error">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
             className="w-full py-3.5 bg-primary text-on-primary font-button text-button rounded-sm hover:opacity-90 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {loading ? 'Sending...' : 'Send sign-in link'}
+            {loading ? '...' : mode === 'signin' ? 'Sign in' : mode === 'signup' ? 'Create account' : 'Send reset link'}
           </button>
         </form>
+
+        <div className="mt-6 space-y-2">
+          {mode === 'signin' && (
+            <>
+              <p className="font-body-md text-sm text-on-surface-variant">
+                Don't have an account?{' '}
+                <button onClick={() => switchMode('signup')} className="text-primary hover:underline">Create one</button>
+              </p>
+              <p className="font-body-md text-sm text-on-surface-variant">
+                Forgot your password?{' '}
+                <button onClick={() => switchMode('reset')} className="text-primary hover:underline">Reset it</button>
+              </p>
+            </>
+          )}
+          {(mode === 'signup' || mode === 'reset') && (
+            <p className="font-body-md text-sm text-on-surface-variant">
+              <button onClick={() => switchMode('signin')} className="text-primary hover:underline">Back to sign in</button>
+            </p>
+          )}
+        </div>
       </div>
     </div>
   )
@@ -238,11 +355,65 @@ function OrderRow({ order, onNavigate }: { order: WholesaleOrder; onNavigate: ()
   )
 }
 
+function SetPasswordForm() {
+  const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [done, setDone] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (password !== confirm) { setError('Passwords do not match.'); return }
+    if (password.length < 8) { setError('Password must be at least 8 characters.'); return }
+    setSaving(true)
+    setError(null)
+    const { error } = await supabase.auth.updateUser({ password })
+    if (error) { setError(error.message); setSaving(false); return }
+    setDone(true)
+    setSaving(false)
+    setPassword('')
+    setConfirm('')
+  }
+
+  if (done) return <p className="font-body-md text-sm text-primary">Password updated.</p>
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3 max-w-sm">
+      <input
+        type="password"
+        required
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        placeholder="New password"
+        className="w-full px-4 py-2.5 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors text-sm"
+      />
+      <input
+        type="password"
+        required
+        value={confirm}
+        onChange={e => setConfirm(e.target.value)}
+        placeholder="Confirm password"
+        className="w-full px-4 py-2.5 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors text-sm"
+      />
+      {error && <p className="font-body-md text-sm text-error">{error}</p>}
+      <button
+        type="submit"
+        disabled={saving}
+        className="px-6 py-2.5 bg-primary text-on-primary font-button text-sm rounded-sm hover:opacity-90 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        {saving ? 'Saving...' : 'Save password'}
+      </button>
+    </form>
+  )
+}
+
 function AccountDashboard() {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
   const [orders, setOrders] = useState<WholesaleOrder[]>([])
   const [loading, setLoading] = useState(true)
+  const [showSetPassword, setShowSetPassword] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -287,12 +458,21 @@ function AccountDashboard() {
         </div>
       )}
 
-      <button
-        onClick={signOut}
-        className="mt-16 font-body-md text-sm text-on-surface-variant hover:text-on-surface transition-colors underline underline-offset-2"
-      >
-        Sign out
-      </button>
+      <div className="mt-16 pt-8 border-t border-outline-variant/30">
+        <button
+          onClick={() => setShowSetPassword(v => !v)}
+          className="font-body-md text-sm text-on-surface-variant hover:text-on-surface transition-colors underline underline-offset-2 block mb-4"
+        >
+          {showSetPassword ? 'Cancel' : 'Set / change password'}
+        </button>
+        {showSetPassword && <div className="mb-6"><SetPasswordForm /></div>}
+        <button
+          onClick={signOut}
+          className="font-body-md text-sm text-on-surface-variant hover:text-on-surface transition-colors underline underline-offset-2"
+        >
+          Sign out
+        </button>
+      </div>
     </div>
   )
 }

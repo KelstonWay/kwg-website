@@ -6,6 +6,7 @@ interface AuthContextValue {
   user: User | null
   session: Session | null
   loading: boolean
+  resettingPassword: boolean
   signOut: () => Promise<void>
 }
 
@@ -13,6 +14,7 @@ const AuthContext = createContext<AuthContextValue>({
   user: null,
   session: null,
   loading: true,
+  resettingPassword: false,
   signOut: async () => {},
 })
 
@@ -20,6 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const [resettingPassword, setResettingPassword] = useState(false)
 
   useEffect(() => {
     let ignore = false
@@ -32,10 +35,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
+      if (event === 'PASSWORD_RECOVERY') setResettingPassword(true)
       ignore = true
     })
 
@@ -47,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, resettingPassword, signOut }}>
       {children}
     </AuthContext.Provider>
   )
