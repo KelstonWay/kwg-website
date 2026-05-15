@@ -256,12 +256,12 @@ function ReorderButton({ orderId }: { orderId: string }) {
     const plantIds = typedItems.map(i => i.plant_id)
     const { data: currentItems } = await supabase
       .from('availability_release_items')
-      .select('id, plant_id, unit_price, qty_available')
+      .select('id, plant_id, unit_price, tray_count, qty_available')
       .eq('release_id', release.id)
       .in('plant_id', plantIds)
       .gt('qty_available', 0)
 
-    type CurrentItem = { id: string; plant_id: string; unit_price: number; qty_available: number }
+    type CurrentItem = { id: string; plant_id: string; unit_price: number; tray_count: number; qty_available: number }
     const availableByPlantId = Object.fromEntries(
       (currentItems as CurrentItem[] ?? []).map(ci => [ci.plant_id, ci])
     )
@@ -273,6 +273,7 @@ function ReorderButton({ orderId }: { orderId: string }) {
       const current = availableByPlantId[item.plant_id]
       if (!current) { skipped++; continue }
 
+      const trayCount = current.tray_count ?? 1
       addToCart({
         id: current.id,
         plant_id: item.plant_id,
@@ -280,6 +281,8 @@ function ReorderButton({ orderId }: { orderId: string }) {
         plant_sku: item.plant_sku,
         plant_size: item.plant_size,
         unit_price: current.unit_price ?? item.unit_price,
+        tray_count: trayCount,
+        tray_price: (current.unit_price ?? item.unit_price) * trayCount,
         qty: item.qty_requested,
         photo_url: null,
         release_item_id: current.id,

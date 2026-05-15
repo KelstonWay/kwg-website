@@ -30,6 +30,8 @@ export default function PlantCard({ item, onAdd, shape = 'arch' }: Props) {
       plant_sku: item.plant_sku,
       plant_size: item.plant_size,
       unit_price: item.unit_price,
+      tray_count: item.tray_count,
+      tray_price: item.unit_price * item.tray_count,
       qty: 1,
       photo_url: item.photo_url,
       release_item_id: item.id,
