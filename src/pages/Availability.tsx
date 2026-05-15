@@ -44,6 +44,7 @@ export default function Availability() {
         plant_name: i.plants?.name ?? '',
         plant_sku: i.plants?.sku ?? '',
         plant_size: i.plants?.size ?? '',
+        tray_count: i.tray_count ?? 1,
       })) as AvailabilityItem[])
       setLoading(false)
     }
@@ -76,16 +77,18 @@ export default function Availability() {
     return q > 0 && i.unit_price
   })
   const totalUnits = orderLines.reduce((s, i) => s + (parseInt(qtys[i.id]) || 0), 0)
-  const totalPrice = orderLines.reduce((s, i) => s + (parseInt(qtys[i.id]) || 0) * (i.unit_price ?? 0), 0)
+  const totalPrice = orderLines.reduce((s, i) => s + (parseInt(qtys[i.id]) || 0) * (i.unit_price ?? 0) * i.tray_count, 0)
 
   function downloadCSV() {
     const rows = [
-      ['Plant Name', 'Item #', 'Size', 'Qty Available', 'Unit Price', 'Notes'],
+      ['Plant Name', 'Item #', 'Size', 'Qty Available (trays)', 'Tray Count', 'Tray Price', 'Unit Price (each)', 'Notes'],
       ...filtered.map(i => [
         i.plant_name,
         i.plant_sku,
         i.plant_size,
         i.qty_available,
+        i.tray_count,
+        i.unit_price != null ? (i.unit_price * i.tray_count).toFixed(2) : '',
         i.unit_price ?? '',
         i.notes ?? '',
       ]),
@@ -155,6 +158,8 @@ export default function Availability() {
         plant_sku: item.plant_sku,
         plant_size: item.plant_size,
         unit_price: item.unit_price!,
+        tray_count: item.tray_count,
+        tray_price: item.unit_price! * item.tray_count,
         qty: parseInt(qtys[item.id]),
         photo_url: item.photo_url,
         release_item_id: item.id,
@@ -329,7 +334,7 @@ export default function Availability() {
           <div className="bg-primary-fixed/60 border border-primary/20 rounded-xl px-5 py-3 mb-6 flex items-center gap-3">
             <span className="material-symbols-outlined text-primary text-lg">edit_note</span>
             <p className="font-body-md text-sm text-on-surface">
-              Enter the quantity you'd like for each item. Tap a photo to see it larger. When ready, hit <span className="font-semibold">Review Order</span> below.
+              Enter the number of trays you'd like for each item. Tap a photo to see it larger. When ready, hit <span className="font-semibold">Review Order</span> below.
             </p>
           </div>
         )}
@@ -441,7 +446,7 @@ export default function Availability() {
                         <div className="flex gap-2 mt-0.5 md:hidden flex-wrap">
                           <span className="font-body-md text-xs text-on-surface-variant">{item.plant_sku}</span>
                           <span className="font-body-md text-xs text-on-surface-variant">{item.plant_size}</span>
-                          <span className="font-body-md text-xs text-on-surface-variant">{item.qty_available} avail</span>
+                          <span className="font-body-md text-xs text-on-surface-variant">{item.qty_available} trays available</span>
                         </div>
                       </td>
 
@@ -449,7 +454,11 @@ export default function Availability() {
                       <td className="py-2 font-label-caps text-xs text-on-surface-variant hidden md:table-cell">{item.plant_size}</td>
                       <td className="py-2 font-body-md font-semibold text-on-surface text-right hidden md:table-cell">{item.qty_available.toLocaleString()}</td>
                       <td className="py-2 font-body-md text-sm font-medium text-on-surface text-right">
-                        {item.unit_price ? `$${item.unit_price.toFixed(2)}` : '—'}
+                        {item.unit_price
+                          ? orderMode
+                            ? `$${(item.unit_price * item.tray_count).toFixed(2)}/tray (${item.tray_count}-count)`
+                            : `$${item.unit_price.toFixed(2)}`
+                          : '—'}
                       </td>
 
                       {orderMode ? (
@@ -505,7 +514,7 @@ export default function Availability() {
             <div className="flex items-center gap-6">
               <div>
                 <p className="font-label-caps text-[10px] text-on-primary/70 uppercase tracking-widest">Your Order</p>
-                <p className="font-body-md font-semibold">{orderLines.length} {orderLines.length === 1 ? 'item' : 'items'} · {totalUnits.toLocaleString()} units</p>
+                <p className="font-body-md font-semibold">{orderLines.length} {orderLines.length === 1 ? 'item' : 'items'} · {totalUnits.toLocaleString()} trays</p>
               </div>
               <div className="hidden md:block w-px h-8 bg-on-primary/20" />
               <div className="hidden md:block">
