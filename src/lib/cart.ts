@@ -48,5 +48,5 @@ export function cartCount(): number {
 }
 
 export function cartTotal(): number {
-  return getCart().reduce((sum, i) => sum + i.qty * i.unit_price, 0)
+  return getCart().reduce((sum, i) => sum + i.qty * i.tray_price, 0)
 }
