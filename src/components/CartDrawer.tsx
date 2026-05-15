@@ -66,12 +66,12 @@ export default function CartDrawer({ open, onClose }: Props) {
                     className="w-16 border border-outline-variant rounded px-2 py-1 text-base font-body-md text-center focus:outline-none focus:border-primary"
                   />
                   <span className="font-body-md text-sm text-on-surface-variant">
-                    × ${item.unit_price.toFixed(2)}
+                    × ${(item.tray_price ?? item.unit_price).toFixed(2)}/tray ({item.tray_count ?? 1}-count)
                   </span>
                 </div>
               </div>
               <div className="text-right flex-shrink-0">
-                <p className="font-body-md font-medium text-on-surface">${(item.qty * item.unit_price).toFixed(2)}</p>
+                <p className="font-body-md font-medium text-on-surface">${(item.qty * (item.tray_price ?? item.unit_price)).toFixed(2)}</p>
                 <button onClick={() => handleRemove(item.release_item_id)} className="text-error text-xs mt-1 hover:underline font-button">
                   Remove
                 </button>
@@ -83,7 +83,7 @@ export default function CartDrawer({ open, onClose }: Props) {
         {items.length > 0 && (
           <div className="px-6 py-5 border-t border-outline-variant/30 space-y-4">
             <div className="flex justify-between font-body-md text-on-surface-variant text-sm">
-              <span>Total units</span>
+              <span>Total trays</span>
               <span>{totalUnits.toLocaleString()}</span>
             </div>
             <div className="flex justify-between font-['Newsreader'] text-lg text-on-surface">

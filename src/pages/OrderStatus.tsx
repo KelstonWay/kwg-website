@@ -10,6 +10,8 @@ interface OrderItem {
   plant_sku: string
   qty_requested: number
   unit_price: number
+  tray_count: number | null
+  tray_price: number | null
   line_total: number
 }
 
@@ -131,14 +133,17 @@ export default function OrderStatus() {
               <p className="font-['Newsreader'] italic text-on-surface">{item.plant_name}</p>
               <p className="font-body-md text-sm text-on-surface-variant">{item.plant_size} · {item.plant_sku}</p>
             </div>
-            <span className="font-body-md text-on-surface-variant">{item.qty_requested} × ${item.unit_price.toFixed(2)}</span>
+            <span className="font-body-md text-on-surface-variant">
+              {item.qty_requested} trays × ${(item.tray_price ?? item.unit_price).toFixed(2)}/tray
+              {item.tray_count && item.tray_count > 1 ? ` (${item.tray_count}-count)` : ''}
+            </span>
             <span className="font-body-md font-medium text-on-surface">${item.line_total.toFixed(2)}</span>
           </div>
         ))}
       </div>
       <div className="flex justify-end mb-12">
         <div className="text-right">
-          <p className="font-label-caps text-label-caps text-on-surface-variant mb-1">{order.total_units?.toLocaleString()} total units</p>
+          <p className="font-label-caps text-label-caps text-on-surface-variant mb-1">{order.total_units?.toLocaleString()} total trays</p>
           <p className="font-['Newsreader'] text-2xl text-on-surface">${order.total_price?.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
         </div>
       </div>

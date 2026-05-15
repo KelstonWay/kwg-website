@@ -106,8 +106,8 @@ export default function Order() {
                     onChange={e => handleQty(item.release_item_id, parseInt(e.target.value) || 1)}
                     className="w-16 border border-outline-variant rounded px-2 py-1.5 text-base font-body-md text-center focus:outline-none focus:border-primary"
                   />
-                  <span className="font-body-md text-sm text-on-surface-variant">× ${item.tray_price.toFixed(2)}/tray ({item.tray_count}-count)</span>
-                  <span className="font-body-md font-medium text-on-surface ml-auto">${(item.qty * item.tray_price).toFixed(2)}</span>
+                  <span className="font-body-md text-sm text-on-surface-variant">× ${(item.tray_price ?? item.unit_price).toFixed(2)}/tray ({item.tray_count ?? 1}-count)</span>
+                  <span className="font-body-md font-medium text-on-surface ml-auto">${(item.qty * (item.tray_price ?? item.unit_price)).toFixed(2)}</span>
                   <button onClick={() => handleRemove(item.release_item_id)} className="p-1.5 hover:bg-error-container rounded transition-colors">
                     <span className="material-symbols-outlined text-error text-lg">delete</span>
                   </button>
