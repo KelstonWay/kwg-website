@@ -6,6 +6,7 @@ export interface AvailabilityItem {
   plant_size: string
   qty_available: number
   unit_price: number | null
+  tray_count: number
   photo_url: string | null
   grade: 1 | 2 | 3 | null
   release_id: string
@@ -19,6 +20,8 @@ export interface CartItem {
   plant_sku: string
   plant_size: string
   unit_price: number
+  tray_count: number
+  tray_price: number
   qty: number
   photo_url: string | null
   release_item_id: string
@@ -46,6 +49,7 @@ export interface WholesaleOrderItem {
   plant_size: string
   plant_id: string
   unit_price: number
+  tray_count: number
   qty_requested: number
   line_total: number
   release_item_id: string
