@@ -30,7 +30,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const releaseItemIds = items.map((i: any) => String(i.release_item_id))
   const { data: releaseItems, error: riErr } = await supabase
     .from('availability_release_items')
-    .select('id, unit_price, qty_available, plant_id, plants(name, sku, size)')
+    .select('id, unit_price, tray_count, qty_available, plant_id, plants(name, sku, size)')
     .in('id', releaseItemIds)
 
   if (riErr || !releaseItems) return res.status(500).json({ error: 'Failed to load items' })
@@ -42,6 +42,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (!ri) return null
       const qty = Math.max(1, Math.floor(Number(i.qty) || 1))
       const unitPrice = ri.unit_price ?? 0
+      const trayCount = ri.tray_count ?? 1
+      const trayPrice = unitPrice * trayCount
       return {
         release_item_id: i.release_item_id,
         plant_id: ri.plant_id,
@@ -49,8 +51,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         plant_sku: ri.plants?.sku ?? '',
         plant_size: ri.plants?.size ?? '',
         unit_price: unitPrice,
+        tray_count: trayCount,
+        tray_price: trayPrice,
         qty_requested: qty,
-        line_total: unitPrice * qty,
+        line_total: trayPrice * qty,
       }
     })
     .filter(Boolean) as any[]
@@ -82,7 +86,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const confirmUrl = `https://kelstonway.com/order/${order.id}?token=${order.confirm_token}`
   const itemsHtml = orderLines
-    .map(i => `<tr><td>${esc(i.plant_name)}</td><td>${esc(i.plant_size)}</td><td>${i.qty_requested}</td><td>$${i.unit_price.toFixed(2)}</td><td>$${i.line_total.toFixed(2)}</td></tr>`)
+    .map(i => `<tr><td>${esc(i.plant_name)}</td><td>${esc(i.plant_size)}</td><td>${i.qty_requested} trays (${i.tray_count}-count)</td><td>$${i.tray_price.toFixed(2)}/tray</td><td>$${i.line_total.toFixed(2)}</td></tr>`)
     .join('')
 
   try {
@@ -97,7 +101,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         from: 'orders@kelstonway.com',
         to: SAMUEL_EMAIL,
         subject: `New Wholesale Order — ${esc(contact.business_name)} — $${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
-        html: `<h2>New Order from ${esc(contact.business_name)}</h2><p><strong>Contact:</strong> ${esc(contact.contact_name)} &lt;${esc(contact.email)}&gt;<br/><strong>Phone:</strong> ${esc(contact.phone || 'N/A')}<br/><strong>Notes:</strong> ${esc(contact.notes || 'N/A')}</p><table border="1" cellpadding="6"><thead><tr><th>Plant</th><th>Size</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>${itemsHtml}</tbody></table><p><strong>Total: ${totalUnits} units / $${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></p><p><a href="${confirmUrl}">✅ Confirm This Order</a></p>`,
+        html: `<h2>New Order from ${esc(contact.business_name)}</h2><p><strong>Contact:</strong> ${esc(contact.contact_name)} &lt;${esc(contact.email)}&gt;<br/><strong>Phone:</strong> ${esc(contact.phone || 'N/A')}<br/><strong>Notes:</strong> ${esc(contact.notes || 'N/A')}</p><table border="1" cellpadding="6"><thead><tr><th>Plant</th><th>Size</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>${itemsHtml}</tbody></table><p><strong>Total: ${totalUnits} trays / $${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></p><p><a href="${confirmUrl}">✅ Confirm This Order</a></p>`,
       }),
     ])
   } catch { /* email failure is non-fatal */ }
