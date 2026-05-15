@@ -106,8 +106,8 @@ export default function Order() {
                     onChange={e => handleQty(item.release_item_id, parseInt(e.target.value) || 1)}
                     className="w-16 border border-outline-variant rounded px-2 py-1.5 text-base font-body-md text-center focus:outline-none focus:border-primary"
                   />
-                  <span className="font-body-md text-sm text-on-surface-variant">× ${item.unit_price.toFixed(2)}</span>
-                  <span className="font-body-md font-medium text-on-surface ml-auto">${(item.qty * item.unit_price).toFixed(2)}</span>
+                  <span className="font-body-md text-sm text-on-surface-variant">× ${item.tray_price.toFixed(2)}/tray ({item.tray_count}-count)</span>
+                  <span className="font-body-md font-medium text-on-surface ml-auto">${(item.qty * item.tray_price).toFixed(2)}</span>
                   <button onClick={() => handleRemove(item.release_item_id)} className="p-1.5 hover:bg-error-container rounded transition-colors">
                     <span className="material-symbols-outlined text-error text-lg">delete</span>
                   </button>
@@ -117,7 +117,7 @@ export default function Order() {
           </div>
           <div className="mt-8 pt-6 border-t border-outline-variant flex justify-between items-center">
             <div className="font-body-md text-on-surface-variant">
-              {totalUnits.toLocaleString()} total units
+              {totalUnits.toLocaleString()} total trays
             </div>
             <div className="text-right">
               <p className="font-label-caps text-label-caps text-on-surface-variant mb-1">Estimated Total</p>
