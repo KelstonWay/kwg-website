@@ -128,5 +128,44 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ])
   } catch { /* email failure is non-fatal */ }
 
+  // Write to kwg-structure's order_submissions table (same Supabase project)
+  try {
+    const rawPayload = {
+      wholesale_order_id: order.id,
+      contact,
+      items: orderLines,
+      total_units: totalUnits,
+      total_price: totalPrice,
+    }
+
+    // Insert submission
+    const { data: submission } = await supabase
+      .from('order_submissions')
+      .insert({
+        source_email: contact.email,
+        raw_payload: rawPayload,
+        status: 'unmatched',
+      })
+      .select('id')
+      .single()
+
+    // Auto-match if email is a known buyer contact
+    if (submission) {
+      const { data: match } = await supabase
+        .from('buyer_contacts')
+        .select('id')
+        .eq('email', contact.email)
+        .limit(1)
+        .single()
+
+      if (match) {
+        await supabase
+          .from('order_submissions')
+          .update({ status: 'matched', buyer_contact_id: match.id })
+          .eq('id', submission.id)
+      }
+    }
+  } catch { /* non-fatal — website order already succeeded */ }
+
   return res.status(200).json({ orderId: order.id, email: contact.email })
 }
