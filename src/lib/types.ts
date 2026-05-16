@@ -4,6 +4,7 @@ export interface AvailabilityItem {
   plant_name: string
   plant_sku: string
   plant_size: string
+  plant_type: string | null
   qty_available: number
   unit_price: number | null
   tray_count: number
