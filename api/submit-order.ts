@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
+import * as XLSX from 'xlsx'
 
 function esc(s: string) {
   return String(s)
@@ -89,19 +90,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     .map(i => `<tr><td>${esc(i.plant_name)}</td><td>${esc(i.plant_size)}</td><td>${i.qty_requested} trays (${i.tray_count}-count)</td><td>$${i.tray_price.toFixed(2)}/tray</td><td>$${i.line_total.toFixed(2)}</td></tr>`)
     .join('')
 
+  // Build Excel attachment for Samuel's accounting import
+  const wsRows = orderLines.map(i => ({
+    'Business': contact.business_name,
+    'Contact': contact.contact_name,
+    'Item #': i.plant_sku,
+    'Plant Name': i.plant_name,
+    'Size': i.plant_size,
+    'Qty (trays)': i.qty_requested,
+    'Plants / Tray': i.tray_count,
+    'Price / Tray': parseFloat(i.tray_price.toFixed(2)),
+    'Line Total': parseFloat(i.line_total.toFixed(2)),
+  }))
+  const ws = XLSX.utils.json_to_sheet(wsRows)
+  ws['!cols'] = [20, 20, 12, 32, 12, 14, 16, 14, 14].map(wch => ({ wch }))
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'Order')
+  const xlsxBuffer: Buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
+  const orderRef = order.id.slice(0, 8).toUpperCase()
+  const xlsxFilename = `kwg-order-${orderRef}-${contact.business_name.replace(/[^a-zA-Z0-9]/g, '-').slice(0, 30)}.xlsx`
+
   try {
     await Promise.all([
       resend.emails.send({
         from: 'orders@kelstonway.com',
         to: contact.email,
         subject: 'Order Received — Kelston Way Greenhouse',
-        html: `<h2>Thank you, ${esc(contact.contact_name)}!</h2><p>We've received your wholesale order (ref: <strong>${order.id.slice(0, 8).toUpperCase()}</strong>) and will be in touch within 1 business day.</p><p>— Kelston Way Greenhouse</p>`,
+        html: `<h2>Thank you, ${esc(contact.contact_name)}!</h2><p>We've received your wholesale order (ref: <strong>${orderRef}</strong>) and will be in touch within 1 business day.</p><p>— Kelston Way Greenhouse</p>`,
       }),
       resend.emails.send({
         from: 'orders@kelstonway.com',
         to: SAMUEL_EMAIL,
         subject: `New Wholesale Order — ${esc(contact.business_name)} — $${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
         html: `<h2>New Order from ${esc(contact.business_name)}</h2><p><strong>Contact:</strong> ${esc(contact.contact_name)} &lt;${esc(contact.email)}&gt;<br/><strong>Phone:</strong> ${esc(contact.phone || 'N/A')}<br/><strong>Notes:</strong> ${esc(contact.notes || 'N/A')}</p><table border="1" cellpadding="6"><thead><tr><th>Plant</th><th>Size</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>${itemsHtml}</tbody></table><p><strong>Total: ${totalUnits} trays / $${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></p><p><a href="${confirmUrl}">✅ Confirm This Order</a></p>`,
+        attachments: [{ filename: xlsxFilename, content: xlsxBuffer }],
       }),
     ])
   } catch { /* email failure is non-fatal */ }

@@ -88,7 +88,7 @@ export default function Order() {
                 {/* Row 1: photo + name */}
                 <div className="flex items-start gap-4 mb-3">
                   {item.photo_url && (
-                    <div className="w-14 h-[72px] organic-shape-1 overflow-hidden flex-shrink-0 bg-surface-container">
+                    <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
                       <img src={item.photo_url} alt={item.plant_name} className="w-full h-full object-cover" />
                     </div>
                   )}
