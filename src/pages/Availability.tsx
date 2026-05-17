@@ -472,13 +472,13 @@ export default function Availability() {
         </div>
 
         {/* Import from Excel callout */}
-        <div className="bg-white border border-outline-variant/50 rounded-xl px-5 py-4 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="bg-secondary/5 border border-secondary/20 rounded-xl px-5 py-4 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-start gap-3">
-            <span className="material-symbols-outlined text-secondary text-xl mt-0.5">upload_file</span>
+            <span className="material-symbols-outlined text-secondary text-xl mt-0.5">table_view</span>
             <div>
-              <p className="font-button text-sm text-on-surface">Order by Excel</p>
+              <p className="font-button text-sm text-on-surface">Another way to order — Excel</p>
               <p className="font-body-md text-xs text-on-surface-variant">
-                Download the Excel template, fill in your quantities, then upload it to place your order.
+                Download our order template, fill in your quantities, and upload it here. Great for large orders.
               </p>
             </div>
           </div>

@@ -192,6 +192,13 @@ export default function Order() {
             <p className="font-body-md text-xs text-on-surface-variant text-center">
               We'll review your order and reach out with an invoice within 1 business day.
             </p>
+            <p className="font-body-md text-xs text-on-surface-variant text-center pt-1">
+              Prefer a spreadsheet?{' '}
+              <a href="/availability" className="text-secondary underline underline-offset-2 hover:opacity-80">
+                Download the Excel template
+              </a>{' '}
+              from the availability page.
+            </p>
           </form>
         </div>
       </div>
