@@ -139,15 +139,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Insert submission
-    const { data: submission } = await supabase
+    const { data: submission, error: subErr } = await supabase
       .from('order_submissions')
       .insert({
-        source_email: contact.email,
+        email_provided: contact.email,
         raw_payload: rawPayload,
         status: 'unmatched',
       })
       .select('id')
       .single()
+    if (subErr) console.error('order_submissions insert failed:', subErr.message)
 
     // Auto-match if email is a known buyer contact
     if (submission) {
