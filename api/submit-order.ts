@@ -23,7 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const { items, contact } = req.body ?? {}
 
-  if (!Array.isArray(items) || !items.length || !contact?.business_name || !contact?.contact_name || !contact?.email) {
+  if (!Array.isArray(items) || !items.length || !contact?.business_name || !contact?.contact_name || !contact?.email || !contact?.address_street || !contact?.address_city || !contact?.address_state || !contact?.address_zip) {
     return res.status(400).json({ error: 'Missing required fields' })
   }
 

@@ -5,7 +5,7 @@ import type { CartItem } from '../lib/types'
 
 export default function Order() {
   const [items, setItems] = useState<CartItem[]>(getCart())
-  const [form, setForm] = useState({ business_name: '', contact_name: '', email: '', phone: '', notes: '' })
+  const [form, setForm] = useState({ business_name: '', contact_name: '', email: '', phone: '', address_street: '', address_city: '', address_state: '', address_zip: '', notes: '' })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
@@ -170,6 +170,40 @@ export default function Order() {
                 className="w-full border border-outline-variant rounded px-4 py-3 font-body-md focus:outline-none focus:border-primary transition-colors"
                 placeholder="Optional"
               />
+            </div>
+            <div>
+              <label className="font-label-caps text-label-caps text-on-surface-variant block mb-2">DELIVERY ADDRESS *</label>
+              <input
+                required
+                value={form.address_street}
+                onChange={e => setForm(f => ({ ...f, address_street: e.target.value }))}
+                className="w-full border border-outline-variant rounded px-4 py-3 font-body-md focus:outline-none focus:border-primary transition-colors mb-2"
+                placeholder="Street address"
+              />
+              <div className="grid grid-cols-6 gap-2">
+                <input
+                  required
+                  value={form.address_city}
+                  onChange={e => setForm(f => ({ ...f, address_city: e.target.value }))}
+                  className="col-span-3 border border-outline-variant rounded px-4 py-3 font-body-md focus:outline-none focus:border-primary transition-colors"
+                  placeholder="City"
+                />
+                <input
+                  required
+                  value={form.address_state}
+                  onChange={e => setForm(f => ({ ...f, address_state: e.target.value.toUpperCase().slice(0, 2) }))}
+                  className="col-span-1 border border-outline-variant rounded px-4 py-3 font-body-md focus:outline-none focus:border-primary transition-colors"
+                  placeholder="TX"
+                  maxLength={2}
+                />
+                <input
+                  required
+                  value={form.address_zip}
+                  onChange={e => setForm(f => ({ ...f, address_zip: e.target.value }))}
+                  className="col-span-2 border border-outline-variant rounded px-4 py-3 font-body-md focus:outline-none focus:border-primary transition-colors"
+                  placeholder="ZIP"
+                />
+              </div>
             </div>
             <div>
               <label className="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOTES</label>
