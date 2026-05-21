@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { AuthProvider } from './contexts/AuthContext'
+import { CartProvider } from './contexts/CartContext'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -24,6 +25,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <CartProvider>
         <ScrollToTop />
         <div className="flex min-h-screen flex-col bg-background text-on-background">
           <Nav />
@@ -41,6 +43,7 @@ export default function App() {
           </main>
           <Footer />
         </div>
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   )

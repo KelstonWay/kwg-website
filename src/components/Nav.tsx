@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { cartVarietyCount } from '../lib/cart'
 import { useAuth } from '../contexts/AuthContext'
+import { useCart } from '../contexts/CartContext'
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
@@ -12,17 +12,11 @@ const NAV_LINKS = [
 ]
 
 export default function Nav() {
-  const [count, setCount] = useState(cartVarietyCount())
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { user } = useAuth()
-
-  useEffect(() => {
-    const update = () => setCount(cartVarietyCount())
-    window.addEventListener('cart-updated', update)
-    return () => window.removeEventListener('cart-updated', update)
-  }, [])
+  const { varietyCount: count } = useCart()
 
   useEffect(() => {
     setMenuOpen(false)

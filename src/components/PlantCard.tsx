@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { AvailabilityItem } from '../lib/types'
-import { addToCart } from '../lib/cart'
+import { useCart } from '../contexts/CartContext'
 
 interface Props {
   item: AvailabilityItem
@@ -21,6 +21,7 @@ const shapeClass: Record<string, string> = {
 
 export default function PlantCard({ item, onAdd, shape = 'arch' }: Props) {
   const [added, setAdded] = useState(false)
+  const { addToCart } = useCart()
 
   function handleAdd() {
     if (!item.unit_price) return
@@ -37,7 +38,6 @@ export default function PlantCard({ item, onAdd, shape = 'arch' }: Props) {
       photo_url: item.photo_url,
       release_item_id: item.id,
     })
-    window.dispatchEvent(new Event('cart-updated'))
     setAdded(true)
     onAdd?.()
     setTimeout(() => setAdded(false), 2000)

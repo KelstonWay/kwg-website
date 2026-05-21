@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCart, updateQty, removeFromCart, cartTotal } from '../lib/cart'
-import type { CartItem } from '../lib/types'
+import { useCart } from '../contexts/CartContext'
 
 interface Props {
   open: boolean
@@ -9,28 +7,9 @@ interface Props {
 }
 
 export default function CartDrawer({ open, onClose }: Props) {
-  const [items, setItems] = useState<CartItem[]>(getCart())
+  const { items, total, updateQty, removeFromCart } = useCart()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const refresh = () => setItems(getCart())
-    window.addEventListener('cart-updated', refresh)
-    return () => window.removeEventListener('cart-updated', refresh)
-  }, [])
-
-  function handleQty(releaseItemId: string, qty: number) {
-    updateQty(releaseItemId, qty)
-    setItems(getCart())
-    window.dispatchEvent(new Event('cart-updated'))
-  }
-
-  function handleRemove(releaseItemId: string) {
-    removeFromCart(releaseItemId)
-    setItems(getCart())
-    window.dispatchEvent(new Event('cart-updated'))
-  }
-
-  const total = cartTotal()
   const totalUnits = items.reduce((s, i) => s + i.qty, 0)
 
   return (
@@ -78,7 +57,7 @@ export default function CartDrawer({ open, onClose }: Props) {
                       min="1"
                       value={item.qty}
                       onChange={(e) =>
-                        handleQty(item.release_item_id, parseInt(e.target.value) || 1)
+                        updateQty(item.release_item_id, parseInt(e.target.value) || 1)
                       }
                       className="w-16 rounded border border-outline-variant px-2 py-1 text-center font-body-md text-base focus:border-primary focus:outline-none"
                     />
@@ -93,7 +72,7 @@ export default function CartDrawer({ open, onClose }: Props) {
                     ${(item.qty * (item.tray_price ?? item.unit_price)).toFixed(2)}
                   </p>
                   <button
-                    onClick={() => handleRemove(item.release_item_id)}
+                    onClick={() => removeFromCart(item.release_item_id)}
                     className="mt-1 font-button text-xs text-error hover:underline"
                   >
                     Remove

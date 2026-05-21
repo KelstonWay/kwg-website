@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import type { AvailabilityItem } from '../lib/types'
-import { clearCart, addToCart } from '../lib/cart'
+import { useCart } from '../contexts/CartContext'
 
 export default function Availability() {
   const [items, setItems] = useState<AvailabilityItem[]>([])
@@ -20,6 +20,7 @@ export default function Availability() {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
   const [importing, setImporting] = useState(false)
   const navigate = useNavigate()
+  const { addToCart, clearCart } = useCart()
 
   useEffect(() => {
     async function load() {
@@ -228,7 +229,6 @@ export default function Availability() {
           release_item_id: item.id,
         })
       })
-      window.dispatchEvent(new Event('cart-updated'))
       navigate('/order')
     } catch (err) {
       console.error('Import failed:', err)
@@ -266,7 +266,6 @@ export default function Availability() {
         release_item_id: item.id,
       })
     })
-    window.dispatchEvent(new Event('cart-updated'))
     navigate('/order')
   }
 

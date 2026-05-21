@@ -2,6 +2,21 @@
 
 B2B wholesale website for Kelston Way Greenhouse. Live at kelstonway.com.
 
+## ⚠️ MANDATORY: Codex Review Before Every Deploy
+
+**No code ships without Codex adversarial review. No exceptions.**
+
+```bash
+node "/home/samuel/.claude/plugins/cache/openai-codex/codex/1.0.4/scripts/codex-companion.mjs" adversarial-review "[describe what changed]" 2>&1
+```
+
+**Deploy command breaks `.git`** — if Codex fails "not a git repo", restore: `mv .git_backup .git`
+
+Deploy:
+```bash
+mv .git .git_backup && npx vercel --prod --yes && mv .git_backup .git
+```
+
 ## Stack
 - React 19 + Vite + TypeScript + Tailwind v3
 - Supabase: `wuemcpptmjmvtzaciezq` (kelston-way project)
@@ -59,3 +74,25 @@ Once GitHub is connected to Vercel, just `git push`.
 - Order confirm uses a UUID token in `wholesale_orders.confirm_token`
 - CSP in vercel.json — if adding a new external service, add its domain to connect-src
 - Founder order always: Art → Titus → Samuel
+
+## Infrastructure (Established 2026-05-20)
+
+**Supabase TypeScript types:** `src/lib/database.types.ts` — auto-generated, never hand-edit.
+Regenerate: `supabase gen types typescript --project-id wuemcpptmjmvtzaciezq > src/lib/database.types.ts`
+Client is wired: `createClient<Database>(url, key)` in `src/lib/supabase.ts`.
+
+**Prettier:** `.prettierrc` at root — singleQuote, no semi, printWidth 100, prettier-plugin-tailwindcss.
+
+**ESLint:** Enforces `no-explicit-any: warn` and `consistent-type-imports: error`.
+
+## Coding Standards (Codex-reviewed)
+
+**Component structure:** Named exports, one component per file, PascalCase filenames, static arrays above component.
+
+**TypeScript:** No implicit `any`. `|| undefined` not `|| null` for optional RPC params. No `as T` casts to paper over nullables.
+
+**Codex review after every task:** `/codex:adversarial-review`
+
+## Coding Decisions
+
+- Search bar removed from Availability page (2026-05-20) — it did nothing useful

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
-import { addToCart } from '../lib/cart'
+import { useCart } from '../contexts/CartContext'
 import type { WholesaleOrder, WholesaleOrderItem } from '../lib/types'
 
 function PasswordForm({ compact = false }: { compact?: boolean }) {
@@ -298,6 +298,7 @@ function AccountLogin() {
 
 function ReorderButton({ orderId }: { orderId: string }) {
   const navigate = useNavigate()
+  const { addToCart } = useCart()
   const [loading, setLoading] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
 
@@ -375,7 +376,6 @@ function ReorderButton({ orderId }: { orderId: string }) {
         photo_url: null,
         release_item_id: current.id,
       })
-      window.dispatchEvent(new Event('cart-updated'))
       added++
     }
 

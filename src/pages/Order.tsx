@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCart, updateQty, removeFromCart, cartTotal, clearCart } from '../lib/cart'
-import type { CartItem } from '../lib/types'
+import { useCart } from '../contexts/CartContext'
 
 export default function Order() {
-  const [items, setItems] = useState<CartItem[]>(getCart())
+  const { items, total, updateQty, removeFromCart, clearCart } = useCart()
   const [form, setForm] = useState({
     business_name: '',
     contact_name: '',
@@ -19,24 +18,6 @@ export default function Order() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
-
-  useEffect(() => {
-    const refresh = () => setItems(getCart())
-    window.addEventListener('cart-updated', refresh)
-    return () => window.removeEventListener('cart-updated', refresh)
-  }, [])
-
-  function handleQty(releaseItemId: string, qty: number) {
-    updateQty(releaseItemId, qty)
-    setItems(getCart())
-    window.dispatchEvent(new Event('cart-updated'))
-  }
-
-  function handleRemove(releaseItemId: string) {
-    removeFromCart(releaseItemId)
-    setItems(getCart())
-    window.dispatchEvent(new Event('cart-updated'))
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -59,7 +40,6 @@ export default function Order() {
       if (!res.ok) throw new Error(data.error ?? 'Failed to submit order')
 
       clearCart()
-      window.dispatchEvent(new Event('cart-updated'))
       navigate('/order/confirmed', { state: { orderId: data.orderId, email: data.email } })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
@@ -67,7 +47,6 @@ export default function Order() {
     }
   }
 
-  const total = cartTotal()
   const totalUnits = items.reduce((s, i) => s + i.qty, 0)
 
   if (items.length === 0) {
@@ -134,7 +113,7 @@ export default function Order() {
                     type="number"
                     min="1"
                     value={item.qty}
-                    onChange={(e) => handleQty(item.release_item_id, parseInt(e.target.value) || 1)}
+                    onChange={(e) => updateQty(item.release_item_id, parseInt(e.target.value) || 1)}
                     className="w-16 rounded border border-outline-variant px-2 py-1.5 text-center font-body-md text-base focus:border-primary focus:outline-none"
                   />
                   <span className="font-body-md text-sm text-on-surface-variant">
@@ -145,7 +124,7 @@ export default function Order() {
                     ${(item.qty * (item.tray_price ?? item.unit_price)).toFixed(2)}
                   </span>
                   <button
-                    onClick={() => handleRemove(item.release_item_id)}
+                    onClick={() => removeFromCart(item.release_item_id)}
                     className="rounded p-1.5 transition-colors hover:bg-error-container"
                   >
                     <span className="material-symbols-outlined text-lg text-error">delete</span>
