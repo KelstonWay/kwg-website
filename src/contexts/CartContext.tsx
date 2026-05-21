@@ -1,12 +1,10 @@
-import { createContext, useContext, useState, useCallback } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import {
   getCart,
   addToCart as cartAdd,
   updateQty as cartUpdateQty,
   removeFromCart as cartRemove,
   clearCart as cartClear,
-  cartTotal as cartGetTotal,
-  cartVarietyCount as cartGetVarietyCount,
 } from '../lib/cart'
 import type { CartItem } from '../lib/types'
 
@@ -26,6 +24,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => getCart())
 
   const refresh = useCallback(() => setItems(getCart()), [])
+
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'kwg_cart') refresh()
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [refresh])
 
   const addToCart = useCallback(
     (item: CartItem) => {
@@ -60,8 +66,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     <CartContext.Provider
       value={{
         items,
-        total: cartGetTotal(),
-        varietyCount: cartGetVarietyCount(),
+        total: items.reduce((s, i) => s + i.qty * i.tray_price, 0),
+        varietyCount: items.length,
         addToCart,
         updateQty,
         removeFromCart,
