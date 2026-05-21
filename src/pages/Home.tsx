@@ -33,11 +33,12 @@ export default function Home() {
         .limit(3)
       if (items)
         setPreview(
-          items.map((i: any) => ({
+          items.map((i) => ({
             ...i,
             plant_name: i.plants?.name ?? '',
             plant_sku: i.plants?.sku ?? '',
             plant_size: i.plants?.size ?? '',
+            plant_type: null,
           })) as AvailabilityItem[]
         )
     }

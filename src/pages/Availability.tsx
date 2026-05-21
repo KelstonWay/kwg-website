@@ -44,7 +44,7 @@ export default function Availability() {
         .gt('qty_available', 0)
       if (data)
         setItems(
-          data.map((i: any) => ({
+          data.map((i) => ({
             ...i,
             plant_name: i.plants?.name ?? '',
             plant_sku: i.plants?.sku ?? '',
