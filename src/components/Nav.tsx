@@ -24,25 +24,28 @@ export default function Nav() {
     return () => window.removeEventListener('cart-updated', update)
   }, [])
 
-  useEffect(() => { setMenuOpen(false) }, [pathname])
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [pathname])
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-5 md:px-20 h-16 bg-white/90 backdrop-blur-md border-b border-outline-variant/30 transition-all duration-300">
+      <header className="fixed left-0 top-0 z-50 flex h-16 w-full items-center justify-between border-b border-outline-variant/30 bg-white/90 px-5 backdrop-blur-md transition-all duration-300 md:px-20">
         <div className="flex items-center gap-6">
           <Link to="/">
             <img src="/logo-cropped.png" alt="Kelston Way" className="h-11 w-auto" />
           </Link>
-          <nav className="hidden md:flex gap-2">
+          <nav className="hidden gap-2 md:flex">
             {NAV_LINKS.map(({ to, label }) => {
-              const active = to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(to + '/')
+              const active =
+                to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(to + '/')
               return (
                 <Link
                   key={to}
                   to={to}
                   className={`px-3 py-1.5 font-button text-sm transition-all duration-200 ${
                     active
-                      ? 'text-on-surface font-semibold border-b border-on-surface'
+                      ? 'border-b border-on-surface font-semibold text-on-surface'
                       : 'text-on-surface-variant hover:text-on-surface'
                   }`}
                 >
@@ -55,38 +58,38 @@ export default function Nav() {
         <div className="flex items-center gap-2">
           <Link
             to="/account"
-            className="hover:bg-surface-container transition-all duration-300 p-2.5 rounded-full relative"
+            className="relative rounded-full p-2.5 transition-all duration-300 hover:bg-surface-container"
             aria-label="Account"
           >
             <span className="material-symbols-outlined text-on-surface-variant">
               {user ? 'account_circle' : 'person'}
             </span>
             {user && (
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />
+              <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-primary" />
             )}
           </Link>
           <button
             onClick={() => navigate('/order')}
-            className="relative hover:bg-surface-container transition-all duration-300 p-2.5 rounded-full"
+            className="relative rounded-full p-2.5 transition-all duration-300 hover:bg-surface-container"
             aria-label="View order"
           >
             <span className="material-symbols-outlined text-on-surface-variant">shopping_bag</span>
             {count > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-on-primary text-[10px] font-button rounded-full flex items-center justify-center">
+              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary font-button text-[10px] text-on-primary">
                 {count}
               </span>
             )}
           </button>
           <Link
             to="/availability"
-            className="hidden md:block px-6 py-2.5 bg-secondary text-on-secondary font-button text-button font-semibold rounded-sm hover:opacity-90 transition-all duration-300"
+            className="hidden rounded-sm bg-secondary px-6 py-2.5 font-button text-button font-semibold text-on-secondary transition-all duration-300 hover:opacity-90 md:block"
           >
             Order Now
           </Link>
           {/* Hamburger — mobile only */}
           <button
-            className="md:hidden p-2 rounded-full hover:bg-surface-container transition-colors"
-            onClick={() => setMenuOpen(o => !o)}
+            className="rounded-full p-2 transition-colors hover:bg-surface-container md:hidden"
+            onClick={() => setMenuOpen((o) => !o)}
             aria-label="Menu"
           >
             <span className="material-symbols-outlined text-on-surface-variant">
@@ -100,16 +103,17 @@ export default function Nav() {
       {menuOpen && (
         <div className="fixed inset-0 z-40 flex flex-col pt-16 md:hidden">
           <div className="absolute inset-0 bg-black/40" onClick={() => setMenuOpen(false)} />
-          <nav className="relative bg-white border-b border-outline-variant/30 px-5 py-4 flex flex-col gap-2 shadow-lg">
+          <nav className="relative flex flex-col gap-2 border-b border-outline-variant/30 bg-white px-5 py-4 shadow-lg">
             {NAV_LINKS.map(({ to, label }) => {
-              const active = to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(to + '/')
+              const active =
+                to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(to + '/')
               return (
                 <Link
                   key={to}
                   to={to}
                   className={`px-4 py-3 font-button text-button transition-all ${
                     active
-                      ? 'text-on-surface font-semibold'
+                      ? 'font-semibold text-on-surface'
                       : 'text-on-surface-variant hover:text-on-surface'
                   }`}
                 >
@@ -119,7 +123,7 @@ export default function Nav() {
             })}
             <Link
               to="/availability"
-              className="mt-2 px-4 py-3 bg-secondary text-on-secondary font-button text-button font-semibold rounded-sm text-center hover:opacity-90 transition-all"
+              className="mt-2 rounded-sm bg-secondary px-4 py-3 text-center font-button text-button font-semibold text-on-secondary transition-all hover:opacity-90"
             >
               Order Now
             </Link>

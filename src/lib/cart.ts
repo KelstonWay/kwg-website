@@ -17,7 +17,7 @@ function saveCart(items: CartItem[]): void {
 
 export function addToCart(item: CartItem): void {
   const cart = getCart()
-  const existing = cart.find(i => i.release_item_id === item.release_item_id)
+  const existing = cart.find((i) => i.release_item_id === item.release_item_id)
   if (existing) {
     existing.qty += item.qty
     saveCart(cart)
@@ -29,14 +29,14 @@ export function addToCart(item: CartItem): void {
 export function updateQty(releaseItemId: string, qty: number): void {
   const cart = getCart()
   if (qty <= 0) {
-    saveCart(cart.filter(i => i.release_item_id !== releaseItemId))
+    saveCart(cart.filter((i) => i.release_item_id !== releaseItemId))
   } else {
-    saveCart(cart.map(i => i.release_item_id === releaseItemId ? { ...i, qty } : i))
+    saveCart(cart.map((i) => (i.release_item_id === releaseItemId ? { ...i, qty } : i)))
   }
 }
 
 export function removeFromCart(releaseItemId: string): void {
-  saveCart(getCart().filter(i => i.release_item_id !== releaseItemId))
+  saveCart(getCart().filter((i) => i.release_item_id !== releaseItemId))
 }
 
 export function clearCart(): void {

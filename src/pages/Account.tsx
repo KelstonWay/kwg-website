@@ -14,55 +14,77 @@ function SetNewPassword() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (password !== confirm) { setError('Passwords do not match.'); return }
-    if (password.length < 8) { setError('Password must be at least 8 characters.'); return }
+    if (password !== confirm) {
+      setError('Passwords do not match.')
+      return
+    }
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.')
+      return
+    }
     setLoading(true)
     setError(null)
     const { error } = await supabase.auth.updateUser({ password })
-    if (error) { setError(error.message); setLoading(false); return }
+    if (error) {
+      setError(error.message)
+      setLoading(false)
+      return
+    }
     setDone(true)
     setLoading(false)
   }
 
   if (done) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center px-5">
-        <div className="max-w-md w-full text-center">
-          <span className="material-symbols-outlined text-4xl text-primary mb-4 block">check_circle</span>
-          <h1 className="font-['Newsreader'] text-headline-lg text-on-surface mb-3">Password set.</h1>
-          <p className="font-body-md text-on-surface-variant">You're signed in. <Link to="/account" className="text-primary hover:underline">Go to your account</Link>.</p>
+      <div className="flex min-h-[80vh] items-center justify-center px-5">
+        <div className="w-full max-w-md text-center">
+          <span className="material-symbols-outlined mb-4 block text-4xl text-primary">
+            check_circle
+          </span>
+          <h1 className="text-headline-lg mb-3 font-['Newsreader'] text-on-surface">
+            Password set.
+          </h1>
+          <p className="font-body-md text-on-surface-variant">
+            You're signed in.{' '}
+            <Link to="/account" className="text-primary hover:underline">
+              Go to your account
+            </Link>
+            .
+          </p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-5">
-      <div className="max-w-md w-full">
-        <span className="font-label-caps text-label-caps text-secondary mb-3 block">ACCOUNT</span>
-        <h1 className="font-['Newsreader'] text-headline-xl text-on-surface mb-8">Set a new password</h1>
+    <div className="flex min-h-[80vh] items-center justify-center px-5">
+      <div className="w-full max-w-md">
+        <span className="mb-3 block font-label-caps text-label-caps text-secondary">ACCOUNT</span>
+        <h1 className="mb-8 font-['Newsreader'] text-headline-xl text-on-surface">
+          Set a new password
+        </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="password"
             required
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="New password"
-            className="w-full px-4 py-3 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors"
+            className="w-full rounded-sm border border-outline-variant bg-surface px-4 py-3 font-body-md text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
           />
           <input
             type="password"
             required
             value={confirm}
-            onChange={e => setConfirm(e.target.value)}
+            onChange={(e) => setConfirm(e.target.value)}
             placeholder="Confirm password"
-            className="w-full px-4 py-3 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors"
+            className="w-full rounded-sm border border-outline-variant bg-surface px-4 py-3 font-body-md text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
           />
           {error && <p className="font-body-md text-sm text-error">{error}</p>}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-primary text-on-primary font-button text-button rounded-sm hover:opacity-90 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full rounded-sm bg-primary py-3.5 font-button text-button text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? 'Saving...' : 'Set password'}
           </button>
@@ -78,7 +100,9 @@ export default function Account() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-32">
-        <span className="material-symbols-outlined text-4xl text-outline animate-spin">progress_activity</span>
+        <span className="material-symbols-outlined animate-spin text-4xl text-outline">
+          progress_activity
+        </span>
       </div>
     )
   }
@@ -103,17 +127,28 @@ function AccountLogin() {
 
     if (mode === 'signin') {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) { setError(error.message); setLoading(false) }
+      if (error) {
+        setError(error.message)
+        setLoading(false)
+      }
     } else if (mode === 'signup') {
       const { error } = await supabase.auth.signUp({ email, password })
-      if (error) { setError(error.message); setLoading(false); return }
+      if (error) {
+        setError(error.message)
+        setLoading(false)
+        return
+      }
       setDone(true)
       setLoading(false)
     } else {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/account`,
       })
-      if (error) { setError(error.message); setLoading(false); return }
+      if (error) {
+        setError(error.message)
+        setLoading(false)
+        return
+      }
       setDone(true)
       setLoading(false)
     }
@@ -128,12 +163,17 @@ function AccountLogin() {
 
   if (done && mode === 'signup') {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center px-5">
-        <div className="max-w-md w-full text-center">
-          <span className="material-symbols-outlined text-4xl text-primary mb-4 block">mark_email_read</span>
-          <h1 className="font-['Newsreader'] text-headline-lg text-on-surface mb-3">Check your email</h1>
+      <div className="flex min-h-[80vh] items-center justify-center px-5">
+        <div className="w-full max-w-md text-center">
+          <span className="material-symbols-outlined mb-4 block text-4xl text-primary">
+            mark_email_read
+          </span>
+          <h1 className="text-headline-lg mb-3 font-['Newsreader'] text-on-surface">
+            Check your email
+          </h1>
           <p className="font-body-md text-on-surface-variant">
-            We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
+            We sent a confirmation link to <strong>{email}</strong>. Click it to activate your
+            account.
           </p>
         </div>
       </div>
@@ -142,14 +182,22 @@ function AccountLogin() {
 
   if (done && mode === 'reset') {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center px-5">
-        <div className="max-w-md w-full text-center">
-          <span className="material-symbols-outlined text-4xl text-primary mb-4 block">mark_email_read</span>
-          <h1 className="font-['Newsreader'] text-headline-lg text-on-surface mb-3">Check your email</h1>
-          <p className="font-body-md text-on-surface-variant mb-4">
-            We sent a password reset link to <strong>{email}</strong>. Click it to set a new password.
+      <div className="flex min-h-[80vh] items-center justify-center px-5">
+        <div className="w-full max-w-md text-center">
+          <span className="material-symbols-outlined mb-4 block text-4xl text-primary">
+            mark_email_read
+          </span>
+          <h1 className="text-headline-lg mb-3 font-['Newsreader'] text-on-surface">
+            Check your email
+          </h1>
+          <p className="mb-4 font-body-md text-on-surface-variant">
+            We sent a password reset link to <strong>{email}</strong>. Click it to set a new
+            password.
           </p>
-          <button onClick={() => switchMode('signin')} className="font-button text-sm text-primary hover:underline">
+          <button
+            onClick={() => switchMode('signin')}
+            className="font-button text-sm text-primary hover:underline"
+          >
             Back to sign in
           </button>
         </div>
@@ -158,35 +206,39 @@ function AccountLogin() {
   }
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-5">
-      <div className="max-w-md w-full">
-        <span className="font-label-caps text-label-caps text-secondary mb-3 block">ACCOUNT</span>
-        <h1 className="font-['Newsreader'] text-headline-xl text-on-surface mb-8">
+    <div className="flex min-h-[80vh] items-center justify-center px-5">
+      <div className="w-full max-w-md">
+        <span className="mb-3 block font-label-caps text-label-caps text-secondary">ACCOUNT</span>
+        <h1 className="mb-8 font-['Newsreader'] text-headline-xl text-on-surface">
           {mode === 'signin' ? 'Sign in' : mode === 'signup' ? 'Create account' : 'Reset password'}
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="font-label-caps text-label-caps text-on-surface-variant block mb-2">Email</label>
+            <label className="mb-2 block font-label-caps text-label-caps text-on-surface-variant">
+              Email
+            </label>
             <input
               type="email"
               required
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="you@yourbusiness.com"
-              className="w-full px-4 py-3 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors"
+              className="w-full rounded-sm border border-outline-variant bg-surface px-4 py-3 font-body-md text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
             />
           </div>
           {mode !== 'reset' && (
             <div>
-              <label className="font-label-caps text-label-caps text-on-surface-variant block mb-2">Password</label>
+              <label className="mb-2 block font-label-caps text-label-caps text-on-surface-variant">
+                Password
+              </label>
               <input
                 type="password"
                 required
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-4 py-3 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors"
+                className="w-full rounded-sm border border-outline-variant bg-surface px-4 py-3 font-body-md text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
               />
             </div>
           )}
@@ -196,9 +248,15 @@ function AccountLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-primary text-on-primary font-button text-button rounded-sm hover:opacity-90 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full rounded-sm bg-primary py-3.5 font-button text-button text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? '...' : mode === 'signin' ? 'Sign in' : mode === 'signup' ? 'Create account' : 'Send reset link'}
+            {loading
+              ? '...'
+              : mode === 'signin'
+                ? 'Sign in'
+                : mode === 'signup'
+                  ? 'Create account'
+                  : 'Send reset link'}
           </button>
         </form>
 
@@ -207,17 +265,29 @@ function AccountLogin() {
             <>
               <p className="font-body-md text-sm text-on-surface-variant">
                 Don't have an account?{' '}
-                <button onClick={() => switchMode('signup')} className="text-primary hover:underline">Create one</button>
+                <button
+                  onClick={() => switchMode('signup')}
+                  className="text-primary hover:underline"
+                >
+                  Create one
+                </button>
               </p>
               <p className="font-body-md text-sm text-on-surface-variant">
                 Forgot your password?{' '}
-                <button onClick={() => switchMode('reset')} className="text-primary hover:underline">Reset it</button>
+                <button
+                  onClick={() => switchMode('reset')}
+                  className="text-primary hover:underline"
+                >
+                  Reset it
+                </button>
               </p>
             </>
           )}
           {(mode === 'signup' || mode === 'reset') && (
             <p className="font-body-md text-sm text-on-surface-variant">
-              <button onClick={() => switchMode('signin')} className="text-primary hover:underline">Back to sign in</button>
+              <button onClick={() => switchMode('signin')} className="text-primary hover:underline">
+                Back to sign in
+              </button>
             </p>
           )}
         </div>
@@ -238,10 +308,15 @@ function ReorderButton({ orderId }: { orderId: string }) {
 
     const { data: items } = await supabase
       .from('wholesale_order_items')
-      .select('plant_id, plant_name, plant_size, plant_sku, qty_requested, unit_price, release_item_id')
+      .select(
+        'plant_id, plant_name, plant_size, plant_sku, qty_requested, unit_price, release_item_id'
+      )
       .eq('order_id', orderId)
 
-    if (!items?.length) { setLoading(false); return }
+    if (!items?.length) {
+      setLoading(false)
+      return
+    }
 
     const { data: release } = await supabase
       .from('availability_releases')
@@ -250,10 +325,14 @@ function ReorderButton({ orderId }: { orderId: string }) {
       .limit(1)
       .single()
 
-    if (!release) { setLoading(false); navigate('/availability'); return }
+    if (!release) {
+      setLoading(false)
+      navigate('/availability')
+      return
+    }
 
     const typedItems = items as WholesaleOrderItem[]
-    const plantIds = typedItems.map(i => i.plant_id)
+    const plantIds = typedItems.map((i) => i.plant_id)
     const { data: currentItems } = await supabase
       .from('availability_release_items')
       .select('id, plant_id, unit_price, tray_count, qty_available')
@@ -261,9 +340,15 @@ function ReorderButton({ orderId }: { orderId: string }) {
       .in('plant_id', plantIds)
       .gt('qty_available', 0)
 
-    type CurrentItem = { id: string; plant_id: string; unit_price: number; tray_count: number; qty_available: number }
+    type CurrentItem = {
+      id: string
+      plant_id: string
+      unit_price: number
+      tray_count: number
+      qty_available: number
+    }
     const availableByPlantId = Object.fromEntries(
-      (currentItems as CurrentItem[] ?? []).map(ci => [ci.plant_id, ci])
+      ((currentItems as CurrentItem[]) ?? []).map((ci) => [ci.plant_id, ci])
     )
 
     let added = 0
@@ -271,7 +356,10 @@ function ReorderButton({ orderId }: { orderId: string }) {
 
     for (const item of typedItems) {
       const current = availableByPlantId[item.plant_id]
-      if (!current) { skipped++; continue }
+      if (!current) {
+        skipped++
+        continue
+      }
 
       const trayCount = current.tray_count ?? 1
       addToCart({
@@ -308,12 +396,14 @@ function ReorderButton({ orderId }: { orderId: string }) {
       <button
         onClick={handleReorder}
         disabled={loading}
-        className="px-4 py-2 border border-outline-variant font-button text-button text-sm text-on-surface-variant rounded-sm hover:border-primary hover:text-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        className="rounded-sm border border-outline-variant px-4 py-2 font-button text-button text-sm text-on-surface-variant transition-all hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50"
       >
         {loading ? '...' : 'Reorder'}
       </button>
       {notice && (
-        <p className="font-body-md text-xs text-on-surface-variant max-w-[200px] text-right">{notice}</p>
+        <p className="max-w-[200px] text-right font-body-md text-xs text-on-surface-variant">
+          {notice}
+        </p>
       )}
     </div>
   )
@@ -328,20 +418,26 @@ const STATUS_STYLES: Record<string, string> = {
 function OrderRow({ order, onNavigate }: { order: WholesaleOrder; onNavigate: () => void }) {
   return (
     <div
-      className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 p-5 bg-surface-container-low border border-outline-variant/30 rounded-sm cursor-pointer hover:border-outline-variant transition-all"
+      className="flex cursor-pointer flex-col gap-3 rounded-sm border border-outline-variant/30 bg-surface-container-low p-5 transition-all hover:border-outline-variant sm:flex-row sm:items-center sm:gap-6"
       onClick={onNavigate}
     >
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="font-['Newsreader'] italic text-on-surface">
             #{order.id.slice(0, 8).toUpperCase()}
           </span>
-          <span className={`font-label-caps text-label-caps px-2.5 py-0.5 rounded-full uppercase text-[10px] ${STATUS_STYLES[order.status] ?? 'text-on-surface-variant bg-surface-container'}`}>
+          <span
+            className={`rounded-full px-2.5 py-0.5 font-label-caps text-[10px] text-label-caps uppercase ${STATUS_STYLES[order.status] ?? 'bg-surface-container text-on-surface-variant'}`}
+          >
             {order.status}
           </span>
         </div>
-        <p className="font-body-md text-sm text-on-surface-variant mt-0.5">
-          {new Date(order.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+        <p className="mt-0.5 font-body-md text-sm text-on-surface-variant">
+          {new Date(order.created_at).toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+          })}
           {order.total_units != null && ` · ${order.total_units.toLocaleString()} units`}
         </p>
       </div>
@@ -352,7 +448,9 @@ function OrderRow({ order, onNavigate }: { order: WholesaleOrder; onNavigate: ()
           </span>
         )}
         <ReorderButton orderId={order.id} />
-        <span className="material-symbols-outlined text-on-surface-variant text-xl hidden sm:block">chevron_right</span>
+        <span className="material-symbols-outlined hidden text-xl text-on-surface-variant sm:block">
+          chevron_right
+        </span>
       </div>
     </div>
   )
@@ -367,12 +465,22 @@ function SetPasswordForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (password !== confirm) { setError('Passwords do not match.'); return }
-    if (password.length < 8) { setError('Password must be at least 8 characters.'); return }
+    if (password !== confirm) {
+      setError('Passwords do not match.')
+      return
+    }
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.')
+      return
+    }
     setSaving(true)
     setError(null)
     const { error } = await supabase.auth.updateUser({ password })
-    if (error) { setError(error.message); setSaving(false); return }
+    if (error) {
+      setError(error.message)
+      setSaving(false)
+      return
+    }
     setDone(true)
     setSaving(false)
     setPassword('')
@@ -382,28 +490,28 @@ function SetPasswordForm() {
   if (done) return <p className="font-body-md text-sm text-primary">Password updated.</p>
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3 max-w-sm">
+    <form onSubmit={handleSubmit} className="max-w-sm space-y-3">
       <input
         type="password"
         required
         value={password}
-        onChange={e => setPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
         placeholder="New password"
-        className="w-full px-4 py-2.5 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors text-sm"
+        className="w-full rounded-sm border border-outline-variant bg-surface px-4 py-2.5 font-body-md text-sm text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
       />
       <input
         type="password"
         required
         value={confirm}
-        onChange={e => setConfirm(e.target.value)}
+        onChange={(e) => setConfirm(e.target.value)}
         placeholder="Confirm password"
-        className="w-full px-4 py-2.5 border border-outline-variant rounded-sm font-body-md text-on-surface bg-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors text-sm"
+        className="w-full rounded-sm border border-outline-variant bg-surface px-4 py-2.5 font-body-md text-sm text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
       />
       {error && <p className="font-body-md text-sm text-error">{error}</p>}
       <button
         type="submit"
         disabled={saving}
-        className="px-6 py-2.5 bg-primary text-on-primary font-button text-sm rounded-sm hover:opacity-90 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+        className="rounded-sm bg-primary px-6 py-2.5 font-button text-sm text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {saving ? 'Saving...' : 'Save password'}
       </button>
@@ -422,7 +530,9 @@ function AccountDashboard() {
     async function load() {
       const { data } = await supabase
         .from('wholesale_orders')
-        .select('id, created_at, business_name, contact_name, email, phone, notes, status, total_units, total_price')
+        .select(
+          'id, created_at, business_name, contact_name, email, phone, notes, status, total_units, total_price'
+        )
         .order('created_at', { ascending: false })
       if (data) setOrders(data as WholesaleOrder[])
       setLoading(false)
@@ -435,43 +545,55 @@ function AccountDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-32">
-        <span className="material-symbols-outlined text-4xl text-outline animate-spin">progress_activity</span>
+        <span className="material-symbols-outlined animate-spin text-4xl text-outline">
+          progress_activity
+        </span>
       </div>
     )
   }
 
   return (
-    <div className="px-5 md:px-20 py-16 max-w-4xl mx-auto">
-      <span className="font-label-caps text-label-caps text-secondary mb-3 block">YOUR ACCOUNT</span>
-      <h1 className="font-['Newsreader'] text-headline-xl text-on-surface mb-10">
+    <div className="mx-auto max-w-4xl px-5 py-16 md:px-20">
+      <span className="mb-3 block font-label-caps text-label-caps text-secondary">
+        YOUR ACCOUNT
+      </span>
+      <h1 className="mb-10 font-['Newsreader'] text-headline-xl text-on-surface">
         Welcome back{businessName ? `, ${businessName}` : ''}.
       </h1>
 
-      <h2 className="font-['Newsreader'] italic text-headline-md text-on-surface border-b border-outline-variant pb-4 mb-6">
+      <h2 className="mb-6 border-b border-outline-variant pb-4 font-['Newsreader'] text-headline-md italic text-on-surface">
         Order History
       </h2>
 
       {orders.length === 0 ? (
-        <p className="font-body-md text-on-surface-variant py-8">No orders yet.</p>
+        <p className="py-8 font-body-md text-on-surface-variant">No orders yet.</p>
       ) : (
         <div className="space-y-3">
-          {orders.map(order => (
-            <OrderRow key={order.id} order={order} onNavigate={() => navigate(`/order/${order.id}`)} />
+          {orders.map((order) => (
+            <OrderRow
+              key={order.id}
+              order={order}
+              onNavigate={() => navigate(`/order/${order.id}`)}
+            />
           ))}
         </div>
       )}
 
-      <div className="mt-16 pt-8 border-t border-outline-variant/30">
+      <div className="mt-16 border-t border-outline-variant/30 pt-8">
         <button
-          onClick={() => setShowSetPassword(v => !v)}
-          className="font-body-md text-sm text-on-surface-variant hover:text-on-surface transition-colors underline underline-offset-2 block mb-4"
+          onClick={() => setShowSetPassword((v) => !v)}
+          className="mb-4 block font-body-md text-sm text-on-surface-variant underline underline-offset-2 transition-colors hover:text-on-surface"
         >
           {showSetPassword ? 'Cancel' : 'Set / change password'}
         </button>
-        {showSetPassword && <div className="mb-6"><SetPasswordForm /></div>}
+        {showSetPassword && (
+          <div className="mb-6">
+            <SetPasswordForm />
+          </div>
+        )}
         <button
           onClick={signOut}
-          className="font-body-md text-sm text-on-surface-variant hover:text-on-surface transition-colors underline underline-offset-2"
+          className="font-body-md text-sm text-on-surface-variant underline underline-offset-2 transition-colors hover:text-on-surface"
         >
           Sign out
         </button>

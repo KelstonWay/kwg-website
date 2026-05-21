@@ -14,7 +14,9 @@ import Account from './pages/Account'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
-  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
   return null
 }
 
@@ -23,7 +25,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <ScrollToTop />
-        <div className="min-h-screen bg-background text-on-background flex flex-col">
+        <div className="flex min-h-screen flex-col bg-background text-on-background">
           <Nav />
           <main className="flex-1 pt-16">
             <Routes>
