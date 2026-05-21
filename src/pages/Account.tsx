@@ -5,10 +5,10 @@ import { useAuth } from '../contexts/AuthContext'
 import { addToCart } from '../lib/cart'
 import type { WholesaleOrder, WholesaleOrderItem } from '../lib/types'
 
-function SetNewPassword() {
+function PasswordForm({ compact = false }: { compact?: boolean }) {
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
 
@@ -22,19 +22,22 @@ function SetNewPassword() {
       setError('Password must be at least 8 characters.')
       return
     }
-    setLoading(true)
+    setSaving(true)
     setError(null)
     const { error } = await supabase.auth.updateUser({ password })
     if (error) {
       setError(error.message)
-      setLoading(false)
+      setSaving(false)
       return
     }
     setDone(true)
-    setLoading(false)
+    setSaving(false)
+    setPassword('')
+    setConfirm('')
   }
 
   if (done) {
+    if (compact) return <p className="font-body-md text-sm text-primary">Password updated.</p>
     return (
       <div className="flex min-h-[80vh] items-center justify-center px-5">
         <div className="w-full max-w-md text-center">
@@ -56,6 +59,21 @@ function SetNewPassword() {
     )
   }
 
+  const inputCls = `w-full rounded-sm border border-outline-variant bg-surface px-4 font-body-md text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none ${compact ? 'py-2.5 text-sm' : 'py-3'}`
+
+  if (compact) {
+    return (
+      <form onSubmit={handleSubmit} className="max-w-sm space-y-3">
+        <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="New password" className={inputCls} />
+        <input type="password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Confirm password" className={inputCls} />
+        {error && <p className="font-body-md text-sm text-error">{error}</p>}
+        <button type="submit" disabled={saving} className="rounded-sm bg-primary px-6 py-2.5 font-button text-sm text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
+          {saving ? 'Saving...' : 'Save password'}
+        </button>
+      </form>
+    )
+  }
+
   return (
     <div className="flex min-h-[80vh] items-center justify-center px-5">
       <div className="w-full max-w-md">
@@ -64,29 +82,11 @@ function SetNewPassword() {
           Set a new password
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="New password"
-            className="w-full rounded-sm border border-outline-variant bg-surface px-4 py-3 font-body-md text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
-          />
-          <input
-            type="password"
-            required
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            placeholder="Confirm password"
-            className="w-full rounded-sm border border-outline-variant bg-surface px-4 py-3 font-body-md text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
-          />
+          <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="New password" className={inputCls} />
+          <input type="password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Confirm password" className={inputCls} />
           {error && <p className="font-body-md text-sm text-error">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-sm bg-primary py-3.5 font-button text-button text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {loading ? 'Saving...' : 'Set password'}
+          <button type="submit" disabled={saving} className="w-full rounded-sm bg-primary py-3.5 font-button text-button text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
+            {saving ? 'Saving...' : 'Set password'}
           </button>
         </form>
       </div>
@@ -107,7 +107,7 @@ export default function Account() {
     )
   }
 
-  if (resettingPassword) return <SetNewPassword />
+  if (resettingPassword) return <PasswordForm />
   if (user) return <AccountDashboard />
   return <AccountLogin />
 }
@@ -456,69 +456,6 @@ function OrderRow({ order, onNavigate }: { order: WholesaleOrder; onNavigate: ()
   )
 }
 
-function SetPasswordForm() {
-  const [password, setPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
-  const [saving, setSaving] = useState(false)
-  const [done, setDone] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (password !== confirm) {
-      setError('Passwords do not match.')
-      return
-    }
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters.')
-      return
-    }
-    setSaving(true)
-    setError(null)
-    const { error } = await supabase.auth.updateUser({ password })
-    if (error) {
-      setError(error.message)
-      setSaving(false)
-      return
-    }
-    setDone(true)
-    setSaving(false)
-    setPassword('')
-    setConfirm('')
-  }
-
-  if (done) return <p className="font-body-md text-sm text-primary">Password updated.</p>
-
-  return (
-    <form onSubmit={handleSubmit} className="max-w-sm space-y-3">
-      <input
-        type="password"
-        required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="New password"
-        className="w-full rounded-sm border border-outline-variant bg-surface px-4 py-2.5 font-body-md text-sm text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
-      />
-      <input
-        type="password"
-        required
-        value={confirm}
-        onChange={(e) => setConfirm(e.target.value)}
-        placeholder="Confirm password"
-        className="w-full rounded-sm border border-outline-variant bg-surface px-4 py-2.5 font-body-md text-sm text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
-      />
-      {error && <p className="font-body-md text-sm text-error">{error}</p>}
-      <button
-        type="submit"
-        disabled={saving}
-        className="rounded-sm bg-primary px-6 py-2.5 font-button text-sm text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {saving ? 'Saving...' : 'Save password'}
-      </button>
-    </form>
-  )
-}
-
 function AccountDashboard() {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
@@ -588,7 +525,7 @@ function AccountDashboard() {
         </button>
         {showSetPassword && (
           <div className="mb-6">
-            <SetPasswordForm />
+            <PasswordForm compact />
           </div>
         )}
         <button
