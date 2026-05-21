@@ -4,6 +4,8 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
 import type { WholesaleOrder, WholesaleOrderItem } from '../lib/types'
+import ErrorBanner from '../components/ErrorBanner'
+import { parseError } from '../lib/parse-error'
 
 function PasswordForm({ compact = false }: { compact?: boolean }) {
   const [password, setPassword] = useState('')
@@ -26,7 +28,7 @@ function PasswordForm({ compact = false }: { compact?: boolean }) {
     setError(null)
     const { error } = await supabase.auth.updateUser({ password })
     if (error) {
-      setError(error.message)
+      setError(parseError(error))
       setSaving(false)
       return
     }
@@ -66,7 +68,7 @@ function PasswordForm({ compact = false }: { compact?: boolean }) {
       <form onSubmit={handleSubmit} className="max-w-sm space-y-3">
         <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="New password" className={inputCls} />
         <input type="password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Confirm password" className={inputCls} />
-        {error && <p className="font-body-md text-sm text-error">{error}</p>}
+        {error && <ErrorBanner message={error} />}
         <button type="submit" disabled={saving} className="rounded-sm bg-primary px-6 py-2.5 font-button text-sm text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
           {saving ? 'Saving...' : 'Save password'}
         </button>
@@ -84,7 +86,7 @@ function PasswordForm({ compact = false }: { compact?: boolean }) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="New password" className={inputCls} />
           <input type="password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Confirm password" className={inputCls} />
-          {error && <p className="font-body-md text-sm text-error">{error}</p>}
+          {error && <ErrorBanner message={error} />}
           <button type="submit" disabled={saving} className="w-full rounded-sm bg-primary py-3.5 font-button text-button text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
             {saving ? 'Saving...' : 'Set password'}
           </button>
@@ -128,13 +130,13 @@ function AccountLogin() {
     if (mode === 'signin') {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) {
-        setError(error.message)
+        setError(parseError(error))
         setLoading(false)
       }
     } else if (mode === 'signup') {
       const { error } = await supabase.auth.signUp({ email, password })
       if (error) {
-        setError(error.message)
+        setError(parseError(error))
         setLoading(false)
         return
       }
@@ -145,7 +147,7 @@ function AccountLogin() {
         redirectTo: `${window.location.origin}/account`,
       })
       if (error) {
-        setError(error.message)
+        setError(parseError(error))
         setLoading(false)
         return
       }
@@ -243,7 +245,7 @@ function AccountLogin() {
             </div>
           )}
 
-          {error && <p className="font-body-md text-sm text-error">{error}</p>}
+          {error && <ErrorBanner message={error} />}
 
           <button
             type="submit"

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import ErrorBanner from '../components/ErrorBanner'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', business: '', message: '' })
@@ -102,7 +103,7 @@ export default function Contact() {
                 placeholder="Tell us what you're looking for..."
               />
             </div>
-            {error && <p className="font-body-md text-sm text-error">{error}</p>}
+            {error && <ErrorBanner message={error} />}
             <button
               type="submit"
               disabled={sending}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import type { WholesaleOrder } from '../lib/types'
+import ErrorBanner from '../components/ErrorBanner'
 
 interface OrderItem {
   id: string
@@ -187,7 +188,7 @@ export default function OrderStatus() {
             Confirming will update the order status to confirmed and send a notification to{' '}
             {order.email}.
           </p>
-          {error && <p className="mb-4 font-body-md text-sm text-error">{error}</p>}
+          {error && <ErrorBanner message={error} className="mb-4" />}
           {confirmed ? (
             <p className="font-body-md font-medium text-primary">
               ✓ Order confirmed. Confirmation sent to customer.

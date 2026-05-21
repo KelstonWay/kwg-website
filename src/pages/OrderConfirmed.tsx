@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
+import ErrorBanner from '../components/ErrorBanner'
+import { parseError } from '../lib/parse-error'
 
 function CreateAccountPrompt({ email }: { email?: string }) {
   const [password, setPassword] = useState('')
@@ -22,7 +24,7 @@ function CreateAccountPrompt({ email }: { email?: string }) {
     setError(null)
     const { error } = await supabase.auth.signUp({ email: email ?? '', password })
     if (error) {
-      setError(error.message)
+      setError(parseError(error))
       setLoading(false)
       return
     }
@@ -75,7 +77,7 @@ function CreateAccountPrompt({ email }: { email?: string }) {
               placeholder="Choose a password"
               className="w-full rounded-sm border border-outline-variant bg-surface px-4 py-2.5 font-body-md text-sm text-on-surface transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none"
             />
-            {error && <p className="font-body-md text-sm text-error">{error}</p>}
+            {error && <ErrorBanner message={error} />}
             <button
               type="submit"
               disabled={loading}

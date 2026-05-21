@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
+import ErrorBanner from '../components/ErrorBanner'
+import { parseError } from '../lib/parse-error'
 
 export default function Order() {
   const { items, total, updateQty, removeFromCart, clearCart } = useCart()
@@ -42,7 +44,7 @@ export default function Order() {
       clearCart()
       navigate('/order/confirmed', { state: { orderId: data.orderId, email: data.email } })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setError(parseError(err))
       setSubmitting(false)
     }
   }
@@ -256,7 +258,7 @@ export default function Order() {
                 placeholder="Delivery preferences, special requests..."
               />
             </div>
-            {error && <p className="font-body-md text-sm text-error">{error}</p>}
+            {error && <ErrorBanner message={error} />}
             <button
               type="submit"
               disabled={submitting}
