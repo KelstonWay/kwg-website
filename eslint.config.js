@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'src/lib/database.types.ts']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -17,6 +17,10 @@ export default defineConfig([
     ],
     languageOptions: {
       globals: globals.browser,
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
     },
   },
 ])
