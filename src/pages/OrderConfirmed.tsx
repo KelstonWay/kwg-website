@@ -65,6 +65,11 @@ function CreateAccountPrompt({
       } catch {
         // Non-fatal — order still placed, just not linked
       }
+    } else if (!token && orderId && resolvedClaimToken) {
+      // Email confirmation required — session is null immediately after signup.
+      // Persist the claim intent so AccountDashboard can execute it after the
+      // user confirms their email and signs in.
+      localStorage.setItem('kwg_pending_claim', JSON.stringify({ orderId, claimToken: resolvedClaimToken, email: (email ?? '').trim().toLowerCase() }))
     }
 
     setOrderLinked(linked)

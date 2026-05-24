@@ -484,39 +484,74 @@ function AccountDashboard() {
   useEffect(() => {
     if (!user) return
 
-    supabase
-      .from('wholesale_orders')
-      .select(
-        'id, created_at, business_name, contact_name, email, phone, notes, status, total_units, total_price, user_id'
-      )
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(50)
-      .then(({ data }) => {
-        if (data) setOrders(data as WholesaleOrder[])
-        setOrdersLoading(false)
-      })
-
-    supabase
-      .from('buyer_profiles')
-      .select('*')
-      .eq('user_id', user.id)
-      .single()
-      .then(({ data }) => {
-        if (data) {
-          const p = data as BuyerProfile
-          setProfileForm({
-            business_name: p.business_name,
-            contact_name: p.contact_name,
-            phone: p.phone ?? '',
-            address_street: p.address_street ?? '',
-            address_city: p.address_city ?? '',
-            address_state: p.address_state ?? '',
-            address_zip: p.address_zip ?? '',
-          })
+    async function load() {
+      // Execute any pending claim stored during email-confirm signup flow.
+      // Only fires if the signed-in user's email matches the claim email —
+      // prevents a different account from claiming someone else's order.
+      const pending = localStorage.getItem('kwg_pending_claim')
+      if (pending) {
+        try {
+          const { orderId, claimToken, email: claimEmail } = JSON.parse(pending) as {
+            orderId: string
+            claimToken: string
+            email: string
+          }
+          if (!claimEmail || claimEmail.toLowerCase() === user!.email?.toLowerCase()) {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session?.access_token) {
+              const res = await fetch('/api/claim-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+                body: JSON.stringify({ orderId, claimToken }),
+              })
+              // Remove on success or terminal failure (expired, already claimed, wrong token)
+              if (res.ok || res.status === 403 || res.status === 409) {
+                localStorage.removeItem('kwg_pending_claim')
+              }
+              // On network/server error keep entry so it retries on next load
+            }
+          }
+        } catch {
+          localStorage.removeItem('kwg_pending_claim')
         }
-        setProfileLoaded(true)
-      })
+      }
+
+      supabase
+        .from('wholesale_orders')
+        .select(
+          'id, created_at, business_name, contact_name, email, phone, notes, status, total_units, total_price, user_id'
+        )
+        .eq('user_id', user!.id)
+        .order('created_at', { ascending: false })
+        .limit(50)
+        .then(({ data }) => {
+          if (data) setOrders(data as WholesaleOrder[])
+          setOrdersLoading(false)
+        })
+
+      supabase
+        .from('buyer_profiles')
+        .select('*')
+        .eq('user_id', user!.id)
+        .single()
+        .then(({ data }) => {
+          if (data) {
+            const p = data as BuyerProfile
+            setProfileForm({
+              business_name: p.business_name,
+              contact_name: p.contact_name,
+              phone: p.phone ?? '',
+              address_street: p.address_street ?? '',
+              address_city: p.address_city ?? '',
+              address_state: p.address_state ?? '',
+              address_zip: p.address_zip ?? '',
+            })
+          }
+          setProfileLoaded(true)
+        })
+    }
+
+    load()
   }, [user])
 
   async function handleSaveProfile(e: React.FormEvent) {

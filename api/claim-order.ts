@@ -23,13 +23,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Find order: id + claim_token must match, user_id must be null, order within 2 hours
   const { data: order } = await supabase
     .from('wholesale_orders')
-    .select('id, user_id, created_at, claim_token')
+    .select('id, user_id, created_at, claim_token, email')
     .eq('id', orderId)
     .eq('claim_token', claimToken)
     .is('user_id', null)
     .single()
 
   if (!order) return res.status(403).json({ error: 'Invalid or expired claim token' })
+
+  // Authenticated user's email must match the order email (case-insensitive)
+  if (userData.user.email?.trim().toLowerCase() !== order.email?.trim().toLowerCase()) {
+    return res.status(403).json({ error: 'Email mismatch' })
+  }
 
   const ageMs = Date.now() - new Date(order.created_at).getTime()
   if (ageMs > 2 * 60 * 60 * 1000) {
