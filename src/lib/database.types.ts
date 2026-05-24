@@ -177,6 +177,45 @@ export type Database = {
           },
         ]
       }
+      buyer_profiles: {
+        Row: {
+          address_city: string | null
+          address_state: string | null
+          address_street: string | null
+          address_zip: string | null
+          business_name: string
+          contact_name: string
+          email: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address_city?: string | null
+          address_state?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          business_name: string
+          contact_name: string
+          email: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address_city?: string | null
+          address_state?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          business_name?: string
+          contact_name?: string
+          email?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       buyers: {
         Row: {
           address_city: string | null
@@ -724,7 +763,7 @@ export type Database = {
           is_cover?: boolean | null
           plant_id?: string | null
           sort_order?: number | null
-          url?: string
+          url: string
         }
         Relationships: [
           {
@@ -1151,7 +1190,12 @@ export type Database = {
       }
       wholesale_orders: {
         Row: {
+          address_city: string | null
+          address_state: string | null
+          address_street: string | null
+          address_zip: string | null
           business_name: string
+          claim_token: string | null
           confirm_token: string | null
           contact_name: string
           created_at: string | null
@@ -1163,9 +1207,15 @@ export type Database = {
           status: string | null
           total_price: number | null
           total_units: number | null
+          user_id: string | null
         }
         Insert: {
+          address_city?: string | null
+          address_state?: string | null
+          address_street?: string | null
+          address_zip?: string | null
           business_name: string
+          claim_token?: string | null
           confirm_token?: string | null
           contact_name: string
           created_at?: string | null
@@ -1177,9 +1227,15 @@ export type Database = {
           status?: string | null
           total_price?: number | null
           total_units?: number | null
+          user_id?: string | null
         }
         Update: {
+          address_city?: string | null
+          address_state?: string | null
+          address_street?: string | null
+          address_zip?: string | null
           business_name?: string
+          claim_token?: string | null
           confirm_token?: string | null
           contact_name?: string
           created_at?: string | null
@@ -1191,6 +1247,7 @@ export type Database = {
           status?: string | null
           total_price?: number | null
           total_units?: number | null
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -1207,6 +1264,29 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_and_assign_submission: {
+        Args: {
+          p_buyer_id: string
+          p_contact_data: Json
+          p_email: string
+          p_submission_id: string
+        }
+        Returns: string
+      }
+      claim_and_create_buyer_submission: {
+        Args: {
+          p_address_city: string
+          p_address_state: string
+          p_address_street: string
+          p_address_zip: string
+          p_company_name: string
+          p_contact_name: string
+          p_email: string
+          p_notes: string
+          p_submission_id: string
+        }
+        Returns: string
+      }
       convert_submission_to_order: {
         Args: { p_notes?: string; p_submission_id: string }
         Returns: string
@@ -1237,12 +1317,6 @@ export type Database = {
           notes: string | null
           ref_number: string
         }
-        SetofOptions: {
-          from: "*"
-          to: "buyers"
-          isOneToOne: true
-          isSetofReturn: false
-        }
       }
       create_order_with_items: {
         Args: {
@@ -1254,6 +1328,24 @@ export type Database = {
           p_status: string
         }
         Returns: string
+      }
+      create_wholesale_order: {
+        Args: {
+          p_address_city: string
+          p_address_state: string
+          p_address_street: string
+          p_address_zip: string
+          p_business_name: string
+          p_contact_name: string
+          p_email: string
+          p_items: Json
+          p_notes: string
+          p_phone: string
+          p_total_price: number
+          p_total_units: number
+          p_user_id: string
+        }
+        Returns: Json
       }
     }
     Enums: {

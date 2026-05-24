@@ -10,10 +10,10 @@ function esc(s: string) {
     .replace(/"/g, '&quot;')
 }
 
-const supabase = createClient(
-  process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY ?? process.env.VITE_SUPABASE_ANON_KEY!
-)
+const SUPABASE_URL = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY
+if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) throw new Error('Missing Supabase env vars')
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -33,19 +33,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!order) return res.status(403).json({ error: 'Invalid or expired link' })
   if (order.status !== 'pending') return res.status(409).json({ error: 'Order already confirmed' })
 
-  const { error: updateErr } = await supabase
+  // Atomic: re-assert token + status in the UPDATE predicate so concurrent retries can't double-fire
+  const { data: updated, error: updateErr } = await supabase
     .from('wholesale_orders')
-    .update({ status: 'confirmed' })
+    .update({ status: 'confirmed', confirm_token: null })
     .eq('id', orderId)
+    .eq('confirm_token', token)
+    .eq('status', 'pending')
+    .select('id, email, contact_name')
+    .single()
 
-  if (updateErr) return res.status(500).json({ error: 'Failed to confirm order' })
+  if (updateErr || !updated) return res.status(500).json({ error: 'Failed to confirm order' })
 
   try {
     await resend.emails.send({
       from: 'orders@kelstonway.com',
-      to: order.email,
+      to: updated.email,
       subject: 'Your Kelston Way Order is Confirmed',
-      html: `<h2>Order Confirmed</h2><p>Hi ${esc(order.contact_name)},</p><p>Your wholesale order has been confirmed. We'll be in touch shortly with your invoice.</p><p>Order ref: <strong>${order.id.slice(0, 8).toUpperCase()}</strong></p><p>— Kelston Way Greenhouse</p>`,
+      html: `<h2>Order Confirmed</h2><p>Hi ${esc(updated.contact_name)},</p><p>Your wholesale order has been confirmed. We'll be in touch shortly with your invoice.</p><p>Order ref: <strong>${updated.id.slice(0, 8).toUpperCase()}</strong></p><p>— Kelston Way Greenhouse</p>`,
     })
   } catch { /* email failure is non-fatal */ }
 

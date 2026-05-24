@@ -1,14 +1,23 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import ErrorBanner from '../components/ErrorBanner'
 import { parseError } from '../lib/parse-error'
 
-function CreateAccountPrompt({ email }: { email?: string }) {
+function CreateAccountPrompt({
+  email,
+  orderId,
+  claimToken,
+}: {
+  email?: string
+  orderId?: string
+  claimToken?: string
+}) {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
+  const [orderLinked, setOrderLinked] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [dismissed, setDismissed] = useState(false)
 
@@ -22,12 +31,43 @@ function CreateAccountPrompt({ email }: { email?: string }) {
     }
     setLoading(true)
     setError(null)
-    const { error } = await supabase.auth.signUp({ email: email ?? '', password })
-    if (error) {
-      setError(parseError(error))
+
+    const { data: signUpData, error: signUpErr } = await supabase.auth.signUp({
+      email: email ?? '',
+      password,
+    })
+    if (signUpErr) {
+      setError(parseError(signUpErr))
       setLoading(false)
       return
     }
+
+    // Link this order to the new account using the claim token
+    const token = signUpData.session?.access_token
+    const resolvedClaimToken =
+      claimToken ?? (orderId ? sessionStorage.getItem(`kwg_claim_${orderId}`) : null)
+
+    let linked = false
+    if (token && orderId && resolvedClaimToken) {
+      try {
+        const claimRes = await fetch('/api/claim-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ orderId, claimToken: resolvedClaimToken }),
+        })
+        if (claimRes.ok) {
+          sessionStorage.removeItem(`kwg_claim_${orderId}`)
+          linked = true
+        }
+      } catch {
+        // Non-fatal — order still placed, just not linked
+      }
+    }
+
+    setOrderLinked(linked)
     setDone(true)
     setLoading(false)
   }
@@ -49,11 +89,19 @@ function CreateAccountPrompt({ email }: { email?: string }) {
           </span>
           <p className="mb-1 font-['Newsreader'] text-lg text-on-surface">Account created.</p>
           <p className="font-body-md text-sm text-on-surface-variant">
-            Check your email to confirm, then{' '}
-            <Link to="/account" className="text-primary hover:underline">
-              sign in
-            </Link>
-            .
+            {orderLinked ? (
+              <Link to="/account" className="text-primary hover:underline">
+                Sign in to view your order history.
+              </Link>
+            ) : (
+              <>
+                Account created.{' '}
+                <Link to="/account" className="text-primary hover:underline">
+                  Sign in
+                </Link>{' '}
+                to manage future orders.
+              </>
+            )}
           </p>
         </div>
       ) : (
@@ -94,8 +142,19 @@ function CreateAccountPrompt({ email }: { email?: string }) {
 
 export default function OrderConfirmed() {
   const { user } = useAuth()
-  const { state } = useLocation() as { state: { orderId?: string; email?: string } | null }
+  const { state } = useLocation() as {
+    state: { orderId?: string; claimToken?: string; email?: string } | null
+  }
   const ref = state?.orderId?.slice(0, 8).toUpperCase() ?? '—'
+
+  // Resolve claim token from state or sessionStorage fallback
+  const [claimToken, setClaimToken] = useState<string | undefined>(state?.claimToken)
+  useEffect(() => {
+    if (!claimToken && state?.orderId) {
+      const stored = sessionStorage.getItem(`kwg_claim_${state.orderId}`)
+      if (stored) setClaimToken(stored)
+    }
+  }, [claimToken, state?.orderId])
 
   return (
     <div className="mx-auto max-w-3xl px-8 py-section-padding text-center md:px-32">
@@ -134,7 +193,13 @@ export default function OrderConfirmed() {
         </Link>
       </div>
 
-      {!user && <CreateAccountPrompt email={state?.email} />}
+      {!user && (
+        <CreateAccountPrompt
+          email={state?.email}
+          orderId={state?.orderId}
+          claimToken={claimToken}
+        />
+      )}
     </div>
   )
 }

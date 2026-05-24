@@ -39,7 +39,25 @@ export interface WholesaleOrder {
   status: 'pending' | 'confirmed' | 'invoiced'
   total_units: number | null
   total_price: number | null
-  confirm_token: string
+  confirm_token: string | null
+  user_id: string | null
+  address_street: string | null
+  address_city: string | null
+  address_state: string | null
+  address_zip: string | null
+}
+
+export interface BuyerProfile {
+  user_id: string
+  business_name: string
+  contact_name: string
+  email: string
+  phone: string | null
+  address_street: string | null
+  address_city: string | null
+  address_state: string | null
+  address_zip: string | null
+  updated_at: string
 }
 
 export interface WholesaleOrderItem {

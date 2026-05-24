@@ -12,6 +12,7 @@ import OrderStatus from './pages/OrderStatus'
 import OurStory from './pages/OurStory'
 import Contact from './pages/Contact'
 import Account from './pages/Account'
+import AccountOrderDetail from './pages/AccountOrderDetail'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -39,6 +40,7 @@ export default function App() {
               <Route path="/our-story" element={<OurStory />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/account" element={<Account />} />
+              <Route path="/account/order/:id" element={<AccountOrderDetail />} />
             </Routes>
           </main>
           <Footer />

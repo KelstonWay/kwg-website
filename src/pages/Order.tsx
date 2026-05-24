@@ -1,25 +1,56 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
+import { useAuth } from '../contexts/AuthContext'
+import { supabase } from '../lib/supabase'
 import ErrorBanner from '../components/ErrorBanner'
 import { parseError } from '../lib/parse-error'
+import type { BuyerProfile } from '../lib/types'
+
+const EMPTY_FORM = {
+  business_name: '',
+  contact_name: '',
+  email: '',
+  phone: '',
+  address_street: '',
+  address_city: '',
+  address_state: '',
+  address_zip: '',
+  notes: '',
+}
 
 export default function Order() {
   const { items, total, updateQty, removeFromCart, clearCart } = useCart()
-  const [form, setForm] = useState({
-    business_name: '',
-    contact_name: '',
-    email: '',
-    phone: '',
-    address_street: '',
-    address_city: '',
-    address_state: '',
-    address_zip: '',
-    notes: '',
-  })
+  const { user, session } = useAuth()
+  const [form, setForm] = useState(EMPTY_FORM)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
+
+  // Auto-fill from buyer profile when logged in
+  useEffect(() => {
+    if (!user) return
+    supabase
+      .from('buyer_profiles')
+      .select('*')
+      .eq('user_id', user.id)
+      .single()
+      .then(({ data }) => {
+        if (!data) return
+        const profile = data as BuyerProfile
+        setForm((f) => ({
+          ...f,
+          business_name: profile.business_name || f.business_name,
+          contact_name: profile.contact_name || f.contact_name,
+          email: profile.email || f.email,
+          phone: profile.phone || f.phone,
+          address_street: profile.address_street || f.address_street,
+          address_city: profile.address_city || f.address_city,
+          address_state: profile.address_state || f.address_state,
+          address_zip: profile.address_zip || f.address_zip,
+        }))
+      })
+  }, [user])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -28,10 +59,14 @@ export default function Order() {
     setError(null)
 
     try {
-      // Send only IDs + quantities — server re-prices from DB
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`
+      }
+
       const res = await fetch('/api/submit-order', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           items: items.map((i) => ({ release_item_id: i.release_item_id, qty: i.qty })),
           contact: form,
@@ -41,8 +76,15 @@ export default function Order() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Failed to submit order')
 
+      // Persist claim token to sessionStorage so it survives a page refresh
+      if (data.claimToken && data.orderId) {
+        sessionStorage.setItem(`kwg_claim_${data.orderId}`, data.claimToken)
+      }
+
       clearCart()
-      navigate('/order/confirmed', { state: { orderId: data.orderId, email: data.email } })
+      navigate('/order/confirmed', {
+        state: { orderId: data.orderId, claimToken: data.claimToken, email: data.email },
+      })
     } catch (err) {
       setError(parseError(err))
       setSubmitting(false)
@@ -91,7 +133,6 @@ export default function Order() {
           <div className="space-y-6">
             {items.map((item) => (
               <div key={item.release_item_id} className="border-b border-outline-variant/20 py-4">
-                {/* Row 1: photo + name */}
                 <div className="mb-3 flex items-start gap-4">
                   {item.photo_url && (
                     <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg bg-surface-container">
@@ -109,7 +150,6 @@ export default function Order() {
                     </p>
                   </div>
                 </div>
-                {/* Row 2: qty + unit price + line total + delete */}
                 <div className="flex items-center gap-3">
                   <input
                     type="number"
@@ -152,9 +192,25 @@ export default function Order() {
 
         {/* Customer form */}
         <div className="lg:col-span-5">
-          <h2 className="mb-8 border-b border-outline-variant pb-6 font-['Newsreader'] text-headline-md italic">
-            Your Information
-          </h2>
+          <div className="mb-8 flex items-center justify-between border-b border-outline-variant pb-6">
+            <h2 className="font-['Newsreader'] text-headline-md italic">Your Information</h2>
+            {!user && (
+              <Link
+                to="/account"
+                className="font-body-md text-sm text-primary underline underline-offset-2 hover:opacity-80"
+              >
+                Sign in to auto-fill
+              </Link>
+            )}
+          </div>
+          {user && (
+            <p className="mb-6 font-body-md text-sm text-on-surface-variant">
+              Filled from your account.{' '}
+              <Link to="/account" className="text-primary underline underline-offset-2">
+                Edit profile
+              </Link>
+            </p>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="mb-2 block font-label-caps text-label-caps text-on-surface-variant">
