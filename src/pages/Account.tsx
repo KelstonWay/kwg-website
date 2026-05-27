@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
-import type { WholesaleOrder, WholesaleOrderItem } from '../lib/types'
+import type { WholesaleOrder, WholesaleOrderItem, BuyerProfile } from '../lib/types'
 import ErrorBanner from '../components/ErrorBanner'
 import { parseError } from '../lib/parse-error'
 
@@ -298,7 +298,7 @@ function AccountLogin() {
   )
 }
 
-function ReorderButton({ orderId }: { orderId: string }) {
+export function ReorderButton({ orderId }: { orderId: string }) {
   const navigate = useNavigate()
   const { addToCart } = useCart()
   const [loading, setLoading] = useState(false)
@@ -458,30 +458,135 @@ function OrderRow({ order, onNavigate }: { order: WholesaleOrder; onNavigate: ()
   )
 }
 
+const EMPTY_PROFILE = {
+  business_name: '',
+  contact_name: '',
+  phone: '',
+  address_street: '',
+  address_city: '',
+  address_state: '',
+  address_zip: '',
+}
+
 function AccountDashboard() {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
   const [orders, setOrders] = useState<WholesaleOrder[]>([])
-  const [loading, setLoading] = useState(true)
+  const [ordersLoading, setOrdersLoading] = useState(true)
   const [showSetPassword, setShowSetPassword] = useState(false)
 
+  const [profileForm, setProfileForm] = useState(EMPTY_PROFILE)
+  const [profileLoaded, setProfileLoaded] = useState(false)
+  const [savingProfile, setSavingProfile] = useState(false)
+  const [profileSaved, setProfileSaved] = useState(false)
+  const [profileError, setProfileError] = useState<string | null>(null)
+
   useEffect(() => {
+    if (!user) return
+
     async function load() {
-      const { data } = await supabase
+      // Execute any pending claim stored during email-confirm signup flow.
+      // Only fires if the signed-in user's email matches the claim email —
+      // prevents a different account from claiming someone else's order.
+      const pending = localStorage.getItem('kwg_pending_claim')
+      if (pending) {
+        try {
+          const { orderId, claimToken, email: claimEmail } = JSON.parse(pending) as {
+            orderId: string
+            claimToken: string
+            email: string
+          }
+          if (!claimEmail || claimEmail.toLowerCase() === user!.email?.toLowerCase()) {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session?.access_token) {
+              const res = await fetch('/api/claim-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+                body: JSON.stringify({ orderId, claimToken }),
+              })
+              // Remove on success or terminal failure (expired, already claimed, wrong token)
+              if (res.ok || res.status === 403 || res.status === 409) {
+                localStorage.removeItem('kwg_pending_claim')
+              }
+              // On network/server error keep entry so it retries on next load
+            }
+          }
+        } catch {
+          localStorage.removeItem('kwg_pending_claim')
+        }
+      }
+
+      supabase
         .from('wholesale_orders')
         .select(
-          'id, created_at, business_name, contact_name, email, phone, notes, status, total_units, total_price'
+          'id, created_at, business_name, contact_name, email, phone, notes, status, total_units, total_price, user_id'
         )
+        .eq('user_id', user!.id)
         .order('created_at', { ascending: false })
-      if (data) setOrders(data as WholesaleOrder[])
-      setLoading(false)
+        .limit(50)
+        .then(({ data }) => {
+          if (data) setOrders(data as WholesaleOrder[])
+          setOrdersLoading(false)
+        })
+
+      supabase
+        .from('buyer_profiles')
+        .select('*')
+        .eq('user_id', user!.id)
+        .single()
+        .then(({ data }) => {
+          if (data) {
+            const p = data as BuyerProfile
+            setProfileForm({
+              business_name: p.business_name,
+              contact_name: p.contact_name,
+              phone: p.phone ?? '',
+              address_street: p.address_street ?? '',
+              address_city: p.address_city ?? '',
+              address_state: p.address_state ?? '',
+              address_zip: p.address_zip ?? '',
+            })
+          }
+          setProfileLoaded(true)
+        })
     }
+
     load()
-  }, [])
+  }, [user])
 
-  const businessName = orders[0]?.business_name ?? user?.email ?? ''
+  async function handleSaveProfile(e: React.FormEvent) {
+    e.preventDefault()
+    if (!user) return
+    setSavingProfile(true)
+    setProfileSaved(false)
+    setProfileError(null)
 
-  if (loading) {
+    const { error } = await supabase.from('buyer_profiles').upsert(
+      {
+        user_id: user.id,
+        email: user.email ?? '',
+        business_name: profileForm.business_name,
+        contact_name: profileForm.contact_name,
+        phone: profileForm.phone || null,
+        address_street: profileForm.address_street || null,
+        address_city: profileForm.address_city || null,
+        address_state: profileForm.address_state || null,
+        address_zip: profileForm.address_zip || null,
+      },
+      { onConflict: 'user_id' }
+    )
+
+    setSavingProfile(false)
+    if (error) {
+      setProfileError(parseError(error))
+    } else {
+      setProfileSaved(true)
+    }
+  }
+
+  const businessName = profileForm.business_name || user?.email || ''
+
+  if (ordersLoading) {
     return (
       <div className="flex items-center justify-center py-32">
         <span className="material-symbols-outlined animate-spin text-4xl text-outline">
@@ -490,6 +595,9 @@ function AccountDashboard() {
       </div>
     )
   }
+
+  const inputCls =
+    'w-full rounded border border-outline-variant px-4 py-3 font-body-md transition-colors focus:border-primary focus:outline-none'
 
   return (
     <div className="mx-auto max-w-4xl px-5 py-16 md:px-20">
@@ -512,13 +620,111 @@ function AccountDashboard() {
             <OrderRow
               key={order.id}
               order={order}
-              onNavigate={() => navigate(`/order/${order.id}`)}
+              onNavigate={() => navigate(`/account/order/${order.id}`)}
             />
           ))}
         </div>
       )}
 
-      <div className="mt-16 border-t border-outline-variant/30 pt-8">
+      <div className="mt-16 border-t border-outline-variant/30 pt-10">
+        <h2 className="mb-6 font-['Newsreader'] text-headline-md italic text-on-surface">
+          Your Profile
+        </h2>
+        {profileLoaded && (
+          <form onSubmit={handleSaveProfile} className="max-w-lg space-y-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className="mb-2 block font-label-caps text-label-caps text-on-surface-variant">
+                  BUSINESS NAME *
+                </label>
+                <input
+                  required
+                  value={profileForm.business_name}
+                  onChange={(e) => setProfileForm((f) => ({ ...f, business_name: e.target.value }))}
+                  className={inputCls}
+                  placeholder="Your nursery or company"
+                />
+              </div>
+              <div>
+                <label className="mb-2 block font-label-caps text-label-caps text-on-surface-variant">
+                  CONTACT NAME *
+                </label>
+                <input
+                  required
+                  value={profileForm.contact_name}
+                  onChange={(e) => setProfileForm((f) => ({ ...f, contact_name: e.target.value }))}
+                  className={inputCls}
+                  placeholder="Your full name"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="mb-2 block font-label-caps text-label-caps text-on-surface-variant">
+                PHONE
+              </label>
+              <input
+                type="tel"
+                value={profileForm.phone}
+                onChange={(e) => setProfileForm((f) => ({ ...f, phone: e.target.value }))}
+                className={inputCls}
+                placeholder="Optional"
+              />
+            </div>
+            <div>
+              <label className="mb-2 block font-label-caps text-label-caps text-on-surface-variant">
+                DELIVERY ADDRESS
+              </label>
+              <input
+                value={profileForm.address_street}
+                onChange={(e) => setProfileForm((f) => ({ ...f, address_street: e.target.value }))}
+                className={`${inputCls} mb-2`}
+                placeholder="Street address"
+              />
+              <div className="grid grid-cols-6 gap-2">
+                <input
+                  value={profileForm.address_city}
+                  onChange={(e) => setProfileForm((f) => ({ ...f, address_city: e.target.value }))}
+                  className={`col-span-3 ${inputCls}`}
+                  placeholder="City"
+                />
+                <input
+                  value={profileForm.address_state}
+                  onChange={(e) =>
+                    setProfileForm((f) => ({
+                      ...f,
+                      address_state: e.target.value.toUpperCase().slice(0, 2),
+                    }))
+                  }
+                  className={`col-span-1 ${inputCls}`}
+                  placeholder="TX"
+                  maxLength={2}
+                />
+                <input
+                  value={profileForm.address_zip}
+                  onChange={(e) => setProfileForm((f) => ({ ...f, address_zip: e.target.value }))}
+                  className={`col-span-2 ${inputCls}`}
+                  placeholder="ZIP"
+                />
+              </div>
+            </div>
+            {profileError && <ErrorBanner message={profileError} />}
+            <div className="flex items-center gap-4">
+              <button
+                type="submit"
+                disabled={savingProfile}
+                className="rounded-sm bg-primary px-6 py-2.5 font-button text-sm text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {savingProfile ? 'Saving...' : 'Save profile'}
+              </button>
+              {profileSaved && (
+                <span className="font-body-md text-sm text-primary">Profile saved.</span>
+              )}
+            </div>
+          </form>
+        )}
+      </div>
+
+      <div className="mt-12 border-t border-outline-variant/30 pt-8">
         <button
           onClick={() => setShowSetPassword((v) => !v)}
           className="mb-4 block font-body-md text-sm text-on-surface-variant underline underline-offset-2 transition-colors hover:text-on-surface"

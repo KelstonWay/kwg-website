@@ -148,6 +148,7 @@ export default function Availability() {
     if (!file) return
     setImporting(true)
     try {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-imports
       let XLSX: typeof import('xlsx')
       try {
         XLSX = await import('xlsx')
@@ -207,7 +208,7 @@ export default function Availability() {
       if (matched.length === 0) {
         const detail =
           rowsWithQty > 0
-            ? `Found ${rowsWithQty} row(s) with quantities but none matched available products.\nDetected columns: "${skuKey}" and "${qtyKey}".\nMake sure you\'re using the template downloaded from this page.`
+            ? `Found ${rowsWithQty} row(s) with quantities but none matched available products.\nDetected columns: "${skuKey}" and "${qtyKey}".\nMake sure you're using the template downloaded from this page.`
             : `No quantities were found in the "${qtyKey}" column.\nFill in that column with the number of trays you want, then save and re-upload.`
         alert(`Import failed — ${detail}`)
         return
@@ -700,7 +701,7 @@ export default function Availability() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            item.photo_url && setSelected(item)
+                            if (item.photo_url) setSelected(item)
                           }}
                           disabled={!item.photo_url}
                           className={`relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg bg-surface-container ${item.photo_url ? 'cursor-zoom-in' : 'cursor-default'}`}

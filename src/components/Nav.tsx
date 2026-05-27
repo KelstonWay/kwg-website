@@ -19,6 +19,7 @@ export default function Nav() {
   const { varietyCount: count } = useCart()
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMenuOpen(false)
   }, [pathname])
 
