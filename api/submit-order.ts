@@ -236,32 +236,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       total_price: totalPrice,
     }
 
-    const { data: submission, error: subErr } = await supabase
+    const { error: subErr } = await supabase
       .from('order_submissions')
       .insert({
         email_provided: contact.email,
         raw_payload: rawPayload,
         status: 'unmatched',
       })
-      .select('id')
-      .single()
     if (subErr) console.error('order_submissions insert failed:', subErr.message)
 
-    if (submission) {
-      const { data: match } = await supabase
-        .from('buyer_contacts')
-        .select('id')
-        .eq('email', contact.email)
-        .limit(1)
-        .single()
-
-      if (match) {
-        await supabase
-          .from('order_submissions')
-          .update({ status: 'matched', buyer_contact_id: match.id })
-          .eq('id', submission.id)
-      }
-    }
   } catch {
     /* non-fatal */
   }

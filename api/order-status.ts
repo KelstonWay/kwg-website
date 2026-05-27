@@ -35,6 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     .select('id, plant_name, plant_size, plant_sku, qty_requested, unit_price, tray_count, tray_price, line_total')
     .eq('order_id', orderId)
 
-  const { confirm_token: _removed, ...orderWithoutToken } = order
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { confirm_token: _confirm_token, ...orderWithoutToken } = order
   return res.status(200).json({ order: orderWithoutToken, items: items ?? [] })
 }

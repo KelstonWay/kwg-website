@@ -157,6 +157,7 @@ export default function OrderConfirmed() {
   useEffect(() => {
     if (!claimToken && state?.orderId) {
       const stored = sessionStorage.getItem(`kwg_claim_${state.orderId}`)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (stored) setClaimToken(stored)
     }
   }, [claimToken, state?.orderId])
