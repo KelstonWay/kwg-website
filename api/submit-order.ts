@@ -226,27 +226,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.error('Email send failed for order', orderId, emailErr)
   }
 
-  // Write to kwg-structure's order_submissions table
+  // Fallback: write to order_submissions if the RPC didn't (e.g. pre-migration).
+  // wholesale_order_id unique constraint makes this a safe no-op after migration.
+  // TODO: remove this block after 20260527_atomic_order_submissions is verified live.
   try {
-    const rawPayload = {
-      wholesale_order_id: orderId,
-      contact,
-      items: orderLines,
-      total_units: totalUnits,
-      total_price: totalPrice,
-    }
-
     const { error: subErr } = await supabase
       .from('order_submissions')
       .insert({
+        wholesale_order_id: orderId,
         email_provided: contact.email,
-        raw_payload: rawPayload,
+        source: 'website',
         status: 'unmatched',
+        raw_payload: {
+          wholesale_order_id: orderId,
+          contact,
+          items: orderLines,
+          total_units: totalUnits,
+          total_price: totalPrice,
+        },
       })
-    if (subErr) console.error('order_submissions insert failed:', subErr.message)
-
+    if (subErr && subErr.code !== '23505' && subErr.code !== '23P01') {
+      console.error('order_submissions fallback insert failed:', subErr.message)
+    }
   } catch {
-    /* non-fatal */
+    /* non-fatal fallback */
   }
 
   return res.status(200).json({ orderId, claimToken, email: contact.email })
