@@ -28,6 +28,7 @@ export default function Availability() {
       const { data: release } = await supabase
         .from('availability_releases')
         .select('id, published_at')
+        .eq('status', 'current')
         .order('published_at', { ascending: false })
         .limit(1)
         .single()

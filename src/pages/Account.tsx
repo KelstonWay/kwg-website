@@ -324,6 +324,7 @@ export function ReorderButton({ orderId }: { orderId: string }) {
     const { data: release } = await supabase
       .from('availability_releases')
       .select('id')
+      .eq('status', 'current')
       .order('published_at', { ascending: false })
       .limit(1)
       .single()
