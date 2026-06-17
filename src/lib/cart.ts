@@ -1,9 +1,18 @@
 import type { CartItem } from './types'
 
 const KEY = 'kwg_cart'
+const VERSION_KEY = 'kwg_cart_version'
+// Bump when CartItem pricing semantics change. v2: unit_price/tray_price are per-tray.
+// Carts written under an older version store incompatible totals and must be dropped.
+const CART_VERSION = '2'
 
 export function getCart(): CartItem[] {
   try {
+    if (localStorage.getItem(VERSION_KEY) !== CART_VERSION) {
+      localStorage.removeItem(KEY)
+      localStorage.setItem(VERSION_KEY, CART_VERSION)
+      return []
+    }
     const raw = localStorage.getItem(KEY)
     return raw ? (JSON.parse(raw) as CartItem[]) : []
   } catch {
@@ -12,6 +21,7 @@ export function getCart(): CartItem[] {
 }
 
 function saveCart(items: CartItem[]): void {
+  localStorage.setItem(VERSION_KEY, CART_VERSION)
   localStorage.setItem(KEY, JSON.stringify(items))
 }
 

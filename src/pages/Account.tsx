@@ -342,6 +342,7 @@ export function ReorderButton({ orderId }: { orderId: string }) {
       .from('availability_release_items')
       .select('id, plant_id, unit_price, tray_count, qty_available')
       .eq('release_id', release.id)
+      .eq('website_visible', true)
       .in('plant_id', plantIds)
       .gt('qty_available', 0)
 
