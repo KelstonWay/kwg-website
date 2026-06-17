@@ -120,7 +120,7 @@ export default function Availability() {
   })
   const totalUnits = orderLines.reduce((s, i) => s + (parseInt(qtys[i.id]) || 0), 0)
   const totalPrice = orderLines.reduce(
-    (s, i) => s + (parseInt(qtys[i.id]) || 0) * (i.unit_price ?? 0) * i.tray_count,
+    (s, i) => s + (parseInt(qtys[i.id]) || 0) * (i.unit_price ?? 0),
     0
   )
 
@@ -133,7 +133,7 @@ export default function Availability() {
       'Plants / Tray': i.tray_count,
       'Qty Available': i.qty_available,
       'Price / Tray':
-        i.unit_price != null ? parseFloat((i.unit_price * i.tray_count).toFixed(2)) : '',
+        i.unit_price != null ? parseFloat(i.unit_price.toFixed(2)) : '',
       'Order Qty': '',
       Notes: i.notes ?? '',
     }))
@@ -225,7 +225,7 @@ export default function Availability() {
           plant_size: item.plant_size,
           unit_price: item.unit_price!,
           tray_count: item.tray_count,
-          tray_price: item.unit_price! * item.tray_count,
+          tray_price: item.unit_price!,
           qty,
           photo_url: item.photo_url,
           release_item_id: item.id,
@@ -262,7 +262,7 @@ export default function Availability() {
         plant_size: item.plant_size,
         unit_price: item.unit_price!,
         tray_count: item.tray_count,
-        tray_price: item.unit_price! * item.tray_count,
+        tray_price: item.unit_price!,
         qty: parseInt(qtys[item.id]),
         photo_url: item.photo_url,
         release_item_id: item.id,
@@ -364,7 +364,7 @@ export default function Availability() {
               {selected.unit_price && (
                 <div>
                   <p className="mb-0.5 font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant">
-                    Unit Price
+                    Price / Tray
                   </p>
                   <p className="font-body-md text-sm font-semibold text-on-surface">
                     ${selected.unit_price.toFixed(2)}
@@ -785,8 +785,8 @@ export default function Availability() {
                       <td className="py-2 text-right font-body-md text-sm font-medium text-on-surface">
                         {item.unit_price
                           ? orderMode
-                            ? `$${(item.unit_price * item.tray_count).toFixed(2)}/tray (${item.tray_count}-count)`
-                            : `$${item.unit_price.toFixed(2)}`
+                            ? `$${item.unit_price.toFixed(2)}/tray (${item.tray_count}-count)`
+                            : `$${item.unit_price.toFixed(2)}/tray`
                           : '—'}
                       </td>
 

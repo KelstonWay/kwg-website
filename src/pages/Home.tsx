@@ -203,12 +203,12 @@ export default function Home() {
                       {item.plant_name}
                     </h3>
                     <p className="mt-0.5 font-body-md text-xs text-stone-500">
-                      {item.plant_size} · {item.qty_available} available
+                      {item.plant_size} · {item.qty_available} trays available
                     </p>
                   </div>
                   {item.unit_price && (
                     <span className="mt-1 flex-shrink-0 rounded-full bg-secondary-fixed px-2 py-0.5 font-label-caps text-[10px] text-on-secondary-fixed-variant">
-                      ${item.unit_price.toFixed(2)}
+                      ${item.unit_price.toFixed(2)}/tray
                     </span>
                   )}
                 </div>

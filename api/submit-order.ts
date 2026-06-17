@@ -108,7 +108,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const qty = qtyByReleaseItem[rid]
     const unitPrice = ri.unit_price ?? 0
     const trayCount = ri.tray_count ?? 1
-    const trayPrice = unitPrice * trayCount
+    const trayPrice = unitPrice
     return {
       release_item_id: rid,
       plant_id: ri.plant_id,

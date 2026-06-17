@@ -33,7 +33,7 @@ export default function PlantCard({ item, onAdd, shape = 'arch' }: Props) {
       plant_size: item.plant_size,
       unit_price: item.unit_price,
       tray_count: item.tray_count,
-      tray_price: item.unit_price * item.tray_count,
+      tray_price: item.unit_price,
       qty: 1,
       photo_url: item.photo_url,
       release_item_id: item.id,
@@ -67,13 +67,13 @@ export default function PlantCard({ item, onAdd, shape = 'arch' }: Props) {
           </div>
           {item.unit_price && (
             <span className="whitespace-nowrap rounded-full bg-secondary-fixed px-3 py-1 font-label-caps text-label-caps text-on-secondary-fixed-variant">
-              ${item.unit_price.toFixed(2)}
+              ${item.unit_price.toFixed(2)}/tray
             </span>
           )}
         </div>
         <div className="flex items-center justify-between">
           <span className="font-body-md text-sm text-on-surface-variant">
-            {item.qty_available} available
+            {item.qty_available} trays available
           </span>
           {item.grade && (
             <span
