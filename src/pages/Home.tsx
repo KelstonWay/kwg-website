@@ -19,6 +19,7 @@ export default function Home() {
         .from('availability_releases')
         .select('id')
         .eq('status', 'current')
+        .not('published_at', 'is', null)
         .order('published_at', { ascending: false })
         .limit(1)
         .single()

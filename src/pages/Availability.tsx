@@ -29,6 +29,7 @@ export default function Availability() {
         .from('availability_releases')
         .select('id, published_at')
         .eq('status', 'current')
+        .not('published_at', 'is', null)
         .order('published_at', { ascending: false })
         .limit(1)
         .single()

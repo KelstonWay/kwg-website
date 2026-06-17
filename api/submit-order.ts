@@ -57,6 +57,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { data: currentRelease, error: releaseErr } = await supabase
     .from('availability_releases')
     .select('id')
+    .eq('status', 'current')
     .not('published_at', 'is', null)
     .order('published_at', { ascending: false })
     .limit(1)
