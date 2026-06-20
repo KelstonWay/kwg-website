@@ -55,6 +55,7 @@ export default function CartDrawer({ open, onClose }: Props) {
                     <input
                       type="number"
                       min="1"
+                      max={item.qty_available}
                       value={item.qty}
                       onChange={(e) =>
                         updateQty(item.release_item_id, parseInt(e.target.value) || 1)

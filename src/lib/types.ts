@@ -24,6 +24,7 @@ export interface CartItem {
   tray_count: number
   tray_price: number
   qty: number
+  qty_available: number
   photo_url: string | null
   release_item_id: string
 }

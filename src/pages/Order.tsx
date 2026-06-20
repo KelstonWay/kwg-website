@@ -154,6 +154,7 @@ export default function Order() {
                   <input
                     type="number"
                     min="1"
+                    max={item.qty_available}
                     value={item.qty}
                     onChange={(e) => updateQty(item.release_item_id, parseInt(e.target.value) || 1)}
                     className="w-16 rounded border border-outline-variant px-2 py-1.5 text-center font-body-md text-base focus:border-primary focus:outline-none"

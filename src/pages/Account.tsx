@@ -378,6 +378,7 @@ export function ReorderButton({ orderId }: { orderId: string }) {
         tray_count: trayCount,
         tray_price: current.unit_price ?? item.unit_price,
         qty: item.qty_requested,
+        qty_available: current.qty_available,
         photo_url: null,
         release_item_id: current.id,
       })

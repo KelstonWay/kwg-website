@@ -228,6 +228,7 @@ export default function Availability() {
           tray_count: item.tray_count,
           tray_price: item.unit_price!,
           qty,
+          qty_available: item.qty_available,
           photo_url: item.photo_url,
           release_item_id: item.id,
         })
@@ -265,6 +266,7 @@ export default function Availability() {
         tray_count: item.tray_count,
         tray_price: item.unit_price!,
         qty: parseInt(qtys[item.id]),
+        qty_available: item.qty_available,
         photo_url: item.photo_url,
         release_item_id: item.id,
       })
@@ -796,30 +798,27 @@ export default function Availability() {
                           <input
                             type="number"
                             min="0"
+                            max={item.qty_available}
                             placeholder="0"
                             value={qty}
                             disabled={!item.unit_price}
-                            onChange={(e) =>
-                              setQtys((prev) => ({ ...prev, [item.id]: e.target.value }))
-                            }
+                            onChange={(e) => {
+                              const raw = e.target.value
+                              if (raw === '') {
+                                setQtys((prev) => ({ ...prev, [item.id]: '' }))
+                                return
+                              }
+                              const n = parseInt(raw)
+                              if (Number.isNaN(n)) return
+                              const clamped = Math.min(Math.max(n, 0), item.qty_available)
+                              setQtys((prev) => ({ ...prev, [item.id]: String(clamped) }))
+                            }}
                             className={`w-20 rounded-lg border px-2 py-1.5 text-center font-body-md text-sm transition-colors focus:outline-none disabled:opacity-30 ${
-                              parseInt(qty) > item.qty_available
-                                ? 'border-amber-400 bg-secondary-fixed/40 font-semibold text-amber-800'
-                                : isSelected
-                                  ? 'border-primary bg-primary-fixed/30 font-semibold text-primary'
-                                  : 'border-outline-variant focus:border-primary'
+                              isSelected
+                                ? 'border-primary bg-primary-fixed/30 font-semibold text-primary'
+                                : 'border-outline-variant focus:border-primary'
                             }`}
                           />
-                          {parseInt(qty) > item.qty_available && (
-                            <div className="mt-1 flex items-center justify-center gap-1">
-                              <span className="material-symbols-outlined text-[13px] text-amber-600">
-                                warning
-                              </span>
-                              <span className="font-label-caps text-[9px] leading-tight text-amber-700">
-                                Exceeds stock
-                              </span>
-                            </div>
-                          )}
                         </td>
                       ) : (
                         <td className="rounded-r-xl py-2 pr-4 text-right">
@@ -844,15 +843,6 @@ export default function Availability() {
             orderLines.length > 0 ? 'translate-y-0' : 'translate-y-full'
           }`}
         >
-          {items.some((i) => parseInt(qtys[i.id] ?? '') > i.qty_available) && (
-            <div className="flex items-center gap-2 bg-secondary-fixed px-4 py-2 text-on-secondary-fixed md:px-32">
-              <span className="material-symbols-outlined text-[16px]">warning</span>
-              <p className="font-body-md text-xs">
-                Some quantities exceed available stock — we'll reach out to confirm before
-                fulfilling.
-              </p>
-            </div>
-          )}
           <div className="flex items-center justify-between bg-primary px-4 py-4 text-on-primary shadow-2xl md:px-32">
             <div className="flex items-center gap-6">
               <div>

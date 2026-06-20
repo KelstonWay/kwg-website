@@ -35,6 +35,7 @@ export default function PlantCard({ item, onAdd, shape = 'arch' }: Props) {
       tray_count: item.tray_count,
       tray_price: item.unit_price,
       qty: 1,
+      qty_available: item.qty_available,
       photo_url: item.photo_url,
       release_item_id: item.id,
     })
