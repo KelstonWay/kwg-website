@@ -47,23 +47,27 @@ export default function OrderEditConfirm() {
         setLoading(false)
         return
       }
-      const res = await fetch('/api/order-edit-status', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId: id, token: urlToken }),
-      })
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        setInactive(data.error ?? 'This confirmation link is no longer active.')
+      try {
+        const res = await fetch('/api/order-edit-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: id, token: urlToken }),
+        })
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}))
+          setInactive(data.error ?? 'This confirmation link is no longer active.')
+          return
+        }
+        const data = await res.json()
+        setToken(urlToken)
+        // Strip the token from the URL once validated (same pattern as OrderStatus)
+        window.history.replaceState({}, '', `/order/${id}/confirm`)
+        setView(data as EditRequestView)
+      } catch {
+        setInactive('We could not load this confirmation right now. Please try again shortly.')
+      } finally {
         setLoading(false)
-        return
       }
-      const data = await res.json()
-      setToken(urlToken)
-      // Strip the token from the URL once validated (same pattern as OrderStatus)
-      window.history.replaceState({}, '', `/order/${id}/confirm`)
-      setView(data as EditRequestView)
-      setLoading(false)
     }
     load()
   }, [id, urlToken])
@@ -72,24 +76,28 @@ export default function OrderEditConfirm() {
     if (!id || !token) return
     setBusy(action)
     setError(null)
-    const res = await fetch('/api/order-edit-action', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ orderId: id, token, action, message: message.trim() }),
-    })
-    const data = await res.json().catch(() => ({}))
-    if (!res.ok) {
-      setError(data.error ?? 'Something went wrong. Please try again.')
+    try {
+      const res = await fetch('/api/order-edit-action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId: id, token, action, message: message.trim() }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setError(data.error ?? 'Something went wrong. Please try again.')
+        return
+      }
+      if (action === 'message') {
+        setMessageSent(true)
+        setMessage('')
+      } else {
+        setResolved(action)
+      }
+    } catch {
+      setError('We could not reach the server. Please check your connection and try again.')
+    } finally {
       setBusy(null)
-      return
     }
-    if (action === 'message') {
-      setMessageSent(true)
-      setMessage('')
-    } else {
-      setResolved(action)
-    }
-    setBusy(null)
   }
 
   if (loading) {

@@ -68,10 +68,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const plantIds = [...new Set(lines.map((l) => l.plant_id).filter((p): p is string => !!p))]
   const plantById = new Map<string, { sku: string | null; size: string | null }>()
   if (plantIds.length > 0) {
+    // org-scoped: the service role bypasses RLS, so never let a malformed
+    // proposed payload enumerate plants outside the order's own org
     const { data: plants } = await supabase
       .from('plants')
       .select('id, sku, size')
       .in('id', plantIds)
+      .eq('org_id', order.org_id)
     for (const p of plants ?? []) plantById.set(p.id, { sku: p.sku, size: p.size })
   }
 
