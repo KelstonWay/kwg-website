@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import PageMeta from '../components/PageMeta'
 import type { AvailabilityItem } from '../lib/types'
 
 const HERO_IMG = '/photos/hero1.webp'
@@ -29,9 +30,10 @@ export default function Home() {
         .from('availability_release_items')
         .select('*, plants(name, sku, size)')
         .eq('release_id', release.id)
-        .eq('is_cover', true)
         .eq('website_visible', true)
         .gt('qty_available', 0)
+        .order('photo_url', { ascending: false, nullsFirst: false })
+        .order('qty_available', { ascending: false })
         .limit(3)
       if (items)
         setPreview(
@@ -60,19 +62,23 @@ export default function Home() {
 
   return (
     <>
+      <PageMeta
+        title="Kelston Way Greenhouse — Wholesale Plant Grower in Central Texas"
+        description="Kelston Way is a family-owned wholesale greenhouse in Oglesby, Texas, growing annuals, perennials, and seasonal color for garden centers and landscape professionals."
+      />
       {/* Hero */}
       <section className="flex flex-col items-center gap-10 overflow-hidden px-5 py-12 md:grid md:grid-cols-12 md:gap-16 md:px-32 md:py-20">
         <div className="z-10 md:col-span-6">
           <span className="mb-4 block font-label-caps text-label-caps text-secondary">
-            WHOLESALE NURSERY · OGLESBY, TEXAS
+            WHOLESALE GROWER · OGLESBY, TEXAS
           </span>
           <h1 className="mb-6 font-['Newsreader'] text-3xl text-on-surface md:mb-8 md:text-display-lg">
             We grow plants for <span className="italic text-primary">garden centers</span> and
-            landscapers.
+            landscape professionals.
           </h1>
           <p className="mb-8 max-w-lg font-body-lg text-body-lg text-sm leading-relaxed text-on-surface-variant md:mb-10 md:text-base">
-            Kelston Way is a family greenhouse in central Texas. We grow annuals, perennials, and
-            seasonal color — and we want to sell to you. Email us with any questions.
+            Kelston Way is a family-owned wholesale greenhouse in Central Texas, growing annuals,
+            perennials, and seasonal color.
           </p>
           <div className="flex flex-wrap gap-3 md:gap-4">
             <Link
@@ -138,17 +144,23 @@ export default function Home() {
             {
               icon: 'inventory_2',
               title: 'See What We Have',
-              body: "We publish our availability each week. Browse the list and order what you need — or email us if you have questions about what's coming.",
+              body: "We update our availability each week so you can see what's currently ready. Review the list and send us what you need.",
+              linkTo: '/availability',
+              linkLabel: 'View Availability',
             },
             {
               icon: 'local_shipping',
               title: 'We Deliver to You',
-              body: 'We deliver to garden centers and landscapers across Texas. Plants arrive healthy and ready for your floor.',
+              body: 'We deliver to garden centers and landscape professionals. Plants arrive healthy and ready for your floor.',
+              linkTo: null,
+              linkLabel: null,
             },
             {
               icon: 'handshake',
               title: 'Work With Us',
-              body: "We're a family business and easy to reach. If you need something specific or want to talk through a regular order, just email us.",
+              body: "We're easy to reach. If you're looking for something specific, planning ahead, or interested in a standing order, email our team.",
+              linkTo: '/contact',
+              linkLabel: 'Contact Our Team',
             },
           ].map((s) => (
             <div
@@ -158,12 +170,14 @@ export default function Home() {
               <span className="material-symbols-outlined mb-6 text-4xl text-primary">{s.icon}</span>
               <h3 className="mb-4 font-['Newsreader'] text-2xl">{s.title}</h3>
               <p className="mb-8 flex-grow font-body-md text-on-surface-variant">{s.body}</p>
-              <Link
-                to="/availability"
-                className="w-fit border-b border-primary/30 pb-1 font-button text-button text-primary transition-all hover:border-primary"
-              >
-                Learn More
-              </Link>
+              {s.linkTo && (
+                <Link
+                  to={s.linkTo}
+                  className="w-fit border-b border-primary/30 pb-1 font-button text-button text-primary transition-all hover:border-primary"
+                >
+                  {s.linkLabel}
+                </Link>
+              )}
             </div>
           ))}
         </div>
@@ -176,7 +190,7 @@ export default function Home() {
             <h2 className="font-['Newsreader'] text-headline-xl text-on-surface">Available Now</h2>
             <Link
               to="/availability"
-              className="group ml-8 flex hidden flex-shrink-0 items-center gap-2 font-button text-button text-primary md:flex"
+              className="group ml-8 hidden flex-shrink-0 items-center gap-2 font-button text-button text-primary md:flex"
             >
               Full Availability{' '}
               <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">
@@ -230,9 +244,6 @@ export default function Home() {
       {/* Bento */}
       <section className="bg-stone-50 px-5 py-14 md:px-32 md:py-20">
         <div className="mx-auto mb-20 max-w-2xl text-center">
-          <span className="mb-4 block font-label-caps text-label-caps text-secondary">
-            OUR FACILITY
-          </span>
           <h2 className="mb-6 font-['Newsreader'] text-headline-xl">Our Greenhouse</h2>
           <div className="mx-auto h-[1px] w-12 bg-secondary" />
         </div>
@@ -283,26 +294,27 @@ export default function Home() {
           </div>
           <div className="flex flex-col items-center justify-center rounded-sm bg-secondary-container p-6 text-center md:col-span-1 md:row-span-1">
             <span className="material-symbols-outlined mb-3 text-3xl text-secondary">
-              local_shipping
+              calendar_month
             </span>
             <h3 className="mb-2 font-['Newsreader'] text-lg text-on-secondary-container">
-              Texas Delivery
+              Weekly Availability
             </h3>
             <p className="mb-4 font-body-md text-xs text-on-secondary-fixed-variant">
-              We deliver to garden centers and landscapers across the state.
+              See what's currently available from the greenhouse.
             </p>
           </div>
           <div className="flex flex-col items-center justify-center rounded-sm bg-primary p-6 text-center text-on-primary md:col-span-1 md:row-span-1">
             <span className="material-symbols-outlined mb-3 text-3xl">handshake</span>
             <h3 className="mb-2 font-['Newsreader'] text-lg">Work With Us</h3>
             <p className="mb-4 font-body-md text-xs opacity-90">
-              Want to buy from us? Email us — we're easy to reach.
+              Looking for a wholesale growing partner? We work with garden centers and landscape
+              professionals.
             </p>
             <a
               href="#inquire"
               className="border-b border-white font-button text-[10px] uppercase tracking-widest"
             >
-              Apply Now
+              Contact Our Team
             </a>
           </div>
         </div>
@@ -313,11 +325,10 @@ export default function Home() {
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-16 md:flex-row">
           <div className="md:w-1/2">
             <h2 className="mb-6 font-['Newsreader'] text-headline-xl">
-              Want to buy from <span className="italic opacity-80">us?</span>
+              Interested in working with <span className="italic opacity-80">Kelston Way?</span>
             </h2>
             <p className="font-body-lg text-lg leading-relaxed opacity-90">
-              Leave your email and we'll reach out. We sell to garden centers and landscapers — if
-              that's you, we'd love to work together.
+              Leave your email and our team will get in touch to learn more about what you need.
             </p>
           </div>
           <div className="w-full md:w-1/2">
@@ -336,7 +347,7 @@ export default function Home() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your business email..."
+                    placeholder="you@yourbusiness.com"
                     className="w-full border-b border-primary-fixed bg-transparent pb-2 text-white outline-none transition-colors placeholder:text-primary-fixed/50 focus:border-white focus:ring-0"
                   />
                 </div>
@@ -344,7 +355,7 @@ export default function Home() {
                   type="submit"
                   className="w-full bg-primary-fixed py-4 font-button text-button text-on-primary-fixed transition-colors hover:bg-white"
                 >
-                  Request Access
+                  Get in Touch
                 </button>
               </form>
             )}

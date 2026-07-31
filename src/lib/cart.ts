@@ -26,17 +26,18 @@ function saveCart(items: CartItem[]): void {
   localStorage.setItem(KEY, JSON.stringify(items))
 }
 
-// Inventory uses decrement-on-order: create_wholesale_order hard-rejects any line whose
-// qty exceeds availability_release_items.qty_available. Clamp every cart mutation to the
-// snapshot carried on the item so the UI can never build an order the server will reject.
+// Buyers may request more than the published quantity (2026-07-31, Samuel): an order is a
+// request KWG reviews, not a guaranteed reservation. Quantities are NOT clamped to
+// qty_available — the UI warns on any line over the published number, and
+// create_wholesale_order floors the stock decrement at zero instead of rejecting.
 export function addToCart(item: CartItem): void {
   const cart = getCart()
   const existing = cart.find((i) => i.release_item_id === item.release_item_id)
   if (existing) {
-    existing.qty = Math.min(existing.qty + item.qty, item.qty_available)
+    existing.qty = existing.qty + item.qty
     saveCart(cart)
   } else {
-    saveCart([...cart, { ...item, qty: Math.min(item.qty, item.qty_available) }])
+    saveCart([...cart, { ...item }])
   }
 }
 
@@ -46,8 +47,7 @@ export function updateQty(releaseItemId: string, qty: number): void {
   if (qty <= 0 || !item) {
     saveCart(cart.filter((i) => i.release_item_id !== releaseItemId))
   } else {
-    const capped = Math.min(qty, item.qty_available)
-    saveCart(cart.map((i) => (i.release_item_id === releaseItemId ? { ...i, qty: capped } : i)))
+    saveCart(cart.map((i) => (i.release_item_id === releaseItemId ? { ...i, qty } : i)))
   }
 }
 

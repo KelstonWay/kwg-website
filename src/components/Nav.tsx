@@ -79,7 +79,7 @@ export default function Nav() {
             to="/availability"
             className="hidden rounded-sm bg-secondary px-6 py-2.5 font-button text-button font-semibold text-on-secondary transition-all duration-300 hover:opacity-90 md:block"
           >
-            Order Now
+            View Availability
           </Link>
           {/* Hamburger — mobile only */}
           <button

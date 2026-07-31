@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import ErrorBanner from '../components/ErrorBanner'
+import PageMeta from '../components/PageMeta'
+import { CONTACT_EMAIL, CONTACT_MAILTO, CONTACT_PHONE, CONTACT_PHONE_HREF } from '../lib/site'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', business: '', message: '' })
@@ -21,7 +23,7 @@ export default function Contact() {
       if (!res.ok) throw new Error()
       setSent(true)
     } catch {
-      setError('Something went wrong. Please email us directly at samuel@kelstonway.com')
+      setError(`Something went wrong. Please email us directly at ${CONTACT_EMAIL}`)
     } finally {
       setSending(false)
     }
@@ -29,13 +31,20 @@ export default function Contact() {
 
   return (
     <div className="px-5 py-20 md:px-32">
+      <PageMeta
+        title="Contact — Kelston Way Greenhouse | Wholesale Grower, Oglesby, Texas"
+        description="Contact the Kelston Way Greenhouse team about wholesale availability, orders, standing orders, or growing programs for garden centers and landscape professionals."
+      />
       <div className="mx-auto max-w-2xl">
         <span className="mb-4 block font-label-caps text-label-caps text-secondary">
           GET IN TOUCH
         </span>
-        <h1 className="mb-4 font-['Newsreader'] text-headline-xl text-on-surface">Contact Us</h1>
+        <h1 className="mb-4 font-['Newsreader'] text-headline-xl text-on-surface">
+          Contact Our Team
+        </h1>
         <p className="mb-12 font-body-lg text-on-surface-variant">
-          Questions about wholesale pricing, availability, or delivery? We'd love to hear from you.
+          Questions about wholesale pricing, availability, or planning ahead? We'd be glad to hear
+          from you.
         </p>
 
         {sent ? (
@@ -46,9 +55,7 @@ export default function Contact() {
             <h2 className="mb-3 font-['Newsreader'] text-headline-md text-on-surface">
               Message sent!
             </h2>
-            <p className="font-body-md text-on-surface-variant">
-              We'll get back to you within 1 business day.
-            </p>
+            <p className="font-body-md text-on-surface-variant">We'll be in touch soon.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -114,15 +121,25 @@ export default function Contact() {
           </form>
         )}
 
-        <div className="mt-16 grid grid-cols-1 gap-8 border-t border-outline-variant/30 pt-12 md:grid-cols-2">
+        <div className="mt-16 grid grid-cols-1 gap-8 border-t border-outline-variant/30 pt-12 md:grid-cols-3">
           <div>
             <span className="material-symbols-outlined mb-3 block text-2xl text-primary">mail</span>
             <p className="mb-1 font-label-caps text-label-caps text-on-surface-variant">EMAIL</p>
             <a
-              href="mailto:samuel@kelstonway.com"
+              href={CONTACT_MAILTO}
               className="font-body-md text-on-surface transition-colors hover:text-primary"
             >
-              samuel@kelstonway.com
+              {CONTACT_EMAIL}
+            </a>
+          </div>
+          <div>
+            <span className="material-symbols-outlined mb-3 block text-2xl text-primary">call</span>
+            <p className="mb-1 font-label-caps text-label-caps text-on-surface-variant">PHONE</p>
+            <a
+              href={CONTACT_PHONE_HREF}
+              className="font-body-md text-on-surface transition-colors hover:text-primary"
+            >
+              {CONTACT_PHONE}
             </a>
           </div>
           <div>

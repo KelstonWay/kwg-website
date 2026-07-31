@@ -80,13 +80,11 @@ export default function PlantCard({ item, onAdd, shape = 'arch' }: Props) {
             <span
               className={`rounded-full px-2 py-0.5 font-label-caps text-xs ${
                 item.grade === 1
-                  ? 'bg-primary/15 text-primary'
-                  : item.grade === 2
-                    ? 'bg-amber-100 text-amber-700'
-                    : 'bg-error-container text-error'
+                  ? 'bg-secondary-container text-on-secondary-container'
+                  : 'bg-primary-fixed text-on-primary-fixed-variant'
               }`}
             >
-              {item.grade === 1 ? 'Can Hold' : item.grade === 2 ? 'Ship Soon' : 'Critical'}
+              {item.grade === 1 ? 'Ready Soon' : 'Available'}
             </span>
           )}
         </div>

@@ -69,7 +69,14 @@ function CreateAccountPrompt({
       // Email confirmation required — session is null immediately after signup.
       // Persist the claim intent so AccountDashboard can execute it after the
       // user confirms their email and signs in.
-      localStorage.setItem('kwg_pending_claim', JSON.stringify({ orderId, claimToken: resolvedClaimToken, email: (email ?? '').trim().toLowerCase() }))
+      localStorage.setItem(
+        'kwg_pending_claim',
+        JSON.stringify({
+          orderId,
+          claimToken: resolvedClaimToken,
+          email: (email ?? '').trim().toLowerCase(),
+        })
+      )
     }
 
     setOrderLinked(linked)
@@ -150,7 +157,7 @@ export default function OrderConfirmed() {
   const { state } = useLocation() as {
     state: { orderId?: string; claimToken?: string; email?: string } | null
   }
-  const ref = state?.orderId?.slice(0, 8).toUpperCase() ?? '—'
+  const ref = state?.orderId?.slice(0, 8).toUpperCase() ?? '-'
 
   // Resolve claim token from state or sessionStorage fallback
   const [claimToken, setClaimToken] = useState<string | undefined>(state?.claimToken)
@@ -174,7 +181,7 @@ export default function OrderConfirmed() {
         Thank you for your order.
       </h1>
       <p className="mb-4 font-body-lg text-on-surface-variant">
-        Your order is being reviewed. We'll reach out with your invoice within 1 business day.
+        Your order is being reviewed. We'll be in touch soon with your invoice.
       </p>
       {state?.email && (
         <p className="mb-8 font-body-md text-on-surface-variant">
@@ -189,7 +196,7 @@ export default function OrderConfirmed() {
           to="/availability"
           className="rounded-sm bg-primary px-8 py-4 font-button text-button text-on-primary transition-all duration-300 hover:bg-primary-container"
         >
-          Browse More
+          View Availability
         </Link>
         <Link
           to="/"

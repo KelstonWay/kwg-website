@@ -103,7 +103,7 @@ export default function Order() {
           Your order is empty
         </h2>
         <p className="mb-8 font-body-md text-on-surface-variant">
-          Browse our current availability to add items.
+          Review our current availability to add items.
         </p>
         <a
           href="/availability"
@@ -154,10 +154,13 @@ export default function Order() {
                   <input
                     type="number"
                     min="1"
-                    max={item.qty_available}
                     value={item.qty}
                     onChange={(e) => updateQty(item.release_item_id, parseInt(e.target.value) || 1)}
-                    className="w-16 rounded border border-outline-variant px-2 py-1.5 text-center font-body-md text-base focus:border-primary focus:outline-none"
+                    className={`w-16 rounded border px-2 py-1.5 text-center font-body-md text-base focus:outline-none ${
+                      item.qty > item.qty_available
+                        ? 'border-amber-500 bg-amber-50 font-semibold text-amber-900'
+                        : 'border-outline-variant focus:border-primary'
+                    }`}
                   />
                   <span className="font-body-md text-sm text-on-surface-variant">
                     × ${(item.tray_price ?? item.unit_price).toFixed(2)}/tray (
@@ -173,9 +176,24 @@ export default function Order() {
                     <span className="material-symbols-outlined text-lg text-error">delete</span>
                   </button>
                 </div>
+                {item.qty > item.qty_available && (
+                  <p className="mt-2 font-body-md text-xs text-amber-700">
+                    We currently show {item.qty_available.toLocaleString()} trays available. You can
+                    still request {item.qty.toLocaleString()} — we'll confirm what we can fill.
+                  </p>
+                )}
               </div>
             ))}
           </div>
+          {items.some((i) => i.qty > i.qty_available) && (
+            <div className="mt-6 flex items-start gap-3 rounded-sm border border-amber-300 bg-amber-50 px-4 py-3">
+              <span className="material-symbols-outlined text-lg text-amber-700">info</span>
+              <p className="font-body-md text-sm leading-relaxed text-amber-900">
+                Some quantities are above what we currently have listed. Send the order anyway — the
+                full request goes to our team, and we'll confirm what we can fill before invoicing.
+              </p>
+            </div>
+          )}
           <div className="mt-8 flex items-center justify-between border-t border-outline-variant pt-6">
             <div className="font-body-md text-on-surface-variant">
               {totalUnits.toLocaleString()} total trays
@@ -324,7 +342,7 @@ export default function Order() {
               {submitting ? 'Submitting...' : 'Submit Order for Review'}
             </button>
             <p className="text-center font-body-md text-xs text-on-surface-variant">
-              We'll review your order and reach out with an invoice within 1 business day.
+              We'll review your order and be in touch soon with an invoice.
             </p>
             <p className="pt-1 text-center font-body-md text-xs text-on-surface-variant">
               Prefer a spreadsheet?{' '}

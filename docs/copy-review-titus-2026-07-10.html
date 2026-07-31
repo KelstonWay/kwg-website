@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kelston Way Website: Copy Changes for Titus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --sage: #4c614c;
+    --earth: #6e5b42;
+    --bg: #f9f9f9;
+    --ink: #2a2a26;
+    --muted: #6b6b64;
+    --old-bg: #faf3f2;
+    --old-ink: #8a4a42;
+    --new-bg: #f2f6f2;
+    --removed-bg: #f5f0ea;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 48px 24px 96px; }
+  h1, h2, h3 { font-family: 'Newsreader', serif; font-weight: 500; }
+  h1 { font-size: 40px; line-height: 1.1; margin: 0 0 8px; }
+  h2 {
+    font-size: 26px; margin: 56px 0 4px; color: var(--sage);
+    border-bottom: 1px solid #ddd; padding-bottom: 8px;
+  }
+  .sub { color: var(--muted); margin: 0 0 6px; }
+  .note {
+    background: #fff; border: 1px solid #e2e2dc; border-left: 4px solid var(--sage);
+    padding: 16px 20px; margin: 28px 0; border-radius: 4px;
+  }
+  .note strong { color: var(--sage); }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; background: #fff; border: 1px solid #e2e2dc; }
+  th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid #eee; }
+  th {
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); background: #f3f3ef; font-weight: 600;
+  }
+  td.where { width: 20%; font-weight: 600; font-size: 13px; color: var(--earth); }
+  td.old { width: 40%; background: var(--old-bg); color: var(--old-ink); }
+  td.new { width: 40%; background: var(--new-bg); }
+  td.new[contenteditable] { outline: none; }
+  td.new[contenteditable]:focus { box-shadow: inset 0 0 0 2px var(--sage); }
+  .tag {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 999px; margin-bottom: 6px;
+  }
+  .tag.removed { background: var(--removed-bg); color: var(--earth); }
+  .tag.newtag { background: var(--new-bg); color: var(--sage); }
+  .strike { text-decoration: line-through; }
+  .why { font-size: 13px; color: var(--muted); margin: 0 0 24px; }
+  .footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid #ddd; color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="sub" style="letter-spacing:.15em;text-transform:uppercase;font-size:11px;font-weight:700;color:var(--sage)">Kelston Way Greenhouse · kelstonway.com</p>
+  <h1>Website Copy Changes</h1>
+  <p class="sub">July 10, 2026 · Prepared for Titus · From Samuel &amp; the site team</p>
+
+  <div class="note">
+    <strong>Titus: how to use this.</strong> Left column is what the site said, right column is the new wording.
+    The right column is editable: click any green cell, type your change, then tell Samuel what you changed
+    (or print/screenshot this page with your edits). Nothing is live yet; the site is paused while we make these changes.
+    <br /><br />
+    <strong>Two big rules behind every change:</strong> (1) The site now talks like we are open and selling today.
+    Every mention of "opening January 2027" is gone. (2) It talks like a person, not a brochure.
+    Plain words: we grow plants, we deliver them, email us.
+  </div>
+
+  <h2>Home Page</h2>
+  <p class="why">Also fixed here: the "Available Now" plant strip was broken and never showed. It now pulls the top three items from the current week's list automatically (photos first). No extra work needed when publishing.</p>
+  <table>
+    <tr><th>Where</th><th>Old</th><th>New (editable)</th></tr>
+    <tr>
+      <td class="where">Hero, under the headline</td>
+      <td class="old">Kelston Way is a family greenhouse in central Texas. We grow annuals, perennials, and seasonal color, and we want to sell to you. Email us with any questions.</td>
+      <td class="new" contenteditable="true">We're a family greenhouse in central Texas growing annuals, perennials, and seasonal color, delivered fresh to your door.</td>
+    </tr>
+    <tr>
+      <td class="where">How It Works, card 1</td>
+      <td class="old">We publish our availability each week. Browse the list and order what you need, or email us if you have questions about what's coming. <em>(link said "Learn More")</em></td>
+      <td class="new" contenteditable="true">We post fresh availability every week. Browse the list and order what you need. <em>(link now says "View Availability")</em></td>
+    </tr>
+    <tr>
+      <td class="where">How It Works, card 3</td>
+      <td class="old">We're a family business and easy to reach. If you need something specific or want to talk through a regular order, just email us. <em>(link said "Learn More" but went to the availability page)</em></td>
+      <td class="new" contenteditable="true">We're a family business and easy to reach. If you need something specific or want to set up a standing order, email us. <em>(link now says "Email Us" and goes to the contact page)</em></td>
+    </tr>
+    <tr>
+      <td class="where">Greenhouse grid, small tile</td>
+      <td class="old"><strong>Texas Delivery.</strong> We deliver to garden centers and landscapers across the state. <em>(said the same thing as the delivery card right above it)</em></td>
+      <td class="new" contenteditable="true"><strong>Updated Weekly.</strong> We post a fresh availability list every week.</td>
+    </tr>
+    <tr>
+      <td class="where">Greenhouse grid, green tile</td>
+      <td class="old"><strong>Work With Us.</strong> Want to buy from us? Email us, we're easy to reach. <em>(button said "Apply Now" but there is nothing to apply for)</em></td>
+      <td class="new" contenteditable="true"><strong>Work With Us.</strong> Garden center or landscaper? We'd love to grow for you. <em>(button now says "Email Us")</em></td>
+    </tr>
+    <tr>
+      <td class="where">Bottom email form</td>
+      <td class="old"><strong>Want to buy from us?</strong> Leave your email and we'll reach out. We sell to garden centers and landscapers. If that's you, we'd love to work together. <em>(button said "Request Access", but there is no gated portal)</em></td>
+      <td class="new" contenteditable="true"><strong>Let's work together.</strong> Leave your email and we'll get in touch. We sell to garden centers and landscapers across Texas. <em>(button now says "Send")</em></td>
+    </tr>
+  </table>
+
+  <h2>Our Story Page</h2>
+  <table>
+    <tr><th>Where</th><th>Old</th><th>New (editable)</th></tr>
+    <tr>
+      <td class="where">Top label</td>
+      <td class="old">Oglesby, Texas · Est. 2027</td>
+      <td class="new" contenteditable="true">Oglesby, Texas</td>
+    </tr>
+    <tr>
+      <td class="where">Intro paragraph</td>
+      <td class="old">...We grow annuals, perennials, and seasonal color for garden centers and landscapers. If you want to buy plants, we want to sell to you.</td>
+      <td class="new" contenteditable="true">...We grow annuals, perennials, and seasonal color for garden centers and landscapers across the state.</td>
+    </tr>
+    <tr>
+      <td class="where">Faith paragraph</td>
+      <td class="old">Our faith in Jesus Christ is the most important thing to us. It shapes how we work, how we treat people, and what we're building at Kelston Way. We want to run a business we're proud of, that serves our customers well and honors God in the process.</td>
+      <td class="new" contenteditable="true">Our faith in Jesus Christ is the most important thing to us. It shapes how we work, how we treat people, and what we're building at Kelston Way. We want to run a business we're proud of, one that serves our customers well and honors God in the process. <em>(tiny grammar fix only)</em></td>
+    </tr>
+    <tr>
+      <td class="where">Titus's bio</td>
+      <td class="old">Hands-on from day one. Titus leads operations: production, growing schedules, and making sure every plant that leaves meets our standard.</td>
+      <td class="new" contenteditable="true">Same wording, just punctuation cleanup. <strong>Titus: edit your own bio here if you want different words.</strong></td>
+    </tr>
+    <tr>
+      <td class="where">Find Us section</td>
+      <td class="old"><span class="tag removed">Removed</span><br /><span class="strike">Opening: January 1, 2027</span><br />Also: the label "Address" now says "Location" (we don't list a street address).</td>
+      <td class="new" contenteditable="true">Location: Oglesby, Coryell County, Texas, United States. Contact: samuel@kelstonway.com</td>
+    </tr>
+    <tr>
+      <td class="where">Bottom banner</td>
+      <td class="old"><strong>Want to buy from us?</strong> We're opening January 2027. If you're a garden center or landscaper looking for a reliable grower, reach out now and we'll get you set up early. <em>(buttons: "Request Wholesale Access" / "View Plant Availability")</em></td>
+      <td class="new" contenteditable="true"><strong>Let's work together.</strong> If you're a garden center or landscaper looking for a reliable grower, we'd love to hear from you. <em>(buttons: "Email Us" / "View Availability")</em></td>
+    </tr>
+  </table>
+
+  <h2>Availability Page</h2>
+  <table>
+    <tr><th>Where</th><th>Old</th><th>New (editable)</th></tr>
+    <tr>
+      <td class="where">Plant badge (grade 3)</td>
+      <td class="old">"Critical" <em>(our internal grading leaked to buyers; sounds like the plant is dying)</em></td>
+      <td class="new" contenteditable="true">"Order Soon"</td>
+    </tr>
+    <tr>
+      <td class="where">Excel box</td>
+      <td class="old">Another way to order: Excel</td>
+      <td class="new" contenteditable="true">Prefer a spreadsheet?</td>
+    </tr>
+  </table>
+
+  <h2>Footer (every page)</h2>
+  <table>
+    <tr><th>Where</th><th>Old</th><th>New (editable)</th></tr>
+    <tr>
+      <td class="where">Blurb</td>
+      <td class="old">A premier Texas greenhouse providing professional-grade wholesale plant supply for commercial buyers.</td>
+      <td class="new" contenteditable="true">A family greenhouse in Oglesby, Texas. We grow annuals, perennials, and seasonal color for garden centers and landscapers.</td>
+    </tr>
+    <tr>
+      <td class="where">Right column</td>
+      <td class="old">DISTRIBUTION<br />Oglesby, Coryell County, Texas<br /><span class="strike">Opening January 2027</span></td>
+      <td class="new" contenteditable="true">LOCATION<br />Oglesby, Coryell County, Texas</td>
+    </tr>
+    <tr>
+      <td class="where">Bottom line</td>
+      <td class="old">© 2026 Kelston Way Greenhouse. Professional Wholesale Supply.</td>
+      <td class="new" contenteditable="true">© 2026 Kelston Way Greenhouse · Oglesby, Texas</td>
+    </tr>
+    <tr>
+      <td class="where">Social</td>
+      <td class="old">A flower icon that was supposed to be Instagram</td>
+      <td class="new" contenteditable="true">A plain "Instagram" text link</td>
+    </tr>
+  </table>
+
+  <h2>Order Emails / Confirm Pages (small cleanups)</h2>
+  <p class="why">Punctuation and phrasing only, no meaning changes: "Change accepted. Your order has been updated." / "Decline and Keep My Order" / "Add a message and it goes straight to the team."</p>
+
+  <div class="footer">
+    Kelston Way Greenhouse · Internal copy review · Send edits back to Samuel (board message or text).
+    Site is paused while we finish; nothing here is public yet.
+  </div>
+
+</div>
+</body>
+</html>

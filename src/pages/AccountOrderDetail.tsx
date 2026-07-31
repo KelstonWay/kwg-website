@@ -53,7 +53,9 @@ export default function AccountOrderDetail() {
 
       const { data: its } = await supabase
         .from('wholesale_order_items')
-        .select('id, plant_name, plant_size, plant_sku, qty_requested, unit_price, tray_count, tray_price, line_total')
+        .select(
+          'id, plant_name, plant_size, plant_sku, qty_requested, unit_price, tray_count, tray_price, line_total'
+        )
         .eq('order_id', id!)
 
       setOrder(o as WholesaleOrder)

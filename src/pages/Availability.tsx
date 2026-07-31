@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import PageMeta from '../components/PageMeta'
+import { CONTACT_EMAIL } from '../lib/site'
 import type { AvailabilityItem } from '../lib/types'
 import { useCart } from '../contexts/CartContext'
 
@@ -119,6 +121,7 @@ export default function Availability() {
     const q = parseInt(qtys[i.id] ?? '')
     return q > 0 && i.unit_price
   })
+  const overOrderedLines = orderLines.filter((i) => (parseInt(qtys[i.id]) || 0) > i.qty_available)
   const totalUnits = orderLines.reduce((s, i) => s + (parseInt(qtys[i.id]) || 0), 0)
   const totalPrice = orderLines.reduce(
     (s, i) => s + (parseInt(qtys[i.id]) || 0) * (i.unit_price ?? 0),
@@ -133,8 +136,7 @@ export default function Availability() {
       Size: i.plant_size,
       'Plants / Tray': i.tray_count,
       'Qty Available': i.qty_available,
-      'Price / Tray':
-        i.unit_price != null ? parseFloat(i.unit_price.toFixed(2)) : '',
+      'Price / Tray': i.unit_price != null ? parseFloat(i.unit_price.toFixed(2)) : '',
       'Order Qty': '',
       Notes: i.notes ?? '',
     }))
@@ -212,7 +214,7 @@ export default function Availability() {
           rowsWithQty > 0
             ? `Found ${rowsWithQty} row(s) with quantities but none matched available products.\nDetected columns: "${skuKey}" and "${qtyKey}".\nMake sure you're using the template downloaded from this page.`
             : `No quantities were found in the "${qtyKey}" column.\nFill in that column with the number of trays you want, then save and re-upload.`
-        alert(`Import failed — ${detail}`)
+        alert(`Import failed: ${detail}`)
         return
       }
 
@@ -236,9 +238,7 @@ export default function Availability() {
       navigate('/order')
     } catch (err) {
       console.error('Import failed:', err)
-      alert(
-        'Something went wrong while importing. Please try again or contact samuel@kelstonway.com.'
-      )
+      alert(`Something went wrong while importing. Please try again or contact ${CONTACT_EMAIL}.`)
     } finally {
       setImporting(false)
       e.target.value = ''
@@ -276,6 +276,10 @@ export default function Availability() {
 
   return (
     <>
+      <PageMeta
+        title="Current Wholesale Availability — Kelston Way Greenhouse"
+        description="This week's wholesale availability from Kelston Way Greenhouse in Oglesby, Texas — annuals, perennials, and seasonal color for garden centers and landscape professionals."
+      />
       {/* Lightbox */}
       {lightbox && (
         <div
@@ -331,17 +335,11 @@ export default function Availability() {
                 <span
                   className={`mt-1 flex-shrink-0 rounded-full px-2 py-1 font-label-caps text-[10px] ${
                     selected.grade === 1
-                      ? 'bg-primary-fixed text-on-primary-fixed-variant'
-                      : selected.grade === 2
-                        ? 'bg-secondary-container text-on-secondary-container'
-                        : 'bg-error-container text-error'
+                      ? 'bg-secondary-container text-on-secondary-container'
+                      : 'bg-primary-fixed text-on-primary-fixed-variant'
                   }`}
                 >
-                  {selected.grade === 1
-                    ? 'Can Hold'
-                    : selected.grade === 2
-                      ? 'Ship Soon'
-                      : 'Critical'}
+                  {selected.grade === 1 ? 'Ready Soon' : 'Available'}
                 </span>
               )}
             </div>
@@ -428,8 +426,11 @@ export default function Availability() {
               LIVE AVAILABILITY
             </span>
             <h1 className="font-['Newsreader'] text-2xl text-on-surface md:text-headline-xl">
-              Current Stock
+              Current Wholesale Availability
             </h1>
+            <p className="mt-1 max-w-xl font-body-md text-sm text-on-surface-variant">
+              For garden centers and landscape professionals.
+            </p>
             {publishedAt && (
               <p className="mt-1 font-body-md text-sm text-on-surface-variant">
                 Updated{' '}
@@ -602,10 +603,10 @@ export default function Availability() {
               table_view
             </span>
             <div>
-              <p className="font-button text-sm text-on-surface">Another way to order — Excel</p>
+              <p className="font-button text-sm text-on-surface">Prefer a spreadsheet?</p>
               <p className="font-body-md text-xs text-on-surface-variant">
-                Download our order template, fill in your quantities, and upload it here. Great for
-                large orders.
+                Download our order template in Excel, fill in your quantities, and upload it here.
+                Best for large orders.
               </p>
             </div>
           </div>
@@ -692,6 +693,7 @@ export default function Availability() {
                 {filtered.map((item) => {
                   const qty = qtys[item.id] ?? ''
                   const isSelected = parseInt(qty) > 0
+                  const overOrdered = (parseInt(qty) || 0) > item.qty_available
                   return (
                     <tr
                       key={item.id}
@@ -741,17 +743,11 @@ export default function Availability() {
                             <span
                               className={`rounded-full px-2 py-0.5 font-label-caps text-[10px] ${
                                 item.grade === 1
-                                  ? 'bg-primary-fixed text-on-primary-fixed-variant'
-                                  : item.grade === 2
-                                    ? 'bg-secondary-container text-on-secondary-container'
-                                    : 'bg-error-container text-error'
+                                  ? 'bg-secondary-container text-on-secondary-container'
+                                  : 'bg-primary-fixed text-on-primary-fixed-variant'
                               }`}
                             >
-                              {item.grade === 1
-                                ? 'Can Hold'
-                                : item.grade === 2
-                                  ? 'Ship Soon'
-                                  : 'Critical'}
+                              {item.grade === 1 ? 'Ready Soon' : 'Available'}
                             </span>
                           )}
                         </div>
@@ -790,7 +786,7 @@ export default function Availability() {
                           ? orderMode
                             ? `$${item.unit_price.toFixed(2)}/tray (${item.tray_count}-count)`
                             : `$${item.unit_price.toFixed(2)}/tray`
-                          : '—'}
+                          : '-'}
                       </td>
 
                       {orderMode ? (
@@ -798,10 +794,10 @@ export default function Availability() {
                           <input
                             type="number"
                             min="0"
-                            max={item.qty_available}
                             placeholder="0"
                             value={qty}
                             disabled={!item.unit_price}
+                            aria-describedby={overOrdered ? `over-${item.id}` : undefined}
                             onChange={(e) => {
                               const raw = e.target.value
                               if (raw === '') {
@@ -810,15 +806,25 @@ export default function Availability() {
                               }
                               const n = parseInt(raw)
                               if (Number.isNaN(n)) return
-                              const clamped = Math.min(Math.max(n, 0), item.qty_available)
-                              setQtys((prev) => ({ ...prev, [item.id]: String(clamped) }))
+                              setQtys((prev) => ({ ...prev, [item.id]: String(Math.max(n, 0)) }))
                             }}
                             className={`w-20 rounded-lg border px-2 py-1.5 text-center font-body-md text-sm transition-colors focus:outline-none disabled:opacity-30 ${
-                              isSelected
-                                ? 'border-primary bg-primary-fixed/30 font-semibold text-primary'
-                                : 'border-outline-variant focus:border-primary'
+                              overOrdered
+                                ? 'border-amber-500 bg-amber-50 font-semibold text-amber-900'
+                                : isSelected
+                                  ? 'border-primary bg-primary-fixed/30 font-semibold text-primary'
+                                  : 'border-outline-variant focus:border-primary'
                             }`}
                           />
+                          {overOrdered && (
+                            <p
+                              id={`over-${item.id}`}
+                              className="mt-1 max-w-[9rem] font-body-md text-[10px] leading-tight text-amber-700"
+                            >
+                              Above the {item.qty_available} listed — we'll confirm what we can
+                              fill.
+                            </p>
+                          )}
                         </td>
                       ) : (
                         <td className="rounded-r-xl py-2 pr-4 text-right">
@@ -843,6 +849,16 @@ export default function Availability() {
             orderLines.length > 0 ? 'translate-y-0' : 'translate-y-full'
           }`}
         >
+          {overOrderedLines.length > 0 && (
+            <div className="flex items-start gap-2 bg-amber-100 px-4 py-2 text-amber-900 md:px-32">
+              <span className="material-symbols-outlined text-base">info</span>
+              <p className="font-body-md text-xs leading-snug">
+                {overOrderedLines.length} {overOrderedLines.length === 1 ? 'item is' : 'items are'}{' '}
+                above the quantity we have listed. You can still send the order — we'll confirm what
+                we can fill before invoicing.
+              </p>
+            </div>
+          )}
           <div className="flex items-center justify-between bg-primary px-4 py-4 text-on-primary shadow-2xl md:px-32">
             <div className="flex items-center gap-6">
               <div>

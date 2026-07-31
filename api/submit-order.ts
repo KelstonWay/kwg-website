@@ -93,16 +93,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(409).json({ error: 'Some items are no longer available', unavailable_ids: unavailableIds })
   }
 
+  // Over-ordering is allowed by design (2026-07-31): an order is a request KWG reviews, so a
+  // line may exceed the published quantity. The buyer is warned in the UI, the full requested
+  // qty is recorded on the order, and create_wholesale_order floors the stock decrement at 0.
   const overQuantityIds = releaseItemIds.filter((rid) => {
     const ri = riMap[rid]
     return ri && qtyByReleaseItem[rid] > ri.qty_available
   })
-  if (overQuantityIds.length > 0) {
-    return res.status(409).json({
-      error: 'Requested quantity exceeds available stock for some items',
-      over_quantity_ids: overQuantityIds,
-    })
-  }
 
   const orderLines = releaseItemIds.map((rid) => {
     const ri = riMap[rid]
@@ -181,11 +178,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const orderRef = orderId.slice(0, 8).toUpperCase()
   const confirmUrl = `https://kelstonway.com/order/${orderId}?token=${confirmToken}`
 
+  // Flag any line the buyer requested above the published quantity so the team sees it
+  // before invoicing — over-ordering is allowed, but it needs a human decision.
+  const overSet = new Set(overQuantityIds)
   const itemsHtml = orderLines
-    .map(
-      (i: any) =>
-        `<tr><td>${esc(i.plant_name)}</td><td>${esc(i.plant_size)}</td><td>${i.qty_requested} trays (${i.tray_count}-count)</td><td>$${i.tray_price.toFixed(2)}/tray</td><td>$${i.line_total.toFixed(2)}</td></tr>`
-    )
+    .map((i: any) => {
+      const over = overSet.has(i.release_item_id)
+      const qtyCell = over
+        ? `${i.qty_requested} trays (${i.tray_count}-count) <strong style="color:#b3261e">⚠ over published qty — ${riMap[i.release_item_id].qty_available} listed</strong>`
+        : `${i.qty_requested} trays (${i.tray_count}-count)`
+      return `<tr><td>${esc(i.plant_name)}</td><td>${esc(i.plant_size)}</td><td>${qtyCell}</td><td>$${i.tray_price.toFixed(2)}/tray</td><td>$${i.line_total.toFixed(2)}</td></tr>`
+    })
     .join('')
 
   // Build Excel attachment for accounting import
@@ -213,7 +216,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         from: 'orders@kelstonway.com',
         to: contact.email,
         subject: 'Order Received — Kelston Way Greenhouse',
-        html: `<h2>Thank you, ${esc(contact.contact_name)}!</h2><p>We've received your wholesale order (ref: <strong>${orderRef}</strong>) and will be in touch within 1 business day.</p><p>— Kelston Way Greenhouse</p>`,
+        html: `<h2>Thank you, ${esc(contact.contact_name)}!</h2><p>We've received your wholesale order (ref: <strong>${orderRef}</strong>) and will be in touch soon.</p><p>— Kelston Way Greenhouse</p>`,
       }),
       resend.emails.send({
         from: 'orders@kelstonway.com',

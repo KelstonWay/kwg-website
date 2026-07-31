@@ -5,8 +5,7 @@ export function parseError(err: unknown): string {
     return "You don't have permission to do that."
   if (msg.includes('duplicate key') || msg.includes('unique constraint'))
     return 'That record already exists.'
-  if (msg.includes('foreign key constraint'))
-    return 'Cannot complete — a linked record is missing.'
+  if (msg.includes('foreign key constraint')) return 'Cannot complete — a linked record is missing.'
   if (msg.includes('JWT') || msg.includes('token') || msg.includes('session'))
     return 'Your session has expired. Please log in again.'
   if (msg.includes('network') || msg.includes('fetch') || msg.includes('Failed to fetch'))

@@ -131,8 +131,8 @@ export default function OrderEditConfirm() {
         </span>
         <h2 className="mb-4 font-['Newsreader'] text-headline-md text-on-surface">
           {resolved === 'accept'
-            ? 'Change accepted — your order has been updated.'
-            : 'Change declined — your order stays as it was.'}
+            ? 'Change accepted. Your order has been updated.'
+            : 'Change declined. Your order stays as it was.'}
         </h2>
         <p className="font-body-md text-on-surface-variant">
           {resolved === 'accept'
@@ -163,8 +163,8 @@ export default function OrderEditConfirm() {
       )}
 
       <p className="mb-8 font-body-md text-on-surface">
-        Kelston Way has proposed a change to this order. Review the updated order below, then
-        accept or decline it. Nothing changes until you accept.
+        Kelston Way has proposed a change to this order. Review the updated order below, then accept
+        or decline it. Nothing changes until you accept.
       </p>
 
       {view.note && (
@@ -222,15 +222,15 @@ export default function OrderEditConfirm() {
           disabled={busy !== null}
           className="rounded-sm border border-outline px-8 py-4 font-button text-button text-on-surface transition-all hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {busy === 'reject' ? 'Declining...' : 'Decline — Keep My Order As-Is'}
+          {busy === 'reject' ? 'Declining...' : 'Decline Changes'}
         </button>
       </div>
 
       <div className="rounded-sm border border-outline-variant/30 bg-surface-container-low p-8">
         <h3 className="mb-3 font-['Newsreader'] text-xl text-on-surface">Send Us a Message</h3>
         <p className="mb-4 font-body-md text-on-surface-variant">
-          Questions about this change? Add a message — it goes straight to the team. You can still
-          accept or decline afterward.
+          Questions about this change? Add a message for our team. You can still accept or decline
+          afterward.
         </p>
         <textarea
           value={message}

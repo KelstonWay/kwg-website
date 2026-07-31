@@ -66,10 +66,28 @@ function PasswordForm({ compact = false }: { compact?: boolean }) {
   if (compact) {
     return (
       <form onSubmit={handleSubmit} className="max-w-sm space-y-3">
-        <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="New password" className={inputCls} />
-        <input type="password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Confirm password" className={inputCls} />
+        <input
+          type="password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="New password"
+          className={inputCls}
+        />
+        <input
+          type="password"
+          required
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+          placeholder="Confirm password"
+          className={inputCls}
+        />
         {error && <ErrorBanner message={error} />}
-        <button type="submit" disabled={saving} className="rounded-sm bg-primary px-6 py-2.5 font-button text-sm text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
+        <button
+          type="submit"
+          disabled={saving}
+          className="rounded-sm bg-primary px-6 py-2.5 font-button text-sm text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+        >
           {saving ? 'Saving...' : 'Save password'}
         </button>
       </form>
@@ -84,10 +102,28 @@ function PasswordForm({ compact = false }: { compact?: boolean }) {
           Set a new password
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="New password" className={inputCls} />
-          <input type="password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Confirm password" className={inputCls} />
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="New password"
+            className={inputCls}
+          />
+          <input
+            type="password"
+            required
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            placeholder="Confirm password"
+            className={inputCls}
+          />
           {error && <ErrorBanner message={error} />}
-          <button type="submit" disabled={saving} className="w-full rounded-sm bg-primary py-3.5 font-button text-button text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
+          <button
+            type="submit"
+            disabled={saving}
+            className="w-full rounded-sm bg-primary py-3.5 font-button text-button text-on-primary transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          >
             {saving ? 'Saving...' : 'Set password'}
           </button>
         </form>
@@ -495,17 +531,26 @@ function AccountDashboard() {
       const pending = localStorage.getItem('kwg_pending_claim')
       if (pending) {
         try {
-          const { orderId, claimToken, email: claimEmail } = JSON.parse(pending) as {
+          const {
+            orderId,
+            claimToken,
+            email: claimEmail,
+          } = JSON.parse(pending) as {
             orderId: string
             claimToken: string
             email: string
           }
           if (!claimEmail || claimEmail.toLowerCase() === user!.email?.toLowerCase()) {
-            const { data: { session } } = await supabase.auth.getSession()
+            const {
+              data: { session },
+            } = await supabase.auth.getSession()
             if (session?.access_token) {
               const res = await fetch('/api/claim-order', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${session.access_token}`,
+                },
                 body: JSON.stringify({ orderId, claimToken }),
               })
               // Remove on success or terminal failure (expired, already claimed, wrong token)

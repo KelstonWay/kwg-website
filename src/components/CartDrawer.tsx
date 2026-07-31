@@ -55,18 +55,27 @@ export default function CartDrawer({ open, onClose }: Props) {
                     <input
                       type="number"
                       min="1"
-                      max={item.qty_available}
                       value={item.qty}
                       onChange={(e) =>
                         updateQty(item.release_item_id, parseInt(e.target.value) || 1)
                       }
-                      className="w-16 rounded border border-outline-variant px-2 py-1 text-center font-body-md text-base focus:border-primary focus:outline-none"
+                      className={`w-16 rounded border px-2 py-1 text-center font-body-md text-base focus:outline-none ${
+                        item.qty > item.qty_available
+                          ? 'border-amber-500 bg-amber-50 font-semibold text-amber-900'
+                          : 'border-outline-variant focus:border-primary'
+                      }`}
                     />
                     <span className="font-body-md text-sm text-on-surface-variant">
                       × ${(item.tray_price ?? item.unit_price).toFixed(2)}/tray (
                       {item.tray_count ?? 1}-count)
                     </span>
                   </div>
+                  {item.qty > item.qty_available && (
+                    <p className="mt-1.5 font-body-md text-xs text-amber-700">
+                      Above the {item.qty_available.toLocaleString()} we have listed — we'll confirm
+                      what we can fill.
+                    </p>
+                  )}
                 </div>
                 <div className="flex-shrink-0 text-right">
                   <p className="font-body-md font-medium text-on-surface">

@@ -1,27 +1,56 @@
 import { Link } from 'react-router-dom'
+import PageMeta from '../components/PageMeta'
+import { CONTACT_EMAIL, CONTACT_MAILTO, CONTACT_PHONE, CONTACT_PHONE_HREF } from '../lib/site'
 
 const HERO_IMG = '/photos/story-hero.webp'
 const STORY_IMG = '/photos/story.webp'
 const LOCATION_IMG = '/photos/location.webp'
 
+// Bios supplied by Titus (2026-07-28 handoff). Titles are "Partner" for all three
+// by design — no hierarchy. Art and Titus fall back to initials until headshots land;
+// drop a matching /photos/team-*.webp in and set `photo` to swap one in.
+const TEAM = [
+  {
+    initials: 'AV',
+    photo: null,
+    name: 'Art VanWingerden',
+    bio: "Art has spent his career building and operating commercial greenhouse businesses. In 2001, he co-founded ColorPoint Greenhouses with his brother Ken and helped grow the company from a three-acre operation into one of the country's largest ornamental plant producers. At Kelston Way, Art brings decades of experience in greenhouse development, production, automation, distribution, customer relationships, and long-term business strategy.",
+  },
+  {
+    initials: 'TV',
+    photo: null,
+    name: 'Titus VanWingerden',
+    bio: "Titus brings hands-on experience in large-scale greenhouse production, operations, production planning, inventory management, process improvement, and team leadership. Before joining Kelston Way, he held several operational leadership roles at Bell Nursery, most recently helping lead operations at the company's largest growing location. At Kelston Way, he focuses on dependable day-to-day operations while working directly with customers.",
+  },
+  {
+    initials: 'SV',
+    photo: '/photos/team-samuel.webp',
+    name: 'Samuel VanWingerden',
+    bio: "Samuel brings experience in store replenishment, inventory flow, and operational systems. At Bell Nursery, he ran replenishment for 107 big-box stores, coordinating product movement and availability across the region. At Kelston Way, he built the company's internal software platform and develops the systems behind planning, inventory, and production. He also works directly with customers.",
+  },
+]
+
 export default function OurStory() {
   return (
     <>
+      <PageMeta
+        title="Our Story — Kelston Way Greenhouse | Wholesale Grower, Oglesby, Texas"
+        description="A family-owned wholesale greenhouse in Oglesby, Texas. Meet the partners behind Kelston Way and how we grow for garden centers and landscape professionals."
+      />
       {/* Hero */}
       <section className="bg-stone-50 px-5 py-20 md:px-16 md:py-28">
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-20">
           <div>
             <span className="mb-5 block font-label-caps text-label-caps text-primary">
-              Oglesby, Texas · Est. 2027
+              Family-Owned Wholesale Grower · Oglesby, Texas
             </span>
             <h1 className="mb-6 font-['Newsreader'] text-4xl font-light leading-[1.08] text-on-surface md:text-[58px]">
               We've been growing plants{' '}
               <em className="font-normal italic text-primary">our whole lives.</em>
             </h1>
             <p className="mb-10 max-w-lg font-body-lg text-body-lg font-light leading-relaxed text-secondary">
-              Kelston Way is a family greenhouse in Oglesby, Texas. We grow annuals, perennials, and
-              seasonal color for garden centers and landscapers. If you want to buy plants, we want
-              to sell to you.
+              Kelston Way is a family-owned wholesale greenhouse in Oglesby, Texas. We grow annuals,
+              perennials, and seasonal color for garden centers and landscape professionals.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
@@ -30,12 +59,12 @@ export default function OurStory() {
               >
                 View Availability
               </Link>
-              <a
-                href="#inquire"
+              <Link
+                to="/contact"
                 className="rounded-sm border border-primary px-8 py-3.5 font-button text-button text-primary transition-all duration-300 hover:bg-primary/5"
               >
-                Wholesale Inquiry
-              </a>
+                Contact Our Team
+              </Link>
             </div>
           </div>
           <div className="h-[340px] overflow-hidden rounded-xl border border-outline-variant/20 bg-stone-200 shadow-sm md:h-[420px]">
@@ -73,14 +102,14 @@ export default function OurStory() {
                 <em className="font-normal italic text-primary">ever known.</em>
               </h2>
               <p className="mb-5 font-body-lg font-light leading-relaxed text-secondary">
-                Art, Titus, and Samuel Vanwingerden grew up in the greenhouse business. It's what
+                Art, Titus, and Samuel VanWingerden grew up in the greenhouse business. It's what
                 our family does. We started Kelston Way because we knew we could grow quality plants
                 and build real relationships with the people we sell to.
               </p>
               <p className="font-body-lg font-light leading-relaxed text-secondary">
-                Our faith in Jesus Christ is the most important thing to us — it shapes how we work,
+                Our faith in Jesus Christ is the most important thing to us. It shapes how we work,
                 how we treat people, and what we're building at Kelston Way. We want to run a
-                business we're proud of, that serves our customers well and honors God in the
+                business we're proud of—one that serves our customers well and honors God in the
                 process.
               </p>
             </div>
@@ -91,11 +120,6 @@ export default function OurStory() {
       {/* Pillars */}
       <section className="bg-stone-50 px-5 py-20 md:px-16 md:py-24">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-12 border-b border-outline-variant/40 pb-3">
-            <span className="font-label-caps text-[10px] font-medium uppercase tracking-[0.25em] text-on-surface-variant">
-              What We Stand For
-            </span>
-          </div>
           <h2 className="mb-12 font-['Newsreader'] text-3xl font-light leading-[1.15] text-on-surface md:text-[42px]">
             What we <em className="font-normal italic text-primary">stand for.</em>
           </h2>
@@ -104,7 +128,7 @@ export default function OurStory() {
               {
                 icon: 'potted_plant',
                 title: 'Good Plants',
-                body: "We grow plants we're proud to sell. If it's not good, it doesn't go out the door. Your reputation is on the line too — we take that seriously.",
+                body: "We grow plants we're proud to sell. If it's not good, it doesn't go out the door. Your reputation is on the line too, and we take that seriously.",
               },
               {
                 icon: 'handshake',
@@ -136,42 +160,45 @@ export default function OurStory() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-12 border-b border-outline-variant/40 pb-3">
             <span className="font-label-caps text-[10px] font-medium uppercase tracking-[0.25em] text-on-surface-variant">
-              The Family
+              Family Owned. Built for the Long Term.
             </span>
           </div>
-          <h2 className="mb-12 font-['Newsreader'] text-3xl font-light leading-[1.15] text-on-surface md:text-[42px]">
-            The people behind <em className="font-normal italic text-primary">every plant.</em>
+          <h2 className="mb-6 font-['Newsreader'] text-3xl font-light leading-[1.15] text-on-surface md:text-[42px]">
+            Meet the team behind <em className="font-normal italic text-primary">Kelston Way.</em>
           </h2>
+          <p className="mb-14 max-w-3xl font-body-lg font-light leading-relaxed text-secondary">
+            Kelston Way brings together decades of commercial greenhouse experience with hands-on
+            knowledge in production, operations, replenishment, technology, sales, and customer
+            relationships. As a family-owned company, we're building for the long term and staying
+            closely involved in the work behind it.
+          </p>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            {[
-              {
-                initials: 'AV',
-                name: 'Art Vanwingerden',
-                role: 'Founder & CEO',
-                bio: 'Decades of greenhouse expertise. Art brings the vision, the relationships, and the standards that define Kelston Way.',
-              },
-              {
-                initials: 'TV',
-                name: 'Titus Vanwingerden',
-                role: 'Co-Founder & COO',
-                bio: 'Hands-on from day one. Titus leads operations — production, growing schedules, and making sure every plant that leaves meets our standard.',
-              },
-              {
-                initials: 'SV',
-                name: 'Samuel Vanwingerden',
-                role: 'Co-Founder & CFO',
-                bio: 'Data-driven and detail-oriented. Samuel manages the financial strategy, operations planning, and business systems.',
-              },
-            ].map(({ initials, name, role, bio }) => (
-              <div key={name} className="text-center">
-                <div className="mx-auto mb-5 flex h-28 w-28 items-center justify-center rounded-full border-2 border-outline-variant/30 bg-secondary-container">
-                  <span className="font-['Newsreader'] text-2xl text-on-surface">{initials}</span>
+            {TEAM.map(({ initials, photo, name, bio }) => (
+              <div
+                key={name}
+                className="flex h-full flex-col rounded-sm border border-outline-variant/30 bg-stone-50 p-8 text-center"
+              >
+                <div
+                  className={`mx-auto mb-5 flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-2 border-outline-variant/30 ${
+                    photo ? 'bg-white' : 'bg-secondary-container'
+                  }`}
+                >
+                  {photo ? (
+                    <img
+                      src={photo}
+                      alt={name}
+                      className="h-full w-full object-cover object-top"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span className="font-['Newsreader'] text-2xl text-on-surface">{initials}</span>
+                  )}
                 </div>
                 <h3 className="mb-1 font-['Newsreader'] text-xl text-on-surface">{name}</h3>
-                <p className="mb-3 font-label-caps text-[10px] uppercase tracking-widest text-primary">
-                  {role}
+                <p className="mb-4 font-label-caps text-[10px] uppercase tracking-widest text-primary">
+                  Partner
                 </p>
-                <p className="mx-auto max-w-[260px] font-body-md text-sm font-light leading-relaxed text-secondary">
+                <p className="font-body-md text-sm font-light leading-relaxed text-secondary">
                   {bio}
                 </p>
               </div>
@@ -185,7 +212,7 @@ export default function OurStory() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-12 border-b border-outline-variant/40 pb-3">
             <span className="font-label-caps text-[10px] font-medium uppercase tracking-[0.25em] text-on-surface-variant">
-              Find Us
+              Where We Grow
             </span>
           </div>
           <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-20">
@@ -194,9 +221,13 @@ export default function OurStory() {
                 Five acres in the{' '}
                 <em className="font-normal italic text-primary">heart of Texas.</em>
               </h2>
+              <p className="mb-8 max-w-lg font-body-md text-sm font-light leading-relaxed text-secondary">
+                Kelston Way Greenhouse is based in Oglesby, Coryell County, Texas. For availability,
+                orders, or general questions, contact our team.
+              </p>
               <div className="space-y-4 font-body-md text-sm font-light leading-loose text-secondary">
                 <div>
-                  <p className="mb-0.5 text-sm font-medium text-on-surface">Address</p>
+                  <p className="mb-0.5 text-sm font-medium text-on-surface">Location</p>
                   <p>
                     Oglesby, Coryell County
                     <br />
@@ -204,15 +235,15 @@ export default function OurStory() {
                   </p>
                 </div>
                 <div>
-                  <p className="mb-0.5 text-sm font-medium text-on-surface">Opening</p>
-                  <p>January 1, 2027</p>
-                </div>
-                <div>
                   <p className="mb-0.5 text-sm font-medium text-on-surface">Contact</p>
                   <p>
-                    samuel@kelstonway.com
+                    <a href={CONTACT_MAILTO} className="transition-colors hover:text-primary">
+                      {CONTACT_EMAIL}
+                    </a>
                     <br />
-                    kelstonway.com
+                    <a href={CONTACT_PHONE_HREF} className="transition-colors hover:text-primary">
+                      {CONTACT_PHONE}
+                    </a>
                   </p>
                 </div>
               </div>
@@ -231,28 +262,25 @@ export default function OurStory() {
 
       {/* CTA Band */}
       <section id="inquire" className="bg-primary px-5 py-20 text-center text-on-primary md:px-16">
-        <span className="mb-4 block font-label-caps text-[10px] uppercase tracking-[0.3em] text-primary-fixed/70">
-          Wholesale Partners
-        </span>
         <h2 className="mb-4 font-['Newsreader'] text-3xl font-light leading-[1.15] md:text-[44px]">
-          Want to buy from us?
+          Let's Work Together
         </h2>
         <p className="mx-auto mb-10 max-w-xl font-body-lg font-light text-primary-fixed/80">
-          We're opening January 2027. If you're a garden center or landscaper looking for a reliable
-          grower, reach out now and we'll get you set up early.
+          If you represent a garden center or landscape business and are looking for a dependable
+          wholesale grower, we'd be glad to hear from you.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link
             to="/contact"
             className="rounded-sm bg-secondary-container px-8 py-3.5 font-button text-button text-secondary transition-all duration-300 hover:opacity-90"
           >
-            Request Wholesale Access
+            Contact Our Team
           </Link>
           <Link
             to="/availability"
             className="rounded-sm border border-white/40 px-8 py-3.5 font-button text-button text-white transition-all duration-300 hover:bg-white/10"
           >
-            View Plant Availability
+            View Availability
           </Link>
         </div>
       </section>

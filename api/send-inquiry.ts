@@ -14,7 +14,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await resend.emails.send({
       from: 'orders@kelstonway.com',
       to: SAMUEL_EMAIL,
-      subject: `Wholesale Access Request — ${email}`,
+      subject: `Wholesale Inquiry — ${email}`,
       html: `<p>New wholesale inquiry from: <strong>${email}</strong></p>`,
     })
     return res.status(200).json({ ok: true })
