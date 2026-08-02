@@ -74,11 +74,11 @@ export default function Home() {
           </span>
           <h1 className="mb-6 font-['Newsreader'] text-3xl text-on-surface md:mb-8 md:text-display-lg">
             We grow plants for <span className="italic text-primary">garden centers</span> and
-            landscape professionals.
+            landscapers.
           </h1>
           <p className="mb-8 max-w-lg font-body-lg text-body-lg text-sm leading-relaxed text-on-surface-variant md:mb-10 md:text-base">
-            Kelston Way is a family-owned wholesale greenhouse in Central Texas, growing annuals,
-            perennials, and seasonal color.
+            A family-owned wholesale greenhouse in Oglesby, Texas, growing annuals, perennials, and
+            seasonal color.
           </p>
           <div className="flex flex-wrap gap-3 md:gap-4">
             <Link
@@ -126,60 +126,6 @@ export default function Home() {
               />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Services */}
-      <section className="bg-stone-100 px-5 py-16 md:px-32 md:py-24">
-        <div className="mb-16 max-w-4xl">
-          <span className="mb-4 block font-label-caps text-label-caps text-secondary">
-            HOW IT WORKS
-          </span>
-          <h2 className="font-['Newsreader'] text-headline-xl text-on-surface">
-            Simple and straightforward.
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
-          {[
-            {
-              icon: 'inventory_2',
-              title: 'See What We Have',
-              body: "We update our availability each week so you can see what's currently ready. Review the list and send us what you need.",
-              linkTo: '/availability',
-              linkLabel: 'View Availability',
-            },
-            {
-              icon: 'local_shipping',
-              title: 'We Deliver to You',
-              body: 'We deliver to garden centers and landscape professionals. Plants arrive healthy and ready for your floor.',
-              linkTo: null,
-              linkLabel: null,
-            },
-            {
-              icon: 'handshake',
-              title: 'Work With Us',
-              body: "We're easy to reach. If you're looking for something specific, planning ahead, or interested in a standing order, email our team.",
-              linkTo: '/contact',
-              linkLabel: 'Contact Our Team',
-            },
-          ].map((s) => (
-            <div
-              key={s.title}
-              className="flex h-full flex-col border border-outline-variant/30 bg-white p-10"
-            >
-              <span className="material-symbols-outlined mb-6 text-4xl text-primary">{s.icon}</span>
-              <h3 className="mb-4 font-['Newsreader'] text-2xl">{s.title}</h3>
-              <p className="mb-8 flex-grow font-body-md text-on-surface-variant">{s.body}</p>
-              {s.linkTo && (
-                <Link
-                  to={s.linkTo}
-                  className="w-fit border-b border-primary/30 pb-1 font-button text-button text-primary transition-all hover:border-primary"
-                >
-                  {s.linkLabel}
-                </Link>
-              )}
-            </div>
-          ))}
         </div>
       </section>
 
@@ -260,7 +206,7 @@ export default function Home() {
               <span className="mb-2 block font-label-caps text-xs uppercase text-stone-200">
                 Oglesby, Texas
               </span>
-              <h3 className="mb-4 font-['Newsreader'] text-4xl">5 Acres Under Glass</h3>
+              <h3 className="mb-4 font-['Newsreader'] text-4xl">5 Acres of Growing Space</h3>
               <Link
                 to="/our-story"
                 className="inline-block border border-white/50 px-6 py-2 font-button text-button transition-all duration-300 hover:bg-white hover:text-primary"
@@ -276,17 +222,10 @@ export default function Home() {
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               loading="lazy"
             />
-            <div className="glass-panel absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
-              <div className="p-8 text-center">
-                <h3 className="mb-2 font-['Newsreader'] text-2xl text-on-surface">
-                  Grown with Care
-                </h3>
-                <p className="mb-6 font-body-md text-on-surface-variant">
-                  Plants we're proud to put our name on.
-                </p>
-              </div>
-            </div>
-            <div className="absolute bottom-6 left-6 transition-opacity group-hover:opacity-0">
+            {/* Titus 2026-08-01: hover panel dropped, photo keeps its label only. The
+                scrim replaces the contrast the panel used to give the label. */}
+            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
+            <div className="absolute bottom-6 left-6">
               <h3 className="font-['Newsreader'] text-2xl text-white drop-shadow-md">
                 Grown with Care
               </h3>
@@ -307,14 +246,13 @@ export default function Home() {
             <span className="material-symbols-outlined mb-3 text-3xl">handshake</span>
             <h3 className="mb-2 font-['Newsreader'] text-lg">Work With Us</h3>
             <p className="mb-4 font-body-md text-xs opacity-90">
-              Looking for a wholesale growing partner? We work with garden centers and landscape
-              professionals.
+              Garden center or landscaper? Email us to get started.
             </p>
             <a
               href="#inquire"
               className="border-b border-white font-button text-[10px] uppercase tracking-widest"
             >
-              Contact Our Team
+              Email Us
             </a>
           </div>
         </div>
@@ -324,12 +262,7 @@ export default function Home() {
       <section id="inquire" className="bg-primary px-5 py-16 text-on-primary md:px-32 md:py-32">
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-16 md:flex-row">
           <div className="md:w-1/2">
-            <h2 className="mb-6 font-['Newsreader'] text-headline-xl">
-              Interested in working with <span className="italic opacity-80">Kelston Way?</span>
-            </h2>
-            <p className="font-body-lg text-lg leading-relaxed opacity-90">
-              Leave your email and our team will get in touch to learn more about what you need.
-            </p>
+            <h2 className="mb-6 font-['Newsreader'] text-headline-xl">Contact Us</h2>
           </div>
           <div className="w-full md:w-1/2">
             {submitted ? (
@@ -355,7 +288,7 @@ export default function Home() {
                   type="submit"
                   className="w-full bg-primary-fixed py-4 font-button text-button text-on-primary-fixed transition-colors hover:bg-white"
                 >
-                  Get in Touch
+                  Send
                 </button>
               </form>
             )}
