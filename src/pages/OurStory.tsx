@@ -16,19 +16,19 @@ const TEAM = [
     initials: 'AV',
     photo: null,
     name: 'Art VanWingerden',
-    bio: 'Art VanWingerden has spent more than 45 years in the commercial greenhouse industry. He co-founded and built two national-scale greenhouse operations from the ground up — including Color Point, which grew to become the 8th largest greenhouse operation in the nation at its peak. Kelston Way is his next one, built in Texas with his sons.',
+    bio: 'Art VanWingerden has spent more than 45 years in the commercial greenhouse industry. He co-founded and built two national-scale greenhouse operations from the ground up, one of which grew to become the 8th largest greenhouse operation in the nation at its peak. Kelston Way is his next one.',
   },
   {
     initials: 'TV',
     photo: null,
     name: 'Titus VanWingerden',
-    bio: 'Titus has worked in greenhouses his whole life, from the growing benches to running large-scale production. At Kelston Way he leads day-to-day operations and works directly with customers.',
+    bio: 'Titus has been in the industry his whole life, a large part of it running production for a large-scale commercial greenhouse. At Kelston Way he runs day-to-day operations.',
   },
   {
     initials: 'SV',
     photo: '/photos/team-samuel.webp',
     name: 'Samuel VanWingerden',
-    bio: 'Samuel grew up in the greenhouse business and has spent his career around growing, inventory, and the systems that keep both honest. At Kelston Way he builds the company’s internal software and works directly with customers.',
+    bio: 'Samuel has been in the industry his whole life, a large part of it managing replenishment and account service for retail garden centers. At Kelston Way he runs the systems behind planning, inventory, and production, and works directly with customers.',
   },
 ]
 
