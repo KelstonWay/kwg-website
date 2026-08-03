@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import PageMeta from '../components/PageMeta'
 import { CONTACT_EMAIL, CONTACT_MAILTO, CONTACT_PHONE, CONTACT_PHONE_HREF } from '../lib/site'
 
 const HERO_IMG = '/photos/story-hero.webp'
@@ -35,10 +34,6 @@ const TEAM = [
 export default function OurStory() {
   return (
     <>
-      <PageMeta
-        title="Our Story — Kelston Way Greenhouse | Wholesale Grower, Oglesby, Texas"
-        description="A family-owned wholesale greenhouse in Oglesby, Texas. Meet the partners behind Kelston Way and how we grow for garden centers and landscape professionals."
-      />
       {/* Hero */}
       <section className="bg-stone-50 px-5 py-20 md:px-16 md:py-28">
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-20">

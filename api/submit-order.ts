@@ -96,6 +96,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Over-ordering is allowed by design (2026-07-31): an order is a request KWG reviews, so a
   // line may exceed the published quantity. The buyer is warned in the UI, the full requested
   // qty is recorded on the order, and create_wholesale_order floors the stock decrement at 0.
+  //
+  // But this endpoint is public and unauthenticated, and every non-cancelled order line is
+  // subtracted from the next recount (approve_submission_tag). Without a ceiling, one request
+  // for a billion trays takes an item off the storefront until staff finds and cancels it —
+  // repeat per item and the catalog goes dark. These caps are the abuse ceiling, NOT a
+  // business minimum/maximum: they sit far above any real wholesale order.
+  const MAX_TRAYS_PER_LINE = 5_000
+  const MAX_TRAYS_PER_ORDER = 25_000
+
+  const overLimitIds = releaseItemIds.filter((rid) => qtyByReleaseItem[rid] > MAX_TRAYS_PER_LINE)
+  if (overLimitIds.length > 0) {
+    return res.status(400).json({
+      error: `Each item is limited to ${MAX_TRAYS_PER_LINE.toLocaleString()} trays per order. Contact us directly for anything larger.`,
+      over_limit_ids: overLimitIds,
+    })
+  }
+
+  const requestedTotal = Object.values(qtyByReleaseItem).reduce((s, q) => s + q, 0)
+  if (requestedTotal > MAX_TRAYS_PER_ORDER) {
+    return res.status(400).json({
+      error: `Orders are limited to ${MAX_TRAYS_PER_ORDER.toLocaleString()} trays. Contact us directly for anything larger.`,
+    })
+  }
+
   const overQuantityIds = releaseItemIds.filter((rid) => {
     const ri = riMap[rid]
     return ri && qtyByReleaseItem[rid] > ri.qty_available

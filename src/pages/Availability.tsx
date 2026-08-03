@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import PageMeta from '../components/PageMeta'
 import { CONTACT_EMAIL } from '../lib/site'
 import type { AvailabilityItem } from '../lib/types'
 import { useCart } from '../contexts/CartContext'
@@ -276,10 +275,6 @@ export default function Availability() {
 
   return (
     <>
-      <PageMeta
-        title="Current Wholesale Availability — Kelston Way Greenhouse"
-        description="This week's wholesale availability from Kelston Way Greenhouse in Oglesby, Texas — annuals, perennials, and seasonal color for garden centers and landscape professionals."
-      />
       {/* Lightbox */}
       {lightbox && (
         <div

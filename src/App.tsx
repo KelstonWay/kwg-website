@@ -4,6 +4,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
+import RouteMeta from './components/RouteMeta'
 import Home from './pages/Home'
 import Availability from './pages/Availability'
 import Order from './pages/Order'
@@ -29,6 +30,7 @@ export default function App() {
       <AuthProvider>
         <CartProvider>
           <ScrollToTop />
+          <RouteMeta />
           <div className="flex min-h-screen flex-col bg-background text-on-background">
             <Nav />
             <main className="flex-1 pt-16">

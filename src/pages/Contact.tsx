@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import ErrorBanner from '../components/ErrorBanner'
-import PageMeta from '../components/PageMeta'
 import { CONTACT_EMAIL, CONTACT_MAILTO, CONTACT_PHONE, CONTACT_PHONE_HREF } from '../lib/site'
 
 export default function Contact() {
@@ -31,10 +30,6 @@ export default function Contact() {
 
   return (
     <div className="px-5 py-20 md:px-32">
-      <PageMeta
-        title="Contact — Kelston Way Greenhouse | Wholesale Grower, Oglesby, Texas"
-        description="Contact the Kelston Way Greenhouse team about wholesale availability, orders, standing orders, or growing programs for garden centers and landscape professionals."
-      />
       <div className="mx-auto max-w-2xl">
         <span className="mb-4 block font-label-caps text-label-caps text-secondary">
           GET IN TOUCH

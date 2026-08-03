@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import PageMeta from '../components/PageMeta'
 import type { AvailabilityItem } from '../lib/types'
 
 const HERO_IMG = '/photos/hero1.webp'
@@ -62,10 +61,6 @@ export default function Home() {
 
   return (
     <>
-      <PageMeta
-        title="Kelston Way Greenhouse — Wholesale Plant Grower in Central Texas"
-        description="Kelston Way is a family-owned wholesale greenhouse in Oglesby, Texas, growing annuals, perennials, and seasonal color for garden centers and landscape professionals."
-      />
       {/* Hero */}
       <section className="flex flex-col items-center gap-10 overflow-hidden px-5 py-12 md:grid md:grid-cols-12 md:gap-16 md:px-32 md:py-20">
         <div className="z-10 md:col-span-6">
