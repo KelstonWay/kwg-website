@@ -68,8 +68,7 @@ export default function Home() {
             WHOLESALE GROWER · OGLESBY, TEXAS
           </span>
           <h1 className="mb-6 font-['Newsreader'] text-3xl text-on-surface md:mb-8 md:text-display-lg">
-            We grow plants for <span className="italic text-primary">garden centers</span> and
-            landscapers.
+            Grown for <span className="italic text-primary">garden centers</span> and landscapers.
           </h1>
           <p className="mb-8 max-w-lg font-body-lg text-body-lg text-sm leading-relaxed text-on-surface-variant md:mb-10 md:text-base">
             A family-owned wholesale greenhouse in Oglesby, Texas, growing annuals, perennials, and
@@ -86,7 +85,7 @@ export default function Home() {
               to="/contact"
               className="rounded-sm border border-secondary px-6 py-3 font-button text-button text-sm text-secondary transition-all duration-300 hover:bg-secondary-container/20 md:px-8 md:py-4"
             >
-              Email Us
+              Contact Us
             </Link>
           </div>
         </div>
@@ -247,7 +246,7 @@ export default function Home() {
               href="#inquire"
               className="border-b border-white font-button text-[10px] uppercase tracking-widest"
             >
-              Email Us
+              Contact Us
             </a>
           </div>
         </div>

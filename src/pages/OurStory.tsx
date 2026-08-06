@@ -27,7 +27,7 @@ const TEAM = [
     initials: 'SV',
     photo: '/photos/team-samuel.webp',
     name: 'Samuel VanWingerden',
-    bio: 'Samuel has been in the industry his whole life, a large part of it managing replenishment and account service for retail garden centers. At Kelston Way he runs the systems behind planning, inventory, and production, and works directly with customers.',
+    bio: 'Samuel has been in the industry his whole life, a large part of it managing replenishment and account service for retail garden centers. At Kelston Way he brings that experience to the team and keeps building on it.',
   },
 ]
 
@@ -59,7 +59,7 @@ export default function OurStory() {
                 to="/contact"
                 className="rounded-sm border border-primary px-8 py-3.5 font-button text-button text-primary transition-all duration-300 hover:bg-primary/5"
               >
-                Contact Our Team
+                Contact Us
               </Link>
             </div>
           </div>
@@ -259,7 +259,7 @@ export default function OurStory() {
             to="/contact"
             className="rounded-sm bg-secondary-container px-8 py-3.5 font-button text-button text-secondary transition-all duration-300 hover:opacity-90"
           >
-            Contact Our Team
+            Contact Us
           </Link>
           <Link
             to="/availability"

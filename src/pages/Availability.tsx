@@ -424,7 +424,7 @@ export default function Availability() {
               Current Wholesale Availability
             </h1>
             <p className="mt-1 max-w-xl font-body-md text-sm text-on-surface-variant">
-              For garden centers and landscape professionals.
+              For garden centers and landscapers.
             </p>
             {publishedAt && (
               <p className="mt-1 font-body-md text-sm text-on-surface-variant">

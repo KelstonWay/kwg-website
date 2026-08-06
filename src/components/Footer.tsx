@@ -14,7 +14,7 @@ export default function Footer() {
           </Link>
           <p className="max-w-xs font-body-md text-base leading-relaxed text-stone-600">
             A family-owned wholesale grower in Oglesby, Texas, supplying annuals, perennials, and
-            seasonal color to garden centers and landscape professionals.
+            seasonal color to garden centers and landscapers.
           </p>
         </div>
         <div className="md:col-span-2">

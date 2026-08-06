@@ -34,9 +34,7 @@ export default function Contact() {
         <span className="mb-4 block font-label-caps text-label-caps text-secondary">
           GET IN TOUCH
         </span>
-        <h1 className="mb-4 font-['Newsreader'] text-headline-xl text-on-surface">
-          Contact Our Team
-        </h1>
+        <h1 className="mb-4 font-['Newsreader'] text-headline-xl text-on-surface">Contact Us</h1>
         <p className="mb-12 font-body-lg text-on-surface-variant">
           Questions about wholesale pricing, availability, or planning ahead? We'd be glad to hear
           from you.
