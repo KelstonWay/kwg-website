@@ -200,7 +200,7 @@ export default function Home() {
               <span className="mb-2 block font-label-caps text-xs uppercase text-stone-200">
                 Oglesby, Texas
               </span>
-              <h3 className="mb-4 font-['Newsreader'] text-4xl">5 Acres of Growing Space</h3>
+              <h3 className="mb-4 font-['Newsreader'] text-4xl">5 Acres Under Plastic</h3>
               <Link
                 to="/our-story"
                 className="inline-block border border-white/50 px-6 py-2 font-button text-button transition-all duration-300 hover:bg-white hover:text-primary"
