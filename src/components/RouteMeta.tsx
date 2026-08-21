@@ -20,10 +20,10 @@ const EXACT: Record<string, { title: string; description: string }> = {
     description:
       "This week's wholesale availability from Kelston Way Greenhouse in Oglesby, Texas — annuals, perennials, and seasonal color for garden centers and landscapers.",
   },
-  '/our-story': {
-    title: 'Our Story — Kelston Way Greenhouse | Wholesale Grower, Oglesby, Texas',
+  '/team': {
+    title: 'Meet the Team — Kelston Way Greenhouse | Wholesale Grower, Oglesby, Texas',
     description:
-      'A family-owned wholesale greenhouse in Oglesby, Texas. Meet the partners behind Kelston Way and how we grow for garden centers and landscapers.',
+      'A family-owned wholesale greenhouse in Oglesby, Texas. Meet the family behind Kelston Way and how we grow for garden centers and landscapers.',
   },
   '/contact': {
     title: 'Contact — Kelston Way Greenhouse | Wholesale Grower, Oglesby, Texas',

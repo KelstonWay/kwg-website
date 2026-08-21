@@ -43,10 +43,10 @@ export default function Footer() {
           <ul className="space-y-4">
             <li>
               <Link
-                to="/our-story"
+                to="/team"
                 className="font-body-md text-base text-stone-600 opacity-80 transition-opacity hover:text-primary hover:opacity-100"
               >
-                Our Story
+                Meet the Team
               </Link>
             </li>
             <li>

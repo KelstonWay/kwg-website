@@ -2,36 +2,38 @@ import { Link } from 'react-router-dom'
 import { CONTACT_EMAIL, CONTACT_MAILTO, CONTACT_PHONE, CONTACT_PHONE_HREF } from '../lib/site'
 
 const HERO_IMG = '/photos/story-hero.webp'
-const STORY_IMG = '/photos/story.webp'
 const LOCATION_IMG = '/photos/location.webp'
 
-// Art's bio is his own verified professional copy (Titus, 2026-08-01). Titus's and
-// Samuel's stay deliberately high-level — a lifetime in the industry, no résumé of
-// past roles (Samuel, same date). Titles are "Partner" for all three, no hierarchy.
-// Art and Titus fall back to initials until headshots land; drop a matching
-// /photos/team-*.webp in and set `photo` to swap one in.
+// Bios are Titus's final copy (2026-08-20), sourced from Art's own professional bio.
+// They deliberately omit each person's name in the body — the card above carries it.
+// Titles split Founder / Partner / Partner, also Titus's call: Art's history carries
+// the weight, so the title reflects it. Art and Titus fall back to initials until
+// their headshots land; drop a matching /photos/team-*.webp in and set `photo`.
 const TEAM = [
   {
     initials: 'AV',
     photo: null,
     name: 'Art VanWingerden',
-    bio: 'Art VanWingerden has spent more than 45 years in the commercial greenhouse industry. He co-founded and built two national-scale greenhouse operations from the ground up, one of which grew to become the 8th largest greenhouse operation in the nation at its peak. Kelston Way is his next one.',
+    role: 'Founder',
+    bio: 'Has spent more than 45 years in the commercial greenhouse industry, starting his career in 1980 in a family greenhouse business with roots in the Netherlands. He co-founded Floral Plant Growers in Maryland in 1983, growing it for over a decade before a successful sale in 1996. In 2001, he co-founded Color Point, growing it over the next two decades into one of the largest greenhouse operations in the country — at its peak, the 8th largest in the nation, spanning 115 acres and over 1,000 employees. As primary operator, Art was hands-on in every part of it: production, labor, capital investment, and facility planning. Today, he leads Kelston Way in Texas, alongside his sons, Titus and Samuel.',
   },
   {
     initials: 'TV',
     photo: null,
     name: 'Titus VanWingerden',
-    bio: 'Titus has been in the industry his whole life, a large part of it running production for a large-scale commercial greenhouse. At Kelston Way he runs day-to-day operations.',
+    role: 'Partner',
+    bio: 'Leads day-to-day operations at Kelston Way, and works alongside his brother on sales.',
   },
   {
     initials: 'SV',
     photo: '/photos/team-samuel.webp',
     name: 'Samuel VanWingerden',
-    bio: 'Samuel has been in the industry his whole life, a large part of it managing replenishment and account service for retail garden centers. At Kelston Way he brings that experience to the team and keeps building on it.',
+    role: 'Partner',
+    bio: 'Leads the technology and systems behind Kelston Way, and works alongside his brother on sales.',
   },
 ]
 
-export default function OurStory() {
+export default function MeetTheTeam() {
   return (
     <>
       {/* Hero */}
@@ -75,72 +77,6 @@ export default function OurStory() {
         </div>
       </section>
 
-      {/* Story */}
-      <section className="bg-white px-5 py-20 md:px-16 md:py-24">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-12 border-b border-outline-variant/40 pb-3">
-            <span className="font-label-caps text-[10px] font-medium uppercase tracking-[0.25em] text-on-surface-variant">
-              Our Story
-            </span>
-          </div>
-          <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2 md:gap-20">
-            <div className="h-[300px] overflow-hidden rounded-xl border border-outline-variant/20 bg-stone-200 shadow-sm md:h-[360px]">
-              <img
-                src={STORY_IMG}
-                alt="Kelston Way story"
-                className="h-full w-full object-cover object-bottom"
-                loading="lazy"
-              />
-            </div>
-            <div>
-              <p className="font-body-lg font-light leading-relaxed text-secondary">
-                Art, Titus, and Samuel VanWingerden grew up in the greenhouse business. It's what
-                our family does. We started Kelston Way because we knew we could grow quality plants
-                and build real relationships with the people we sell to.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pillars */}
-      <section className="bg-stone-50 px-5 py-20 md:px-16 md:py-24">
-        <div className="mx-auto max-w-7xl">
-          <h2 className="mb-12 font-['Newsreader'] text-3xl font-light leading-[1.15] text-on-surface md:text-[42px]">
-            What we <em className="font-normal italic text-primary">stand for.</em>
-          </h2>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {[
-              {
-                icon: 'potted_plant',
-                title: 'Good Plants',
-                body: 'Every plant is graded before it ships, so what you order is what you get.',
-              },
-              {
-                icon: 'handshake',
-                title: 'Straight Talk',
-                body: "We tell you what we have, what's coming, and what we don't. No runaround.",
-              },
-              {
-                icon: 'location_on',
-                title: 'Grown in Texas',
-                body: 'Our plants are grown in central Texas, acclimated to the heat, and ready for your customers the day they arrive.',
-              },
-            ].map(({ icon, title, body }) => (
-              <div key={title} className="rounded-sm border border-outline-variant/30 bg-white p-8">
-                <span className="material-symbols-outlined mb-4 block text-3xl text-primary">
-                  {icon}
-                </span>
-                <h3 className="mb-3 font-['Newsreader'] text-xl text-on-surface">{title}</h3>
-                <p className="font-body-md text-sm font-light leading-relaxed text-secondary">
-                  {body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Team */}
       <section className="bg-white px-5 py-20 md:px-16 md:py-24">
         <div className="mx-auto max-w-7xl">
@@ -158,14 +94,16 @@ export default function OurStory() {
             relationships. As a family-owned company, we're building for the long term and staying
             closely involved in the work behind it.
           </p>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            {TEAM.map(({ initials, photo, name, bio }) => (
+          {/* Rows, not a 3-up card grid: Art's bio runs several times longer than his sons',
+              and equal-height cards left two of them mostly empty. */}
+          <div className="border-t border-outline-variant/40">
+            {TEAM.map(({ initials, photo, name, role, bio }) => (
               <div
                 key={name}
-                className="flex h-full flex-col rounded-sm border border-outline-variant/30 bg-stone-50 p-8 text-center"
+                className="grid grid-cols-1 items-start gap-8 border-b border-outline-variant/40 py-10 md:grid-cols-[10rem_1fr] md:gap-12 md:py-12"
               >
                 <div
-                  className={`mx-auto mb-5 flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-2 border-outline-variant/30 ${
+                  className={`mx-auto flex h-32 w-32 items-center justify-center overflow-hidden rounded-full border-2 border-outline-variant/30 md:mx-0 md:h-40 md:w-40 ${
                     photo ? 'bg-white' : 'bg-secondary-container'
                   }`}
                 >
@@ -177,16 +115,18 @@ export default function OurStory() {
                       loading="lazy"
                     />
                   ) : (
-                    <span className="font-['Newsreader'] text-2xl text-on-surface">{initials}</span>
+                    <span className="font-['Newsreader'] text-3xl text-on-surface">{initials}</span>
                   )}
                 </div>
-                <h3 className="mb-1 font-['Newsreader'] text-xl text-on-surface">{name}</h3>
-                <p className="mb-4 font-label-caps text-[10px] uppercase tracking-widest text-primary">
-                  Partner
-                </p>
-                <p className="font-body-md text-sm font-light leading-relaxed text-secondary">
-                  {bio}
-                </p>
+                <div className="text-center md:text-left">
+                  <h3 className="mb-1 font-['Newsreader'] text-2xl text-on-surface">{name}</h3>
+                  <p className="mb-4 font-label-caps text-[10px] uppercase tracking-widest text-primary">
+                    {role}
+                  </p>
+                  <p className="max-w-3xl font-body-md text-base font-light leading-relaxed text-secondary">
+                    {bio}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

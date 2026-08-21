@@ -202,10 +202,10 @@ export default function Home() {
               </span>
               <h3 className="mb-4 font-['Newsreader'] text-4xl">5 Acres of Growing Space</h3>
               <Link
-                to="/our-story"
+                to="/team"
                 className="inline-block border border-white/50 px-6 py-2 font-button text-button transition-all duration-300 hover:bg-white hover:text-primary"
               >
-                Our Story
+                Meet the Team
               </Link>
             </div>
           </div>
