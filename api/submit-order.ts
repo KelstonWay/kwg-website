@@ -245,8 +245,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const xlsxBuffer: Buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
   const xlsxFilename = `kwg-order-${orderRef}-${contact.business_name.replace(/[^a-zA-Z0-9]/g, '-').slice(0, 30)}.xlsx`
 
-  try {
-    await Promise.all([
+  // allSettled, not all: send() now rejects on a Resend error, and Promise.all would
+  // return on the first rejection while the sibling send is still in flight — which a
+  // serverless runtime may then kill. The order alert is the one that must not be lost
+  // (Codex review, 2026-08-25).
+  const outcomes = await Promise.allSettled([
       send({
         from: 'orders@kelstonway.com',
         to: contact.email,
@@ -260,10 +263,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         html: `<h2>New Order from ${esc(contact.business_name)}</h2><p><strong>Contact:</strong> ${esc(contact.contact_name)} &lt;${esc(contact.email)}&gt;<br/><strong>Phone:</strong> ${esc(contact.phone || 'N/A')}<br/><strong>Address:</strong> ${esc(contact.address_street)}, ${esc(contact.address_city)}, ${esc(contact.address_state)} ${esc(contact.address_zip)}<br/><strong>Notes:</strong> ${esc(contact.notes || 'N/A')}</p><table border="1" cellpadding="6"><thead><tr><th>Plant</th><th>Size</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>${itemsHtml}</tbody></table><p><strong>Total: ${totalUnits} trays / $${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></p><p><a href="${confirmUrl}">✅ Confirm This Order</a></p>`,
         attachments: [{ filename: xlsxFilename, content: xlsxBuffer }],
       }),
-    ])
-  } catch (emailErr) {
-    console.error('Email send failed for order', orderId, emailErr)
-  }
+  ])
+  const labels = ['buyer confirmation', 'team order alert']
+  outcomes.forEach((o, i) => {
+    if (o.status === 'rejected') {
+      console.error(`${labels[i]} failed for order`, orderId, o.reason)
+    }
+  })
 
   return res.status(200).json({ orderId, claimToken, email: contact.email })
 }
