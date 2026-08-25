@@ -63,6 +63,12 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       })
+      // A 400 means the address itself was rejected, which is the buyer's to fix.
+      // Only a real failure should send them off to email us directly.
+      if (res.status === 400) {
+        setInquiryError('Please enter a valid business email address.')
+        return
+      }
       if (!res.ok) throw new Error()
       setSubmitted(true)
       setEmail('')

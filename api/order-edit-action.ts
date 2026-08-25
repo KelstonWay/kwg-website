@@ -133,27 +133,39 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (action === 'accept' || action === 'reject') {
       const verdict = action === 'accept' ? 'accepted' : 'rejected'
-      await send({
-        from: FROM,
-        to: TEAM_EMAIL,
-        subject: `Order #${orderNo} change ${verdict} by the buyer`,
-        html: `<p>The buyer <strong>${verdict}</strong> the proposed change to order <strong>#${orderNo}</strong>.</p>${msgBlock}<p>— kelstonway.com</p>`,
-      })
-      const buyerEmail = order ? await buyerContactEmail(order.buyer_id, order.org_id) : null
-      if (buyerEmail) {
-        await send({
+      // Independent, not sequential: the buyer is told a confirmation is on its way,
+      // so a failed team notification must not stop it being attempted, and vice
+      // versa (Codex review, 2026-08-25).
+      const outcomes = await Promise.allSettled([
+        send({
           from: FROM,
-          to: buyerEmail,
-          subject:
-            action === 'accept'
-              ? `Your updated Kelston Way order #${orderNo} is confirmed`
-              : `Kelston Way order #${orderNo} — change declined`,
-          html:
-            action === 'accept'
-              ? `<p>Thanks — the change to order <strong>#${orderNo}</strong> has been applied and your order is confirmed.</p><p>— Kelston Way Greenhouse</p>`
-              : `<p>You declined the proposed change to order <strong>#${orderNo}</strong>. Your order remains exactly as it was.</p><p>— Kelston Way Greenhouse</p>`,
-        })
-      }
+          to: TEAM_EMAIL,
+          subject: `Order #${orderNo} change ${verdict} by the buyer`,
+          html: `<p>The buyer <strong>${verdict}</strong> the proposed change to order <strong>#${orderNo}</strong>.</p>${msgBlock}<p>— kelstonway.com</p>`,
+        }),
+        (async () => {
+          const buyerEmail = order ? await buyerContactEmail(order.buyer_id, order.org_id) : null
+          if (!buyerEmail) return
+          await send({
+            from: FROM,
+            to: buyerEmail,
+            subject:
+              action === 'accept'
+                ? `Your updated Kelston Way order #${orderNo} is confirmed`
+                : `Kelston Way order #${orderNo} — change declined`,
+            html:
+              action === 'accept'
+                ? `<p>Thanks — the change to order <strong>#${orderNo}</strong> has been applied and your order is confirmed.</p><p>— Kelston Way Greenhouse</p>`
+                : `<p>You declined the proposed change to order <strong>#${orderNo}</strong>. Your order remains exactly as it was.</p><p>— Kelston Way Greenhouse</p>`,
+          })
+        })(),
+      ])
+      const labels = ['team notification', 'buyer confirmation']
+      outcomes.forEach((o, i) => {
+        if (o.status === 'rejected') {
+          console.error(`Order-change ${labels[i]} failed for order`, orderId, o.reason)
+        }
+      })
     } else {
       await send({
         from: FROM,
