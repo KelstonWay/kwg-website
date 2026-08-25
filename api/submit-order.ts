@@ -20,7 +20,18 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 const resend = new Resend(process.env.RESEND_API_KEY)
-const SAMUEL_EMAIL = process.env.SAMUEL_EMAIL ?? 'samuel@kelstonway.com'
+// Where buyer mail and order alerts land. orders@ is a shared mailbox, so Samuel and
+// Titus both see it (Samuel, 2026-08-25). Deliberately does not fall back to the old
+// SAMUEL_EMAIL var — that would quietly route buyer mail to one person again.
+const TEAM_EMAIL = process.env.TEAM_EMAIL?.trim() || 'orders@kelstonway.com'
+
+// Resend resolves API and network failures as { data: null, error } instead of
+// throwing, so an unchecked send reports success even when nothing was delivered
+// (Codex review, 2026-08-25). Everything goes through here so a failure is real.
+async function send(opts: Parameters<typeof resend.emails.send>[0]) {
+  const { error } = await resend.emails.send(opts)
+  if (error) throw new Error(`Resend: ${error.message ?? JSON.stringify(error)}`)
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).end()
@@ -236,15 +247,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     await Promise.all([
-      resend.emails.send({
+      send({
         from: 'orders@kelstonway.com',
         to: contact.email,
         subject: 'Order Received — Kelston Way Greenhouse',
         html: `<h2>Thank you, ${esc(contact.contact_name)}!</h2><p>We've received your wholesale order (ref: <strong>${orderRef}</strong>) and will be in touch soon.</p><p>— Kelston Way Greenhouse</p>`,
       }),
-      resend.emails.send({
+      send({
         from: 'orders@kelstonway.com',
-        to: SAMUEL_EMAIL,
+        to: TEAM_EMAIL,
         subject: `New Wholesale Order — ${esc(contact.business_name)} — $${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
         html: `<h2>New Order from ${esc(contact.business_name)}</h2><p><strong>Contact:</strong> ${esc(contact.contact_name)} &lt;${esc(contact.email)}&gt;<br/><strong>Phone:</strong> ${esc(contact.phone || 'N/A')}<br/><strong>Address:</strong> ${esc(contact.address_street)}, ${esc(contact.address_city)}, ${esc(contact.address_state)} ${esc(contact.address_zip)}<br/><strong>Notes:</strong> ${esc(contact.notes || 'N/A')}</p><table border="1" cellpadding="6"><thead><tr><th>Plant</th><th>Size</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>${itemsHtml}</tbody></table><p><strong>Total: ${totalUnits} trays / $${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></p><p><a href="${confirmUrl}">✅ Confirm This Order</a></p>`,
         attachments: [{ filename: xlsxFilename, content: xlsxBuffer }],

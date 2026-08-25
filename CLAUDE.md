@@ -33,7 +33,7 @@ mv .git .git_backup && npx vercel --prod --yes && mv .git_backup .git
 | `SUPABASE_URL` | API functions |
 | `SUPABASE_SERVICE_KEY` | API functions (elevated access) |
 | `RESEND_API_KEY` | API functions |
-| `SAMUEL_EMAIL` | API functions (order notify) |
+| `TEAM_EMAIL` | API functions (order + contact notify; defaults to orders@) |
 
 `VITE_*` = exposed to browser. Non-prefixed = server only.
 
@@ -47,12 +47,18 @@ mv .git .git_backup && npx vercel --prod --yes && mv .git_backup .git
 RLS: public anon SELECT on all four. Authenticated only for writes.
 
 ## API Routes (Vercel Functions)
-- `POST /api/submit-order` — creates order, sends Resend emails to customer + Samuel
-- `POST /api/confirm-order` — Samuel confirms via token link
+- `POST /api/submit-order` — creates order, sends Resend emails to the customer + the team
+- `POST /api/confirm-order` — the team confirms via token link
 - `POST /api/send-contact` — contact form
 - `POST /api/send-inquiry` — home page inquiry form
 
 Emails send from `orders@kelstonway.com` — domain must be verified in Resend.
+
+Team notifications are addressed to `orders@kelstonway.com` too (a shared mailbox Samuel and
+Titus both read), so those messages are from and to the same address. Contact and inquiry
+notifications set `replyTo` to the person who wrote in, otherwise replying would land back in
+the shared mailbox. Resend reports failures as `{ error }` rather than throwing, so every send
+goes through the local `send()` helper that turns that into a real exception.
 
 ## Deploy
 Free tier workaround (no GitHub auto-deploy yet):

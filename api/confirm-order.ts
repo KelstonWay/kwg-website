@@ -16,6 +16,14 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) throw new Error('Missing Supabase en
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+// Resend resolves API and network failures as { data: null, error } instead of
+// throwing, so an unchecked send reports success even when nothing was delivered
+// (Codex review, 2026-08-25). Everything goes through here so a failure is real.
+async function send(opts: Parameters<typeof resend.emails.send>[0]) {
+  const { error } = await resend.emails.send(opts)
+  if (error) throw new Error(`Resend: ${error.message ?? JSON.stringify(error)}`)
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).end()
 
@@ -46,13 +54,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (updateErr || !updated) return res.status(500).json({ error: 'Failed to confirm order' })
 
   try {
-    await resend.emails.send({
+    await send({
       from: 'orders@kelstonway.com',
       to: updated.email,
       subject: 'Your Kelston Way Order is Confirmed',
       html: `<h2>Order Confirmed</h2><p>Hi ${esc(updated.contact_name)},</p><p>Your wholesale order has been confirmed. We'll be in touch shortly with your invoice.</p><p>Order ref: <strong>${updated.id.slice(0, 8).toUpperCase()}</strong></p><p>— Kelston Way Greenhouse</p>`,
     })
-  } catch { /* email failure is non-fatal */ }
+  } catch (emailErr) {
+    // The order is already confirmed in the database, so do not fail the request
+    // and make the buyer retry. Log it loudly instead.
+    console.error('Confirmation email failed for order', orderId, emailErr)
+  }
 
   return res.status(200).json({ ok: true })
 }

@@ -14,7 +14,18 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) throw new Error('Missing Supabase en
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const SAMUEL_EMAIL = process.env.SAMUEL_EMAIL ?? 'samuel@kelstonway.com'
+// Where buyer mail and order alerts land. orders@ is a shared mailbox, so Samuel and
+// Titus both see it (Samuel, 2026-08-25). Deliberately does not fall back to the old
+// SAMUEL_EMAIL var — that would quietly route buyer mail to one person again.
+const TEAM_EMAIL = process.env.TEAM_EMAIL?.trim() || 'orders@kelstonway.com'
+
+// Resend resolves API and network failures as { data: null, error } instead of
+// throwing, so an unchecked send reports success even when nothing was delivered
+// (Codex review, 2026-08-25). Everything goes through here so a failure is real.
+async function send(opts: Parameters<typeof resend.emails.send>[0]) {
+  const { error } = await resend.emails.send(opts)
+  if (error) throw new Error(`Resend: ${error.message ?? JSON.stringify(error)}`)
+}
 const FROM = 'orders@kelstonway.com'
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const MAX_MESSAGE_LEN = 2000
@@ -117,15 +128,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (action === 'accept' || action === 'reject') {
       const verdict = action === 'accept' ? 'accepted' : 'rejected'
-      await resend.emails.send({
+      await send({
         from: FROM,
-        to: SAMUEL_EMAIL,
+        to: TEAM_EMAIL,
         subject: `Order #${orderNo} change ${verdict} by the buyer`,
         html: `<p>The buyer <strong>${verdict}</strong> the proposed change to order <strong>#${orderNo}</strong>.</p>${msgBlock}<p>— kelstonway.com</p>`,
       })
       const buyerEmail = order ? await buyerContactEmail(order.buyer_id, order.org_id) : null
       if (buyerEmail) {
-        await resend.emails.send({
+        await send({
           from: FROM,
           to: buyerEmail,
           subject:
@@ -139,15 +150,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         })
       }
     } else {
-      await resend.emails.send({
+      await send({
         from: FROM,
-        to: SAMUEL_EMAIL,
+        to: TEAM_EMAIL,
         subject: `Order #${orderNo} — message from the buyer`,
         html: `<p>The buyer sent a message about the pending change to order <strong>#${orderNo}</strong>:</p>${msgBlock}<p>— kelstonway.com</p>`,
       })
     }
-  } catch {
-    /* email failure is non-fatal */
+  } catch (emailErr) {
+    // The buyer's decision is already recorded, so do not fail their request and
+    // make them click again. Log it loudly instead.
+    console.error('Order-change notification failed for order', orderId, emailErr)
   }
 
   return res.status(200).json({ ok: true, result: action })
