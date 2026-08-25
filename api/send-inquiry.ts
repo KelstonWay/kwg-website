@@ -1,6 +1,14 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { Resend } from 'resend'
 
+function esc(s: string) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const resend = new Resend(process.env.RESEND_API_KEY)
 // Where buyer mail and order alerts land. orders@ is a shared mailbox, so Samuel and
@@ -19,20 +27,27 @@ async function send(opts: Parameters<typeof resend.emails.send>[0]) {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).end()
 
-  const { email } = req.body ?? {}
-  if (!email) return res.status(400).json({ error: 'Missing email' })
+  // Validate rather than just gating replyTo: a malformed address would otherwise
+  // either drop the reply header silently or make Resend reject the whole
+  // notification, losing the inquiry (Codex review, 2026-08-25).
+  const address = String(req.body?.email ?? '').trim()
+  if (!address) return res.status(400).json({ error: 'Missing email' })
+  if (address.length > 254 || !EMAIL_RE.test(address)) {
+    return res.status(400).json({ error: 'Invalid email' })
+  }
 
   try {
     await send({
       from: 'orders@kelstonway.com',
       to: TEAM_EMAIL,
       // Same reason as the contact form: reply should reach the person asking.
-      ...(EMAIL_RE.test(String(email)) ? { replyTo: String(email) } : {}),
-      subject: `Wholesale Inquiry — ${email}`,
-      html: `<p>New wholesale inquiry from: <strong>${email}</strong></p>`,
+      replyTo: address,
+      subject: `Wholesale Inquiry — ${address}`,
+      html: `<p>New wholesale inquiry from: <strong>${esc(address)}</strong></p>`,
     })
     return res.status(200).json({ ok: true })
-  } catch {
+  } catch (emailErr) {
+    console.error('Inquiry notification failed for', address, emailErr)
     return res.status(500).json({ error: 'Failed to send' })
   }
 }

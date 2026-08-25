@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { CONTACT_EMAIL } from '../lib/site'
 import type { AvailabilityItem } from '../lib/types'
 
 const HERO_IMG = '/photos/hero1.webp'
@@ -12,6 +13,8 @@ export default function Home() {
   const [preview, setPreview] = useState<AvailabilityItem[]>([])
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [inquiryError, setInquiryError] = useState<string | null>(null)
 
   useEffect(() => {
     async function load() {
@@ -50,13 +53,24 @@ export default function Home() {
 
   async function handleInquiry(e: React.FormEvent) {
     e.preventDefault()
-    await fetch('/api/send-inquiry', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    })
-    setSubmitted(true)
-    setEmail('')
+    setSending(true)
+    setInquiryError(null)
+    try {
+      // fetch resolves normally on a 500, so without this check a failed send
+      // still cleared the field and thanked the buyer (Codex review, 2026-08-25).
+      const res = await fetch('/api/send-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (!res.ok) throw new Error()
+      setSubmitted(true)
+      setEmail('')
+    } catch {
+      setInquiryError(`Something went wrong. Please email us directly at ${CONTACT_EMAIL}`)
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -278,11 +292,17 @@ export default function Home() {
                     className="w-full border-b border-primary-fixed bg-transparent pb-2 text-white outline-none transition-colors placeholder:text-primary-fixed/50 focus:border-white focus:ring-0"
                   />
                 </div>
+                {inquiryError && (
+                  <p className="font-body-md text-sm text-white" role="alert">
+                    {inquiryError}
+                  </p>
+                )}
                 <button
                   type="submit"
-                  className="w-full bg-primary-fixed py-4 font-button text-button text-on-primary-fixed transition-colors hover:bg-white"
+                  disabled={sending}
+                  className="w-full bg-primary-fixed py-4 font-button text-button text-on-primary-fixed transition-colors hover:bg-white disabled:opacity-60"
                 >
-                  Send
+                  {sending ? 'Sending…' : 'Send'}
                 </button>
               </form>
             )}

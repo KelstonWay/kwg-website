@@ -58,7 +58,10 @@ function friendlyRpcError(message: string | undefined): string {
 }
 
 async function buyerContactEmail(buyerId: string, orgId: string): Promise<string | null> {
-  const { data } = await supabase
+  // A failed lookup used to be indistinguishable from "this buyer has no contact",
+  // which silently skipped the confirmation the buyer was promised (Codex review,
+  // 2026-08-25). Throw so the caller's catch logs it.
+  const { data, error } = await supabase
     .from('buyer_contacts')
     .select('email, is_default_order_contact')
     .eq('buyer_id', buyerId)
@@ -66,6 +69,7 @@ async function buyerContactEmail(buyerId: string, orgId: string): Promise<string
     .not('email', 'is', null)
     .order('is_default_order_contact', { ascending: false })
     .order('created_at', { ascending: true })
+  if (error) throw new Error(`buyer_contacts lookup failed: ${error.message}`)
   return data?.[0]?.email ?? null
 }
 
@@ -116,11 +120,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Emails are a record, never a gate — failures are non-fatal (confirm-order.ts rule)
   try {
-    const { data: order } = await supabase
+    const { data: order, error: orderErr } = await supabase
       .from('orders')
       .select('order_number, buyer_id, org_id')
       .eq('id', orderId)
       .maybeSingle()
+    if (orderErr) throw new Error(`order lookup failed: ${orderErr.message}`)
     const orderNo = esc(order?.order_number ?? '')
     const msgBlock = buyerMessage
       ? `<blockquote style="border-left:3px solid #4c614c;padding-left:12px;color:#555">${esc(buyerMessage)}</blockquote>`

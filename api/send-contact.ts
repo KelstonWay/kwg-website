@@ -41,7 +41,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       html: `<p><strong>Name:</strong> ${esc(name)}<br/><strong>Email:</strong> ${esc(email)}<br/><strong>Business:</strong> ${esc(business || 'N/A')}</p><p><strong>Message:</strong><br/>${esc(message).replace(/\n/g, '<br/>')}</p>`,
     })
     return res.status(200).json({ ok: true })
-  } catch {
+  } catch (emailErr) {
+    console.error('Contact form send failed for', String(email), emailErr)
     return res.status(500).json({ error: 'Failed to send message' })
   }
 }
