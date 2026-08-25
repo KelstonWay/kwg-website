@@ -9,12 +9,15 @@ const LOCATION_IMG = '/photos/location.webp'
 // Titles split Founder / Partner / Partner, also Titus's call: Art's history carries
 // the weight, so the title reflects it. Art and Titus fall back to initials until
 // their headshots land; drop a matching /photos/team-*.webp in and set `photo`.
+// `linkedin` is optional the same way — Art does not have a profile, and nothing
+// renders for anyone who is missing one.
 const TEAM = [
   {
     initials: 'AV',
     photo: null,
     name: 'Art VanWingerden',
     role: 'Founder',
+    linkedin: null,
     bio: 'Has spent more than 45 years in the commercial greenhouse industry, starting his career in 1980 in a family greenhouse business with roots in the Netherlands. He co-founded Floral Plant Growers in Maryland in 1983, growing it for over a decade before a successful sale in 1996. In 2001, he co-founded Color Point, growing it over the next two decades into one of the largest greenhouse operations in the country — at its peak, the 8th largest in the nation, spanning 115 acres and over 1,000 employees. As primary operator, Art was hands-on in every part of it: production, labor, capital investment, and facility planning. Today, he leads Kelston Way in Texas, alongside his sons, Titus and Samuel.',
   },
   {
@@ -22,6 +25,7 @@ const TEAM = [
     photo: null,
     name: 'Titus VanWingerden',
     role: 'Partner',
+    linkedin: 'https://www.linkedin.com/in/titus-vanwingerden-587231187',
     bio: 'Leads day-to-day operations at Kelston Way, and works alongside his brother on sales.',
   },
   {
@@ -29,9 +33,26 @@ const TEAM = [
     photo: '/photos/team-samuel.webp',
     name: 'Samuel VanWingerden',
     role: 'Partner',
+    linkedin: 'https://www.linkedin.com/in/samuel-vanwingerden-7ab56331b',
     bio: 'Leads the technology and systems behind Kelston Way, and works alongside his brother on sales.',
   },
 ]
+
+function LinkedInLink({ href, name }: { href: string; name: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${name} on LinkedIn`}
+      className="text-on-surface-variant/60 transition-colors duration-300 hover:text-primary"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" className="h-4 w-4">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+      </svg>
+    </a>
+  )
+}
 
 export default function MeetTheTeam() {
   return (
@@ -97,7 +118,7 @@ export default function MeetTheTeam() {
           {/* Rows, not a 3-up card grid: Art's bio runs several times longer than his sons',
               and equal-height cards left two of them mostly empty. */}
           <div className="border-t border-outline-variant/40">
-            {TEAM.map(({ initials, photo, name, role, bio }) => (
+            {TEAM.map(({ initials, photo, name, role, bio, linkedin }) => (
               <div
                 key={name}
                 className="grid grid-cols-1 items-start gap-8 border-b border-outline-variant/40 py-10 md:grid-cols-[10rem_1fr] md:gap-12 md:py-12"
@@ -119,7 +140,10 @@ export default function MeetTheTeam() {
                   )}
                 </div>
                 <div className="text-center md:text-left">
-                  <h3 className="mb-1 font-['Newsreader'] text-2xl text-on-surface">{name}</h3>
+                  <div className="mb-1 flex items-center justify-center gap-2.5 md:justify-start">
+                    <h3 className="font-['Newsreader'] text-2xl text-on-surface">{name}</h3>
+                    {linkedin && <LinkedInLink href={linkedin} name={name} />}
+                  </div>
                   <p className="mb-4 font-label-caps text-[10px] uppercase tracking-widest text-primary">
                     {role}
                   </p>
