@@ -253,7 +253,7 @@ export default function Home() {
               Weekly Availability
             </h3>
             <p className="mb-4 font-body-md text-xs text-on-secondary-fixed-variant">
-              See what's currently available from the greenhouse.
+              See what's available.
             </p>
           </div>
           <div className="flex flex-col items-center justify-center rounded-sm bg-primary p-6 text-center text-on-primary md:col-span-1 md:row-span-1">

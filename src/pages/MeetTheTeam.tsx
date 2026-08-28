@@ -4,8 +4,10 @@ import { CONTACT_EMAIL, CONTACT_MAILTO, CONTACT_PHONE, CONTACT_PHONE_HREF } from
 const HERO_IMG = '/photos/story-hero.webp'
 const LOCATION_IMG = '/photos/location.webp'
 
-// Bios are Titus's final copy (2026-08-20), sourced from Art's own professional bio.
-// They deliberately omit each person's name in the body — the card above carries it.
+// Bios are Titus's copy (2026-08-20, revised 2026-08-28), sourced from Art's own
+// professional bio and Titus's own employment history. Art's and Titus's open with
+// their first name on purpose (Titus's round-4 call); Samuel's is a placeholder he
+// will replace with his own wording.
 // Titles split Founder / Partner / Partner, also Titus's call: Art's history carries
 // the weight, so the title reflects it. Art and Titus fall back to initials until
 // their headshots land; drop a matching /photos/team-*.webp in and set `photo`.
@@ -18,7 +20,7 @@ const TEAM = [
     name: 'Art VanWingerden',
     role: 'Founder',
     linkedin: null,
-    bio: 'Has spent more than 45 years in the commercial greenhouse industry, starting his career in 1980 in a family greenhouse business with roots in the Netherlands. He co-founded Floral Plant Growers in Maryland in 1983, growing it for over a decade before a successful sale in 1996. In 2001, he co-founded Color Point, growing it over the next two decades into one of the largest greenhouse operations in the country — at its peak, the 8th largest in the nation, spanning 115 acres and over 1,000 employees. As primary operator, Art was hands-on in every part of it: production, labor, capital investment, and facility planning. Today, he leads Kelston Way in Texas, alongside his sons, Titus and Samuel.',
+    bio: 'Art has spent more than 45 years in the commercial greenhouse industry, starting his career in 1980 in a family greenhouse business with roots in the Netherlands. He co-founded Floral Plant Growers in Maryland in 1983, growing it for over a decade before a successful sale in 1996. In 2001, he co-founded Color Point, growing it over the next two decades into one of the largest greenhouse operations in the country — at its peak, the 8th largest in the nation, spanning 115 acres and over 1,000 employees. As primary operator, Art was hands-on in every part of it: production, labor, capital investment, and facility planning. Today, he leads Kelston Way in Texas, alongside his sons, Titus and Samuel.',
   },
   {
     initials: 'TV',
@@ -26,7 +28,7 @@ const TEAM = [
     name: 'Titus VanWingerden',
     role: 'Partner',
     linkedin: 'https://www.linkedin.com/in/titus-vanwingerden-587231187',
-    bio: 'Leads day-to-day operations at Kelston Way, and works alongside his brother on sales.',
+    bio: "Titus started in greenhouse operations at the company his father built, then went on to lead production at one of the country's largest commercial growing sites. At Kelston Way, he leads day-to-day operations and sales.",
   },
   {
     initials: 'SV',
