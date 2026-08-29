@@ -9,14 +9,17 @@ const LOCATION_IMG = '/photos/location.webp'
 // 2026-08-29). All three open with the person's first name on purpose (Titus's
 // round-4 call), and both brothers name sales deliberately — Samuel's call.
 // Titles split Founder / Partner / Partner, also Titus's call: Art's history carries
-// the weight, so the title reflects it. Art and Titus fall back to initials until
-// their headshots land; drop a matching /photos/team-*.webp in and set `photo`.
+// the weight, so the title reflects it. Titus's and Samuel's photos are family
+// shots in the greenhouse (Samuel's pick, 2026-08-29), cropped square at 800px so
+// the circle shows the whole family. Art falls back to initials until his headshot
+// lands; drop /photos/team-art.webp in and set `photo`.
 // `linkedin` is optional the same way — Art does not have a profile, and nothing
 // renders for anyone who is missing one.
 const TEAM = [
   {
     initials: 'AV',
     photo: null,
+    photoAlt: null,
     name: 'Art VanWingerden',
     role: 'Founder',
     linkedin: null,
@@ -24,7 +27,8 @@ const TEAM = [
   },
   {
     initials: 'TV',
-    photo: null,
+    photo: '/photos/team-titus.webp',
+    photoAlt: 'Titus VanWingerden with his family in the greenhouse',
     name: 'Titus VanWingerden',
     role: 'Partner',
     linkedin: 'https://www.linkedin.com/in/titus-vanwingerden-587231187',
@@ -33,6 +37,7 @@ const TEAM = [
   {
     initials: 'SV',
     photo: '/photos/team-samuel.webp',
+    photoAlt: 'Samuel VanWingerden with his family in the greenhouse',
     name: 'Samuel VanWingerden',
     role: 'Partner',
     linkedin: 'https://www.linkedin.com/in/samuel-vanwingerden-7ab56331b',
@@ -120,7 +125,7 @@ export default function MeetTheTeam() {
           {/* Rows, not a 3-up card grid: Art's bio runs several times longer than his sons',
               and equal-height cards left two of them mostly empty. */}
           <div className="border-t border-outline-variant/40">
-            {TEAM.map(({ initials, photo, name, role, bio, linkedin }) => (
+            {TEAM.map(({ initials, photo, photoAlt, name, role, bio, linkedin }) => (
               <div
                 key={name}
                 className="grid grid-cols-1 items-start gap-8 border-b border-outline-variant/40 py-10 md:grid-cols-[10rem_1fr] md:gap-12 md:py-12"
@@ -133,7 +138,7 @@ export default function MeetTheTeam() {
                   {photo ? (
                     <img
                       src={photo}
-                      alt={name}
+                      alt={photoAlt ?? name}
                       className="h-full w-full object-cover object-top"
                       loading="lazy"
                     />
