@@ -28,7 +28,7 @@ const TEAM = [
     name: 'Titus VanWingerden',
     role: 'Partner',
     linkedin: 'https://www.linkedin.com/in/titus-vanwingerden-587231187',
-    bio: "Titus started in greenhouse operations at the company his father built, then went on to lead production at one of the country's largest commercial growing sites. At Kelston Way, he leads day-to-day operations and sales.",
+    bio: "Titus started in greenhouse operations at the company his father built, then went on to lead production at one of the country's largest commercial growing sites. At Kelston Way, he leads operations and sales.",
   },
   {
     initials: 'SV',
