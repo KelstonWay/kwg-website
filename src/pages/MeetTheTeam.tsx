@@ -5,9 +5,9 @@ const HERO_IMG = '/photos/story-hero.webp'
 const LOCATION_IMG = '/photos/location.webp'
 
 // Bios are Titus's copy (2026-08-20, revised 2026-08-28), sourced from Art's own
-// professional bio and Titus's own employment history. Art's and Titus's open with
-// their first name on purpose (Titus's round-4 call); Samuel's is a placeholder he
-// will replace with his own wording.
+// professional bio and the brothers' own employment histories (Samuel wrote his,
+// 2026-08-29). All three open with the person's first name on purpose (Titus's
+// round-4 call), and both brothers name sales deliberately — Samuel's call.
 // Titles split Founder / Partner / Partner, also Titus's call: Art's history carries
 // the weight, so the title reflects it. Art and Titus fall back to initials until
 // their headshots land; drop a matching /photos/team-*.webp in and set `photo`.
@@ -36,7 +36,7 @@ const TEAM = [
     name: 'Samuel VanWingerden',
     role: 'Partner',
     linkedin: 'https://www.linkedin.com/in/samuel-vanwingerden-7ab56331b',
-    bio: 'Leads the technology and systems behind Kelston Way, and works alongside his brother on sales.',
+    bio: "Samuel grew up in the greenhouse industry and worked alongside Art and Titus at one of the country's largest commercial growing sites, where he led live-goods replenishment for more than 100 Home Depot stores. At Kelston Way, he leads technology, business innovation, and sales.",
   },
 ]
 
