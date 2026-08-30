@@ -90,13 +90,11 @@ export default function Footer() {
         <p className="font-body-md text-sm text-stone-500">
           © {new Date().getFullYear()} Kelston Way Greenhouse · Wholesale Grower · Waco Area, Texas
         </p>
-        {/* Titus 2026-08-29: the facility shots are Art's Paris, Kentucky greenhouse, so
-            the site says so once, here, rather than captioning every photo. Plant
-            photography is our own and needs no note. */}
-        <p className="mx-auto mt-4 max-w-2xl font-body-md text-xs leading-relaxed text-stone-500">
-          Facility photos are from Paris, Kentucky, the greenhouse Art built. This is not our
-          current Kelston Way facility in Oglesby. All plant photography shows product we grew
-          ourselves.
+        {/* Samuel 2026-08-29: the facility note is fine print. One line, in the footer,
+            nowhere else. */}
+        <p className="mt-3 font-body-md text-[10px] leading-relaxed text-stone-500">
+          Facility photos show the Paris, Kentucky greenhouse Art built, not our Waco area site.
+          Plant photos are our own.
         </p>
       </div>
     </footer>
