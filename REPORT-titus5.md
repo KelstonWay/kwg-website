@@ -122,3 +122,72 @@ All under `/home/samuel/kwg-website-titus5/.superpowers/shots/titus5/` (full pag
 
 The Availability shots show the empty state, which is deliberate. The Home shots have no
 "Available Now" strip for the same reason.
+
+## Pass four: Samuel's rulings
+
+Five commits. Samuel's rulings override Titus wherever they differ, so a few things this report
+flagged earlier as deliberately left alone were changed here.
+
+| Ruling | Change                                                                                                                                                                                                                                                                                                                                                                | File                                                        | Commit    |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | --------- |
+| 1      | Home hero eyebrow now reads "WHOLESALE GROWER · WACO AREA, TEXAS".                                                                                                                                                                                                                                                                                                    | `src/pages/Home.tsx`                                        | `5bda062` |
+| 1      | Meet the Team eyebrow now "Family-Owned Wholesale Grower · Waco Area, Texas", the h1 now "A family-owned wholesale greenhouse in the _Waco area, Texas._" with the italic emphasis on the place, the Find Us paragraph now "Kelston Way Greenhouse is based in the Waco area of Texas.", and its Location block now "Waco area / Texas, United States".               | `src/pages/MeetTheTeam.tsx`                                 | `5bda062` |
+| 1      | Contact page location line now "Waco area, Texas".                                                                                                                                                                                                                                                                                                                    | `src/pages/Contact.tsx`                                     | `5bda062` |
+| 1      | Footer blurb now "A family-owned wholesale grower in the Waco area, ...", the CONTACT column now one line, "Waco area, Texas", and the copyright line now "· Waco Area, Texas".                                                                                                                                                                                       | `src/components/Footer.tsx`                                 | `5bda062` |
+| 1      | Metadata: the description and og:description in `index.html`, the default description, and the availability, team and contact entries all say Waco area, and the buyer-type tail came off every meta description so each is one plain sentence. The team and contact titles read "Wholesale Grower, Waco Area, Texas".                                                | `index.html`, `src/components/RouteMeta.tsx`                | `9d13756` |
+| 2      | The facility note is now one line of fine print under the copyright: "Facility photos show the Paris, Kentucky greenhouse Art built, not our Waco area site. Plant photos are our own." It uses the smallest muted body type the site already ships, `font-body-md text-[10px] text-stone-500`, measured at 10px in the browser. It appears nowhere else on the site. | `src/components/Footer.tsx`                                 | `0f66848` |
+| 3      | Fundraisers is schools only. The Churches group and its three cards are gone, the heading is "Flower fundraisers for _schools_", the intro is "We grow the flowers, your school sells them, and we deliver to you.", and the three links dropped the group parameter. Route metadata follows. Nav and footer entries untouched.                                       | `src/pages/Fundraisers.tsx`, `src/components/RouteMeta.tsx` | `ea65541` |
+
+Commit `924ec2c` is prettier reflow only, no wording in it.
+
+### Meta descriptions as they now read
+
+- Default and `index.html`: "Kelston Way is a family-owned wholesale greenhouse in the Waco area, Texas, growing annuals, perennials, and seasonal color."
+- `index.html` og:description: "A family-owned wholesale grower in the Waco area, Texas, supplying annuals, perennials, and seasonal color."
+- Availability: "This week's wholesale availability from Kelston Way Greenhouse in the Waco area, Texas, with annuals, perennials, and seasonal color." The em dash that string carried is gone with it.
+- Meet the Team: "Meet the family behind Kelston Way Greenhouse, a family-owned wholesale greenhouse in the Waco area, Texas."
+- Contact: "Contact the Kelston Way Greenhouse team about wholesale availability, orders, standing orders, or growing programs."
+- Fundraisers: "Flower fundraisers for schools in the Waco area. We grow the flowers, your school sells them, and we deliver to you."
+
+### Fundraiser links, read back out of the live DOM
+
+```
+https://kwg-fundraiser.vercel.app/?season=spring
+https://kwg-fundraiser.vercel.app/?season=fall
+https://kwg-fundraiser.vercel.app/?season=winter
+```
+
+### Oglesby and Coryell
+
+`grep -rn "Oglesby\|Coryell\|OGLESBY\|CORYELL" src index.html api public` returns nothing. There is
+no true postal address anywhere in the site, so nothing had grounds to stay. Two code comments
+named the town, one in the footer and one over the home bento tile; both were reworded rather than
+left, since the pages they explain no longer name it. No page renders the word: the body text of
+Home, Fundraisers, Meet the Team and Contact was read back at 1440 and tested against
+`/Oglesby|Coryell/i`, and all four came back false.
+
+### Judgment calls
+
+- The single "Schools" group label above the cards came out with the grouping. With one audience it
+  only repeated the heading two lines above it. Say the word and it goes back.
+- The footer blurb keeps "to garden centers and landscapers". The ruling scoped that cut to the meta
+  strings, and the blurb is the wholesale positioning line, not a meta description.
+- Art's bio on Meet the Team still carries the one em dash flagged in pass three. Still not on any
+  list.
+
+### Checks
+
+| Check             | Command                                                                            | Result                                                                                                                                                                                                                                                                                                 |
+| ----------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Typecheck + build | `npm run build`                                                                    | Passed, built in 646ms. Only the pre-existing chunk-size advisory.                                                                                                                                                                                                                                     |
+| Lint              | `npm run lint`                                                                     | Passed. 0 errors, 6 warnings, all pre-existing `no-explicit-any` in `api/submit-order.ts`.                                                                                                                                                                                                             |
+| Format            | `npx prettier --check src api index.html`                                          | All matched files use Prettier style.                                                                                                                                                                                                                                                                  |
+| Browser           | Dev server on `http://localhost:5207`, Playwright Chromium at 1440x900 and 390x844 | Home, Fundraisers, Meet the Team and Contact all render. No console errors and no page errors at either width. Read back out of the live DOM: every Waco line above, the three fundraiser links, the four page titles and descriptions, and the computed font size and color of the footer fine print. |
+
+Screenshots retaken into `/home/samuel/kwg-website-titus5/.superpowers/shots/titus5/`: `home-1440.png`,
+`home-390.png`, `fundraisers-1440.png`, `fundraisers-390.png`, `team-1440.png`, `team-390.png`,
+`contact-1440.png`, `contact-390.png`. The availability shots are from pass three and still current;
+that page did not change.
+
+The dev server this pass started was stopped when it finished. Nothing was pushed and `main` was
+never touched.
