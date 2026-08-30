@@ -203,10 +203,6 @@ export default function Home() {
 
       {/* Bento */}
       <section className="bg-stone-50 px-5 py-14 md:px-32 md:py-20">
-        <div className="mx-auto mb-20 max-w-2xl text-center">
-          <h2 className="mb-6 font-['Newsreader'] text-headline-xl">Our Greenhouse</h2>
-          <div className="mx-auto h-[1px] w-12 bg-secondary" />
-        </div>
         <div className="grid h-auto grid-cols-1 grid-rows-2 gap-8 md:h-[800px] md:grid-cols-4">
           <div className="group relative overflow-hidden rounded-sm bg-stone-200 md:col-span-2 md:row-span-2">
             <img
@@ -241,7 +237,7 @@ export default function Home() {
             <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
             <div className="absolute bottom-6 left-6">
               <h3 className="font-['Newsreader'] text-2xl text-white drop-shadow-md">
-                Grown with Care
+                Quality, Every Tray
               </h3>
             </div>
           </div>
@@ -260,7 +256,7 @@ export default function Home() {
             <span className="material-symbols-outlined mb-3 text-3xl">handshake</span>
             <h3 className="mb-2 font-['Newsreader'] text-lg">Work With Us</h3>
             <p className="mb-4 font-body-md text-xs opacity-90">
-              Garden center or landscaper? Email us to get started.
+              Ready to work together? Email us to get started.
             </p>
             <a
               href="#inquire"
