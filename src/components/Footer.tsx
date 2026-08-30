@@ -42,8 +42,8 @@ export default function Footer() {
           <h4 className="mb-6 font-label-caps text-label-caps text-on-surface">COMPANY</h4>
           <ul className="space-y-4">
             <li>
-              {/* Under COMPANY, not WHOLESALE: a school or church raising money is not
-                  placing a wholesale order, and that column is the buyer's ordering lane. */}
+              {/* Under COMPANY, not WHOLESALE: a school raising money is not placing a
+                  wholesale order, and that column is the buyer's ordering lane. */}
               <Link
                 to="/fundraisers"
                 className="font-body-md text-base text-stone-600 opacity-80 transition-opacity hover:text-primary hover:opacity-100"
@@ -80,9 +80,7 @@ export default function Footer() {
               {CONTACT_PHONE}
             </a>
             <br />
-            <span className="mt-2 block">
-              Waco area, Texas
-            </span>
+            <span className="mt-2 block">Waco area, Texas</span>
           </p>
         </div>
       </div>
