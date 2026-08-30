@@ -76,7 +76,7 @@ export default function MeetTheTeam() {
               <em className="font-normal italic text-primary">Oglesby, Texas.</em>
             </h1>
             <p className="mb-10 max-w-lg font-body-lg text-body-lg font-light leading-relaxed text-secondary">
-              We grow annuals, perennials, and seasonal color for garden centers and landscapers.
+              Growing annuals, perennials, and seasonal color.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
@@ -110,7 +110,7 @@ export default function MeetTheTeam() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-12 border-b border-outline-variant/40 pb-3">
             <span className="font-label-caps text-[10px] font-medium uppercase tracking-[0.25em] text-on-surface-variant">
-              Family Owned. Built for the Long Term.
+              Family Owned and Operated.
             </span>
           </div>
           <h2 className="mb-6 font-['Newsreader'] text-3xl font-light leading-[1.15] text-on-surface md:text-[42px]">
@@ -223,7 +223,7 @@ export default function MeetTheTeam() {
           Contact Us
         </h2>
         <p className="mx-auto mb-10 max-w-xl font-body-lg font-light text-primary-fixed/80">
-          If you're a garden center or landscaper looking for a reliable grower, get in touch.
+          Looking for a reliable grower? Get in touch.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link
