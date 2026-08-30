@@ -8,6 +8,7 @@ import RouteMeta from './components/RouteMeta'
 import PreviewGate from './components/PreviewGate'
 import Home from './pages/Home'
 import Availability from './pages/Availability'
+import Fundraisers from './pages/Fundraisers'
 import Order from './pages/Order'
 import OrderConfirmed from './pages/OrderConfirmed'
 import OrderStatus from './pages/OrderStatus'
@@ -39,6 +40,7 @@ export default function App() {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/availability" element={<Availability />} />
+                  <Route path="/fundraisers" element={<Fundraisers />} />
                   <Route path="/order" element={<Order />} />
                   <Route path="/order/confirmed" element={<OrderConfirmed />} />
                   <Route path="/order/:id" element={<OrderStatus />} />

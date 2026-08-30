@@ -20,6 +20,11 @@ const EXACT: Record<string, { title: string; description: string }> = {
     description:
       "This week's wholesale availability from Kelston Way Greenhouse in Oglesby, Texas — annuals, perennials, and seasonal color for garden centers and landscapers.",
   },
+  '/fundraisers': {
+    title: 'Fundraisers | Kelston Way Greenhouse',
+    description:
+      'Flower fundraisers for schools and churches in the Waco area. We grow the flowers, your group sells them, and we deliver to you.',
+  },
   '/team': {
     title: 'Meet the Team — Kelston Way Greenhouse | Wholesale Grower, Oglesby, Texas',
     description:
