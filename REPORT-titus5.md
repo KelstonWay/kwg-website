@@ -1,11 +1,14 @@
-# Titus round 5 — copy pass
+# Titus round 5
 
 Branch `titus/round-5`, worktree `/home/samuel/kwg-website-titus5`. Nothing pushed, `main` untouched.
 
-Copy rule applied throughout: plain sentences, no em dashes and no spaced hyphens in any line I
-wrote or rewrote.
+Copy rule applied throughout: plain sentences, no em dashes, no spaced hyphens and no exclamation
+marks in any line I wrote or rewrote.
 
-## Items
+Round 5 came in two passes. The first was Titus's six copy items; the second was Samuel's two
+answers, his bio and the Fundraisers section. Both are on this branch.
+
+## Pass one: Titus's copy items
 
 | # | Change | File | Commit |
 |---|--------|------|--------|
@@ -21,6 +24,55 @@ wrote or rewrote.
 
 After the pass, "garden centers and landscapers" appears in visible copy in exactly two places:
 the Home hero body line and the footer blurb, as asked.
+
+
+## Pass two: Samuel's answers
+
+| Item | Change | File | Commit |
+|------|--------|------|--------|
+| A | Samuel's bio now reads: "Samuel grew up in the greenhouse industry and worked alongside Art and Titus, where he led live-goods replenishment for more than 100 big box retail stores. At Kelston Way, he leads operations and sales." The growing-site clause and Home Depot are gone. | `src/pages/MeetTheTeam.tsx` | `a2d88e6` |
+| B | Fundraisers section: new `/fundraisers` page, nav entry, footer link and route metadata. | `src/pages/Fundraisers.tsx`, `src/App.tsx`, `src/components/Nav.tsx`, `src/components/Footer.tsx`, `src/components/RouteMeta.tsx` | `5999692` |
+
+### One thing to confirm on the bio (A)
+
+The brief said the change drops two phrases and leaves everything else alone, but the sign-off
+text also changed the last sentence from "he leads technology, business innovation, and sales" to
+"he leads operations and sales". I applied the quoted text exactly, so Samuel's closing line now
+matches Titus's word for word: both partners read as leading operations and sales. If the old
+line was meant to stay, it is a one word fix in the `TEAM` array in `src/pages/MeetTheTeam.tsx`.
+
+### How the Fundraisers page is built (B)
+
+- Header: eyebrow "FUNDRAISERS · WACO AREA", heading "Flower fundraisers for *schools and
+  churches*" with the same italic primary emphasis the Home and Meet the Team headlines use, then
+  the single intro line "We grow the flowers, your group sells them, and we deliver to you."
+- Two groups, Schools then Churches, each under the same underlined label-caps eyebrow the Meet
+  the Team page uses for "Where We Grow". Three cards per group: Spring, Fall, Winter.
+- Cards carry the season name in Newsreader, one line of copy, and a "View fundraiser" button in
+  the primary green. Fall and Winter also carry a "Coming soon" chip in the same quiet
+  `secondary-fixed` pill the Home availability strip uses for prices. Their links stay live.
+- All six links open in the same tab and were read back out of the rendered DOM:
+
+  ```
+  https://kwg-fundraiser.vercel.app/?season=spring&for=school
+  https://kwg-fundraiser.vercel.app/?season=fall&for=school
+  https://kwg-fundraiser.vercel.app/?season=winter&for=school
+  https://kwg-fundraiser.vercel.app/?season=spring&for=church
+  https://kwg-fundraiser.vercel.app/?season=fall&for=church
+  https://kwg-fundraiser.vercel.app/?season=winter&for=church
+  ```
+
+- Nav reads Home · Availability · Fundraisers · Meet the Team · Contact · Account on desktop and
+  in the mobile menu, both off the one `NAV_LINKS` array.
+- The footer link went under COMPANY, not WHOLESALE. The WHOLESALE column is the buyer's ordering
+  lane, Current Availability and Place an Order, and a school or church raising money is not
+  placing a wholesale order. Easy to move if you disagree.
+- No new fonts, colors, images or components. Everything comes from the existing Tailwind tokens.
+- No CSP change needed: the site's policy restricts `connect-src`, which governs fetch and XHR,
+  not a plain link navigation to another origin.
+- `/fundraisers` also got a `RouteMeta` entry, otherwise it would wear the site-wide default
+  description. Title is "Fundraisers | Kelston Way Greenhouse", using the pipe already in that
+  file rather than the dash the older entries use.
 
 ## Left alone on purpose
 
@@ -43,12 +95,14 @@ the Home hero body line and the footer blurb, as asked.
 
 ## Checks
 
+Run after each pass. Results below are the final run, with both passes in the tree.
+
 | Check | Command | Result |
 |-------|---------|--------|
-| Typecheck + build | `npm run build` (`tsc -b && vite build`) | Passed. 407 modules, built in 866ms. Only the pre-existing "chunks larger than 500 kB" advisory. |
+| Typecheck + build | `npm run build` (`tsc -b && vite build`) | Passed. Built in 719ms. Only the pre-existing "chunks larger than 500 kB" advisory. |
 | Lint | `npm run lint` | Passed. 0 errors, 6 warnings, all pre-existing `no-explicit-any` in `api/submit-order.ts`, a file this round did not touch. |
-| Format | `npx prettier --check` on the four edited files | All match Prettier style. |
-| Browser | Dev server on `http://localhost:5199`, Playwright Chromium at 1440x900 and 390x844 | All four pages rendered. No page errors and no console errors on any of the eight loads. |
+| Format | `npx prettier --check src api index.html` | All matched files use Prettier style. |
+| Browser | Dev server on `http://localhost:5199`, Playwright Chromium at 1440x900 and 390x844 | Home, Availability, Meet the Team, Contact and Fundraisers all render. No page errors and no console errors on any load. The six fundraiser links, the nav order, the page title, the footer link and the new bio text were all read back out of the live DOM. |
 
 ## Screenshots
 
@@ -56,8 +110,9 @@ All under `/home/samuel/kwg-website-titus5/.superpowers/shots/titus5/` (full pag
 
 - `home-1440.png`, `home-390.png`
 - `availability-1440.png`, `availability-390.png`
-- `team-1440.png`, `team-390.png`
+- `team-1440.png`, `team-390.png` (retaken after the bio change)
 - `contact-1440.png`, `contact-390.png`
+- `fundraisers-1440.png`, `fundraisers-390.png`
 
 The Availability shots show the empty state, which is deliberate. The Home shots have no
 "Available Now" strip for the same reason.
