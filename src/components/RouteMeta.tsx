@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom'
 const DEFAULT_META = {
   title: 'Kelston Way Greenhouse — Wholesale Plant Grower in Central Texas',
   description:
-    'Kelston Way is a family-owned wholesale greenhouse in Oglesby, Texas, growing annuals, perennials, and seasonal color for garden centers and landscapers.',
+    'Kelston Way is a family-owned wholesale greenhouse in the Waco area, Texas, growing annuals, perennials, and seasonal color.',
 }
 
 // Exact paths first, then prefixes for the routes that carry an :id.
@@ -18,7 +18,7 @@ const EXACT: Record<string, { title: string; description: string }> = {
   '/availability': {
     title: 'Current Wholesale Availability — Kelston Way Greenhouse',
     description:
-      "This week's wholesale availability from Kelston Way Greenhouse in Oglesby, Texas — annuals, perennials, and seasonal color for garden centers and landscapers.",
+      "This week's wholesale availability from Kelston Way Greenhouse in the Waco area, Texas, with annuals, perennials, and seasonal color.",
   },
   '/fundraisers': {
     title: 'Fundraisers | Kelston Way Greenhouse',
@@ -26,14 +26,14 @@ const EXACT: Record<string, { title: string; description: string }> = {
       'Flower fundraisers for schools and churches in the Waco area. We grow the flowers, your group sells them, and we deliver to you.',
   },
   '/team': {
-    title: 'Meet the Team — Kelston Way Greenhouse | Wholesale Grower, Oglesby, Texas',
+    title: 'Meet the Team — Kelston Way Greenhouse | Wholesale Grower, Waco Area, Texas',
     description:
-      'A family-owned wholesale greenhouse in Oglesby, Texas. Meet the family behind Kelston Way and how we grow for garden centers and landscapers.',
+      'Meet the family behind Kelston Way Greenhouse, a family-owned wholesale greenhouse in the Waco area, Texas.',
   },
   '/contact': {
-    title: 'Contact — Kelston Way Greenhouse | Wholesale Grower, Oglesby, Texas',
+    title: 'Contact — Kelston Way Greenhouse | Wholesale Grower, Waco Area, Texas',
     description:
-      'Contact the Kelston Way Greenhouse team about wholesale availability, orders, standing orders, or growing programs for garden centers and landscapers.',
+      'Contact the Kelston Way Greenhouse team about wholesale availability, orders, standing orders, or growing programs.',
   },
   '/order': {
     title: 'Review Your Order — Kelston Way Greenhouse',
