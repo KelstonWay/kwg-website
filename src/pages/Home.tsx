@@ -88,11 +88,11 @@ export default function Home() {
             WHOLESALE GROWER · OGLESBY, TEXAS
           </span>
           <h1 className="mb-6 font-['Newsreader'] text-3xl text-on-surface md:mb-8 md:text-display-lg">
-            Grown for <span className="italic text-primary">garden centers</span> and landscapers.
+            A <span className="italic text-primary">family-owned</span> greenhouse, growing annuals,
+            perennials, and seasonal color.
           </h1>
           <p className="mb-8 max-w-lg font-body-lg text-body-lg text-sm leading-relaxed text-on-surface-variant md:mb-10 md:text-base">
-            A family-owned wholesale greenhouse in Oglesby, Texas, growing annuals, perennials, and
-            seasonal color.
+            Grown for garden centers and landscapers.
           </p>
           <div className="flex flex-wrap gap-3 md:gap-4">
             <Link
