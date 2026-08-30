@@ -1,10 +1,12 @@
+import { useState } from 'react'
+
 // The season cards hand off to the fundraiser pitch app rather than pitching here, so
 // this page stays a directory: pick a season and the app carries the story, the pricing
-// and the sign-up. Spring 2027 is the season actually running; fall and winter carry a
-// quiet "Coming soon" chip but keep a live link, because a chair planning next year
-// should still be able to read the pitch (Samuel, 2026-08-29). Schools only for now, so
-// the links no longer carry a group.
+// and the sign-up. Spring 2027 is the season actually running; fall and winter say
+// "Coming soon" and say it again when tapped, with no link out, until Samuel fills those
+// seasons in (Samuel, 2026-08-30). Schools only for now, so the links carry no group.
 const PITCH_APP = 'https://kwg-fundraiser.vercel.app/'
+const SOON_NOTE = 'We are filling this season in now. Check back soon.'
 
 const SEASONS = [
   { key: 'spring', name: 'Spring', line: 'Hanging baskets and spring annuals', soon: false },
@@ -17,6 +19,7 @@ function pitchUrl(season: string) {
 }
 
 export default function Fundraisers() {
+  const [tapped, setTapped] = useState<Record<string, boolean>>({})
   return (
     <div className="px-5 py-20 md:px-32">
       <div className="mx-auto max-w-7xl">
@@ -46,12 +49,34 @@ export default function Fundraisers() {
                 )}
               </div>
               <p className="mb-6 font-body-md text-sm text-on-surface-variant">{line}</p>
-              <a
-                href={pitchUrl(season)}
-                className="mt-auto rounded-sm bg-primary px-6 py-3 text-center font-button text-button text-on-primary transition-all duration-300 hover:bg-primary-container"
-              >
-                View fundraiser
-              </a>
+              {soon ? (
+                <div className="mt-auto flex flex-col gap-2">
+                  <button
+                    type="button"
+                    aria-describedby={tapped[season] ? `${season}-soon` : undefined}
+                    onClick={() => setTapped((t) => ({ ...t, [season]: true }))}
+                    className="rounded-sm border border-outline-variant bg-surface-container px-6 py-3 text-center font-button text-button text-on-surface-variant transition-all duration-300 hover:bg-surface-container-high"
+                  >
+                    Coming soon
+                  </button>
+                  {tapped[season] && (
+                    <p
+                      id={`${season}-soon`}
+                      role="status"
+                      className="font-body-md text-sm text-on-surface-variant"
+                    >
+                      {SOON_NOTE}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <a
+                  href={pitchUrl(season)}
+                  className="mt-auto rounded-sm bg-primary px-6 py-3 text-center font-button text-button text-on-primary transition-all duration-300 hover:bg-primary-container"
+                >
+                  View fundraiser
+                </a>
+              )}
             </div>
           ))}
         </div>
