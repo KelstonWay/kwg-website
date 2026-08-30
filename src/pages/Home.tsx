@@ -216,11 +216,11 @@ export default function Home() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
             <div className="absolute bottom-10 left-10 text-white">
-              {/* Not a place line: the photo behind this tile is the Paris, Kentucky
-                  greenhouse Art built, so naming our own site here contradicted the footer
-                  disclaimer (Codex review, 2026-08-29). */}
+              {/* Not a place or ownership line: the photo behind this tile is the Paris,
+                  Kentucky greenhouse Art built, so naming our own site here contradicted the
+                  footer disclaimer (Codex reviews, 2026-08-29 and 30). */}
               <span className="mb-2 block font-label-caps text-xs uppercase text-stone-200">
-                Our Greenhouse
+                Family Owned
               </span>
               <h3 className="mb-4 font-['Newsreader'] text-4xl">5 Acres of Growing Space</h3>
               <Link

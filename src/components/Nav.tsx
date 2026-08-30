@@ -31,7 +31,7 @@ export default function Nav() {
           <Link to="/">
             <img src="/logo-cropped.png" alt="Kelston Way" className="h-11 w-auto" />
           </Link>
-          <nav className="hidden gap-2 md:flex">
+          <nav className="hidden gap-2 lg:flex">
             {NAV_LINKS.map(({ to, label }) => {
               const active =
                 to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(to + '/')
@@ -84,7 +84,7 @@ export default function Nav() {
           </Link>
           {/* Hamburger — mobile only */}
           <button
-            className="rounded-full p-2 transition-colors hover:bg-surface-container md:hidden"
+            className="rounded-full p-2 transition-colors hover:bg-surface-container lg:hidden"
             onClick={() => setMenuOpen((o) => !o)}
             aria-label="Menu"
           >
@@ -97,7 +97,7 @@ export default function Nav() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 flex flex-col pt-16 md:hidden">
+        <div className="fixed inset-0 z-40 flex flex-col pt-16 lg:hidden">
           <div className="absolute inset-0 bg-black/40" onClick={() => setMenuOpen(false)} />
           <nav className="relative flex flex-col gap-2 border-b border-outline-variant/30 bg-white px-5 py-4 shadow-lg">
             {NAV_LINKS.map(({ to, label }) => {
