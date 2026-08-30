@@ -114,7 +114,7 @@ export default function Home() {
           <div className="relative h-[240px] overflow-hidden rounded-xl border border-outline-variant/20 bg-stone-200 shadow-sm md:hidden">
             <img
               src={HERO_IMG}
-              alt="Kelston Way greenhouse interior"
+              alt="Greenhouse interior at the Paris, Kentucky facility Art built"
               className="h-full w-full object-cover object-center"
               fetchPriority="high"
               loading="eager"
@@ -125,7 +125,7 @@ export default function Home() {
             <div className="shape-arch absolute right-0 top-0 h-[400px] w-3/4 overflow-hidden border border-outline-variant/20 bg-stone-200 shadow-sm">
               <img
                 src={HERO_IMG}
-                alt="Kelston Way greenhouse interior"
+                alt="Greenhouse interior at the Paris, Kentucky facility Art built"
                 className="h-full w-full object-cover object-bottom"
                 fetchPriority="high"
                 loading="eager"
@@ -203,18 +203,24 @@ export default function Home() {
 
       {/* Bento */}
       <section className="bg-stone-50 px-5 py-14 md:px-32 md:py-20">
+        {/* The visible heading came out in round 5, which left these tile h3s with no h2
+            above them whenever the availability strip is empty. */}
+        <h2 className="sr-only">What we offer</h2>
         <div className="grid h-auto grid-cols-1 grid-rows-2 gap-8 md:h-[800px] md:grid-cols-4">
           <div className="group relative overflow-hidden rounded-sm bg-stone-200 md:col-span-2 md:row-span-2">
             <img
               src={BENTO_IMG}
-              alt="Kelston Way greenhouse"
+              alt="Greenhouse at the Paris, Kentucky facility Art built"
               className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
             <div className="absolute bottom-10 left-10 text-white">
+              {/* Not a place line: the photo behind this tile is the Paris, Kentucky
+                  greenhouse Art built, so naming Oglesby here contradicted the footer
+                  disclaimer (Codex review, 2026-08-29). */}
               <span className="mb-2 block font-label-caps text-xs uppercase text-stone-200">
-                Oglesby, Texas
+                Our Greenhouse
               </span>
               <h3 className="mb-4 font-['Newsreader'] text-4xl">5 Acres of Growing Space</h3>
               <Link

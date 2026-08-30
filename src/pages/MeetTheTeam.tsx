@@ -41,7 +41,7 @@ const TEAM = [
     name: 'Samuel VanWingerden',
     role: 'Partner',
     linkedin: 'https://www.linkedin.com/in/samuel-vanwingerden-7ab56331b',
-    bio: 'Samuel grew up in the greenhouse industry and worked alongside Art and Titus, where he led live-goods replenishment for more than 100 big box retail stores. At Kelston Way, he leads operations and sales.',
+    bio: 'Samuel grew up in the greenhouse industry and worked alongside Art and Titus, where he led live-goods replenishment for more than 100 big box retail stores. At Kelston Way, he leads technology, business innovation, and sales.',
   },
 ]
 
