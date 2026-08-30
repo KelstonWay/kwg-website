@@ -179,8 +179,8 @@ export default function MeetTheTeam() {
                 <em className="font-normal italic text-primary">Heart of Texas.</em>
               </h2>
               <p className="mb-8 max-w-lg font-body-md text-sm font-light leading-relaxed text-secondary">
-                Kelston Way Greenhouse is based in the Waco area of Texas. For availability,
-                orders, or general questions, contact our team.
+                Kelston Way Greenhouse is based in the Waco area of Texas. For availability, orders,
+                or general questions, contact our team.
               </p>
               <div className="space-y-4 font-body-md text-sm font-light leading-loose text-secondary">
                 <div>
