@@ -13,7 +13,7 @@ export default function Footer() {
             Kelston Way
           </Link>
           <p className="max-w-xs font-body-md text-base leading-relaxed text-stone-600">
-            A family-owned wholesale grower in Oglesby, Texas, supplying annuals, perennials, and
+            A family-owned wholesale grower in the Waco area, supplying annuals, perennials, and
             seasonal color to garden centers and landscapers.
           </p>
         </div>
@@ -81,16 +81,14 @@ export default function Footer() {
             </a>
             <br />
             <span className="mt-2 block">
-              Oglesby, Coryell County
-              <br />
-              Texas
+              Waco area, Texas
             </span>
           </p>
         </div>
       </div>
       <div className="mt-20 border-t border-stone-200/50 pt-8 text-center">
         <p className="font-body-md text-sm text-stone-500">
-          © {new Date().getFullYear()} Kelston Way Greenhouse · Wholesale Grower · Oglesby, Texas
+          © {new Date().getFullYear()} Kelston Way Greenhouse · Wholesale Grower · Waco Area, Texas
         </p>
         {/* Titus 2026-08-29: the facility shots are Art's Paris, Kentucky greenhouse, so
             the site says so once, here, rather than captioning every photo. Plant

@@ -69,11 +69,11 @@ export default function MeetTheTeam() {
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-20">
           <div>
             <span className="mb-5 block font-label-caps text-label-caps text-primary">
-              Family-Owned Wholesale Grower · Oglesby, Texas
+              Family-Owned Wholesale Grower · Waco Area, Texas
             </span>
             <h1 className="mb-6 font-['Newsreader'] text-4xl font-light leading-[1.08] text-on-surface md:text-[58px]">
-              A family-owned wholesale greenhouse in{' '}
-              <em className="font-normal italic text-primary">Oglesby, Texas.</em>
+              A family-owned wholesale greenhouse in the{' '}
+              <em className="font-normal italic text-primary">Waco area, Texas.</em>
             </h1>
             <p className="mb-10 max-w-lg font-body-lg text-body-lg font-light leading-relaxed text-secondary">
               Growing annuals, perennials, and seasonal color.
@@ -179,14 +179,14 @@ export default function MeetTheTeam() {
                 <em className="font-normal italic text-primary">Heart of Texas.</em>
               </h2>
               <p className="mb-8 max-w-lg font-body-md text-sm font-light leading-relaxed text-secondary">
-                Kelston Way Greenhouse is based in Oglesby, Coryell County, Texas. For availability,
+                Kelston Way Greenhouse is based in the Waco area of Texas. For availability,
                 orders, or general questions, contact our team.
               </p>
               <div className="space-y-4 font-body-md text-sm font-light leading-loose text-secondary">
                 <div>
                   <p className="mb-0.5 text-sm font-medium text-on-surface">Location</p>
                   <p>
-                    Oglesby, Coryell County
+                    Waco area
                     <br />
                     Texas, United States
                   </p>
