@@ -80,13 +80,13 @@ export default function Footer() {
               {CONTACT_PHONE}
             </a>
             <br />
-            <span className="mt-2 block">Waco area, Texas</span>
+            <span className="mt-2 block">Waco, Texas area</span>
           </p>
         </div>
       </div>
       <div className="mt-20 border-t border-stone-200/50 pt-8 text-center">
         <p className="font-body-md text-sm text-stone-500">
-          © {new Date().getFullYear()} Kelston Way Greenhouse · Wholesale Grower · Waco Area, Texas
+          © {new Date().getFullYear()} Kelston Way Greenhouse · Wholesale Grower · Waco, Texas Area
         </p>
         {/* Samuel 2026-08-29: the facility note is fine print. One line, in the footer,
             nowhere else. */}

@@ -140,7 +140,7 @@ export default function Contact() {
               location_on
             </span>
             <p className="mb-1 font-label-caps text-label-caps text-on-surface-variant">LOCATION</p>
-            <p className="font-body-md text-on-surface">Waco area, Texas</p>
+            <p className="font-body-md text-on-surface">Waco, Texas area</p>
           </div>
         </div>
       </div>

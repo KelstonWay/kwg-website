@@ -85,7 +85,7 @@ export default function Home() {
       <section className="flex flex-col items-center gap-10 overflow-hidden px-5 py-12 md:grid md:grid-cols-12 md:gap-16 md:px-32 md:py-20">
         <div className="z-10 md:col-span-6">
           <span className="mb-4 block font-label-caps text-label-caps text-secondary">
-            WHOLESALE GROWER · WACO AREA, TEXAS
+            WHOLESALE GROWER · WACO, TEXAS AREA
           </span>
           <h1 className="mb-6 font-['Newsreader'] text-3xl text-on-surface md:mb-8 md:text-display-lg">
             A <span className="italic text-primary">family-owned</span> greenhouse, growing annuals,

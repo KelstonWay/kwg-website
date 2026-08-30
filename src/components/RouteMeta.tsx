@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom'
 const DEFAULT_META = {
   title: 'Kelston Way Greenhouse — Wholesale Plant Grower in Central Texas',
   description:
-    'Kelston Way is a family-owned wholesale greenhouse in the Waco area, Texas, growing annuals, perennials, and seasonal color.',
+    'Kelston Way is a family-owned wholesale greenhouse in the Waco, Texas area, growing annuals, perennials, and seasonal color.',
 }
 
 // Exact paths first, then prefixes for the routes that carry an :id.
@@ -18,7 +18,7 @@ const EXACT: Record<string, { title: string; description: string }> = {
   '/availability': {
     title: 'Current Wholesale Availability — Kelston Way Greenhouse',
     description:
-      "This week's wholesale availability from Kelston Way Greenhouse in the Waco area, Texas, with annuals, perennials, and seasonal color.",
+      "This week's wholesale availability from Kelston Way Greenhouse in the Waco, Texas area, with annuals, perennials, and seasonal color.",
   },
   '/fundraisers': {
     title: 'Fundraisers | Kelston Way Greenhouse',
@@ -26,12 +26,12 @@ const EXACT: Record<string, { title: string; description: string }> = {
       'Flower fundraisers for schools in the Waco area. We grow the flowers, your school sells them, and we deliver to you.',
   },
   '/team': {
-    title: 'Meet the Team — Kelston Way Greenhouse | Wholesale Grower, Waco Area, Texas',
+    title: 'Meet the Team — Kelston Way Greenhouse | Wholesale Grower, Waco, Texas Area',
     description:
-      'Meet the family behind Kelston Way Greenhouse, a family-owned wholesale greenhouse in the Waco area, Texas.',
+      'Meet the family behind Kelston Way Greenhouse, a family-owned wholesale greenhouse in the Waco, Texas area.',
   },
   '/contact': {
-    title: 'Contact — Kelston Way Greenhouse | Wholesale Grower, Waco Area, Texas',
+    title: 'Contact — Kelston Way Greenhouse | Wholesale Grower, Waco, Texas Area',
     description:
       'Contact the Kelston Way Greenhouse team about wholesale availability, orders, standing orders, or growing programs.',
   },

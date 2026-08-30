@@ -69,11 +69,11 @@ export default function MeetTheTeam() {
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-20">
           <div>
             <span className="mb-5 block font-label-caps text-label-caps text-primary">
-              Family-Owned Wholesale Grower · Waco Area, Texas
+              Family-Owned Wholesale Grower · Waco, Texas Area
             </span>
             <h1 className="mb-6 font-['Newsreader'] text-4xl font-light leading-[1.08] text-on-surface md:text-[58px]">
               A family-owned wholesale greenhouse in the{' '}
-              <em className="font-normal italic text-primary">Waco area, Texas.</em>
+              <em className="font-normal italic text-primary">Waco, Texas area.</em>
             </h1>
             <p className="mb-10 max-w-lg font-body-lg text-body-lg font-light leading-relaxed text-secondary">
               Growing annuals, perennials, and seasonal color.
