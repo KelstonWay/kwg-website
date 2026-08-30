@@ -30,16 +30,8 @@ the Home hero body line and the footer blurb, as asked.
 
 | Item | Change | File | Commit |
 |------|--------|------|--------|
-| A | Samuel's bio now reads: "Samuel grew up in the greenhouse industry and worked alongside Art and Titus, where he led live-goods replenishment for more than 100 big box retail stores. At Kelston Way, he leads operations and sales." The growing-site clause and Home Depot are gone. | `src/pages/MeetTheTeam.tsx` | `a2d88e6` |
+| A | Samuel's bio drops the growing-site clause and Home Depot, and keeps his closing line. It now reads: "Samuel grew up in the greenhouse industry and worked alongside Art and Titus, where he led live-goods replenishment for more than 100 big box retail stores. At Kelston Way, he leads technology, business innovation, and sales." | `src/pages/MeetTheTeam.tsx` | `a2d88e6`, corrected in `cb9cf58` |
 | B | Fundraisers section: new `/fundraisers` page, nav entry, footer link and route metadata. | `src/pages/Fundraisers.tsx`, `src/App.tsx`, `src/components/Nav.tsx`, `src/components/Footer.tsx`, `src/components/RouteMeta.tsx` | `5999692` |
-
-### One thing to confirm on the bio (A)
-
-The brief said the change drops two phrases and leaves everything else alone, but the sign-off
-text also changed the last sentence from "he leads technology, business innovation, and sales" to
-"he leads operations and sales". I applied the quoted text exactly, so Samuel's closing line now
-matches Titus's word for word: both partners read as leading operations and sales. If the old
-line was meant to stay, it is a one word fix in the `TEAM` array in `src/pages/MeetTheTeam.tsx`.
 
 ### How the Fundraisers page is built (B)
 
@@ -74,6 +66,22 @@ line was meant to stay, it is a one word fix in the `TEAM` array in `src/pages/M
   description. Title is "Fundraisers | Kelston Way Greenhouse", using the pipe already in that
   file rather than the dash the older entries use.
 
+
+## Pass three: Codex adversarial review
+
+Commit `cb9cf58`. All of it lands on the home page except the bio correction.
+
+| Finding | What changed |
+|---------|--------------|
+| HIGH, `Home.tsx:217`: the eyebrow read OGLESBY, TEXAS over the tile whose photo is the Paris, Kentucky greenhouse, contradicting the disclaimer added this round. | The eyebrow now reads OUR GREENHOUSE. The photo stays. |
+| MEDIUM, `Home.tsx:117`, `:128`, `:210`: three facility images claimed to be Kelston Way in their alt text. | Hero images now read "Greenhouse interior at the Paris, Kentucky facility Art built" and the tile image reads "Greenhouse at the Paris, Kentucky facility Art built". The plant photos, `hero2` and `bento2`, were left alone: the disclaimer says plant photography shows product we grew ourselves, so those alts are already true. |
+| MEDIUM, `Home.tsx:205`: the tile grid lost its visible h2 earlier this round, breaking the heading order. | Added an sr-only h2, "What we offer". This matters more than it looks: the visible "Available Now" h2 only renders when there is a published release, so with an empty availability strip the tile h3s were sitting straight under the h1. Heading order read back from the live page is now h1, h2 "What we offer", four h3s, h2 "Contact Us". |
+| Two LOW items asking for Titus's headline fragments to be turned into full sentences. | Titus's wording kept. |
+
+The bio correction in the same commit restores "he leads technology, business innovation, and sales",
+which pass two had dropped. The only cuts Samuel approved were the growing-site clause and Home
+Depot. Titus's line was not touched at any point.
+
 ## Left alone on purpose
 
 - Contact email, Samuel's bio, the Availability empty state and the copyright year: all pending
@@ -95,22 +103,22 @@ line was meant to stay, it is a one word fix in the `TEAM` array in `src/pages/M
 
 ## Checks
 
-Run after each pass. Results below are the final run, with both passes in the tree.
+Run after each pass. Results below are the final run, with all three passes in the tree.
 
 | Check | Command | Result |
 |-------|---------|--------|
 | Typecheck + build | `npm run build` (`tsc -b && vite build`) | Passed. Built in 719ms. Only the pre-existing "chunks larger than 500 kB" advisory. |
 | Lint | `npm run lint` | Passed. 0 errors, 6 warnings, all pre-existing `no-explicit-any` in `api/submit-order.ts`, a file this round did not touch. |
 | Format | `npx prettier --check src api index.html` | All matched files use Prettier style. |
-| Browser | Dev server on `http://localhost:5199`, Playwright Chromium at 1440x900 and 390x844 | Home, Availability, Meet the Team, Contact and Fundraisers all render. No page errors and no console errors on any load. The six fundraiser links, the nav order, the page title, the footer link and the new bio text were all read back out of the live DOM. |
+| Browser | Dev server on `http://localhost:5199`, Playwright Chromium at 1440x900 and 390x844 | Home, Availability, Meet the Team, Contact and Fundraisers all render. No page errors and no console errors on any load. Read back out of the live DOM: the six fundraiser links, the nav order, the page title, the footer link, the bio text, the home page heading order and every image alt on the home page. |
 
 ## Screenshots
 
 All under `/home/samuel/kwg-website-titus5/.superpowers/shots/titus5/` (full page, 2x scale):
 
-- `home-1440.png`, `home-390.png`
+- `home-1440.png`, `home-390.png` (retaken after the review fixes)
 - `availability-1440.png`, `availability-390.png`
-- `team-1440.png`, `team-390.png` (retaken after the bio change)
+- `team-1440.png`, `team-390.png` (retaken after the bio correction)
 - `contact-1440.png`, `contact-390.png`
 - `fundraisers-1440.png`, `fundraisers-390.png`
 
