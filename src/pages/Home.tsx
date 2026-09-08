@@ -9,6 +9,20 @@ const HERO_IMG2 = '/photos/hero2.webp'
 const BENTO_IMG = '/photos/bento1.webp'
 const BENTO_IMG2 = '/photos/bento2.webp'
 
+// Samuel 2026-09-08: the two facility photos on this page are the Paris, Kentucky
+// greenhouse Art built, not ours. The footer fine print alone was easy to miss, so the
+// photos themselves now say it (Titus, 2026-08-29 batch). Keep the wording in step with
+// the footer line in src/components/Footer.tsx.
+function FacilityPhotoNote({ className = 'bottom-3 right-3 max-w-[85%]' }: { className?: string }) {
+  return (
+    <p
+      className={`pointer-events-none absolute z-10 rounded-sm bg-black/70 px-2.5 py-1 text-right font-body-md text-[11px] leading-snug text-white backdrop-blur-sm ${className}`}
+    >
+      The Paris, Kentucky greenhouse Art built. Not our Waco area site.
+    </p>
+  )
+}
+
 export default function Home() {
   const [preview, setPreview] = useState<AvailabilityItem[]>([])
   const [email, setEmail] = useState('')
@@ -119,6 +133,7 @@ export default function Home() {
               fetchPriority="high"
               loading="eager"
             />
+            <FacilityPhotoNote />
           </div>
           {/* Desktop: overlapping arch + pill layout */}
           <div className="relative hidden h-[600px] md:block">
@@ -130,6 +145,8 @@ export default function Home() {
                 fetchPriority="high"
                 loading="eager"
               />
+              {/* The pill overlaps the bottom-left third of the arch, so the note stays narrow. */}
+              <FacilityPhotoNote className="bottom-3 right-3 max-w-[58%]" />
             </div>
             <div className="shape-pill absolute bottom-0 left-0 z-20 h-[300px] w-1/2 overflow-hidden border border-outline-variant/20 bg-stone-100 shadow-sm">
               <img
@@ -215,6 +232,7 @@ export default function Home() {
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            <FacilityPhotoNote className="right-3 top-3 max-w-[70%]" />
             <div className="absolute bottom-10 left-10 text-white">
               {/* Not a place or ownership line: the photo behind this tile is the Paris,
                   Kentucky greenhouse Art built, so naming our own site here contradicted the
