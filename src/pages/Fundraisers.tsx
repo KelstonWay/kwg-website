@@ -31,7 +31,7 @@ export default function Fundraisers() {
           Flower fundraisers for <em className="font-normal italic text-primary">schools</em>
         </h1>
         <p className="mb-16 max-w-2xl font-body-lg text-on-surface-variant">
-          We grow the flowers, your school sells them, and we deliver to you.
+          Fresh flowers, grown in the Waco area, delivered straight to your school.
         </p>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
