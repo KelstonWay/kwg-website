@@ -5,7 +5,7 @@ import { useState } from 'react'
 // and the sign-up. Spring 2027 is the season actually running; fall and winter say
 // "Coming soon" and say it again when tapped, with no link out, until Samuel fills those
 // seasons in (Samuel, 2026-08-30). Schools only for now, so the links carry no group.
-const PITCH_APP = 'https://kwg-fundraiser.vercel.app/'
+const PITCH_APP = 'https://fundraisers.kelstonway.com/'
 const SOON_NOTE = 'We are filling this season in now. Check back soon.'
 
 const SEASONS = [
