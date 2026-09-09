@@ -23,7 +23,7 @@ const EXACT: Record<string, { title: string; description: string }> = {
   '/fundraisers': {
     title: 'Fundraisers | Kelston Way Greenhouse',
     description:
-      'Flower fundraisers for schools. Fresh flowers, grown in the Waco area, delivered to your school.',
+      'Flower fundraisers for schools. Fresh flowers, grown in the Waco, Texas area, delivered to your school.',
   },
   '/team': {
     title: 'Meet the Team — Kelston Way Greenhouse | Wholesale Grower, Waco, Texas Area',
