@@ -110,7 +110,7 @@ export default function MeetTheTeam() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-12 border-b border-outline-variant/40 pb-3">
             <span className="font-label-caps text-[10px] font-medium uppercase tracking-[0.25em] text-on-surface-variant">
-              Family Owned and Operated.
+              Built for the Long Term.
             </span>
           </div>
           <h2 className="mb-6 font-['Newsreader'] text-3xl font-light leading-[1.15] text-on-surface md:text-[42px]">
@@ -118,9 +118,7 @@ export default function MeetTheTeam() {
           </h2>
           <p className="mb-14 max-w-3xl font-body-lg font-light leading-relaxed text-secondary">
             Kelston Way brings together decades of commercial greenhouse experience with hands-on
-            knowledge in production, operations, replenishment, technology, sales, and customer
-            relationships. As a family-owned company, we're building for the long term and staying
-            closely involved in the work behind it.
+            knowledge across production, technology, and sales.
           </p>
           {/* Rows, not a 3-up card grid: Art's bio runs several times longer than his sons',
               and equal-height cards left two of them mostly empty. */}

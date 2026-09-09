@@ -91,8 +91,8 @@ export default function Footer() {
         {/* Samuel 2026-08-29: the facility note is fine print. One line, in the footer,
             nowhere else. */}
         <p className="mt-3 font-body-md text-[10px] leading-relaxed text-stone-500">
-          Facility photos show the Paris, Kentucky greenhouse Art built, not our Waco area site.
-          Plant photos are our own.
+          Facility photos are from Paris, Kentucky, the greenhouse Art built, not our current
+          facility. All plant photography shows product we grew ourselves.
         </p>
       </div>
     </footer>

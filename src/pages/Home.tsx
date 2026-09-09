@@ -91,8 +91,10 @@ export default function Home() {
             A <span className="italic text-primary">family-owned</span> greenhouse, growing annuals,
             perennials, and seasonal color.
           </h1>
-          <p className="mb-8 max-w-lg font-body-lg text-body-lg text-sm leading-relaxed text-on-surface-variant md:mb-10 md:text-base">
-            Grown for garden centers and landscapers.
+          {/* Titus 2026-09-09: the subhead carries the headline's serif and italic accent so it
+              reads as part of it, not as body copy. Wording unchanged. */}
+          <p className="mb-8 max-w-lg font-['Newsreader'] text-xl leading-snug text-on-surface-variant md:mb-10 md:text-2xl">
+            Grown for <em className="italic text-primary">garden centers and landscapers.</em>
           </p>
           <div className="flex flex-wrap gap-3 md:gap-4">
             <Link
@@ -216,12 +218,9 @@ export default function Home() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
             <div className="absolute bottom-10 left-10 text-white">
-              {/* Not a place or ownership line: the photo behind this tile is the Paris,
-                  Kentucky greenhouse Art built, so naming our own site here contradicted the
-                  footer disclaimer (Codex reviews, 2026-08-29 and 30). */}
-              <span className="mb-2 block font-label-caps text-xs uppercase text-stone-200">
-                Family Owned
-              </span>
+              {/* No eyebrow here: a place line contradicted the footer disclaimer (the photo is
+                  the Paris, Kentucky greenhouse), and "Family Owned" was one of five on the site
+                  (Titus 2026-09-09). The other tiles carry none either. */}
               <h3 className="mb-4 font-['Newsreader'] text-4xl">5 Acres of Growing Space</h3>
               <Link
                 to="/team"
@@ -247,17 +246,23 @@ export default function Home() {
               </h3>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center rounded-sm bg-secondary-container p-6 text-center md:col-span-1 md:row-span-1">
-            <span className="material-symbols-outlined mb-3 text-3xl text-secondary">
+          {/* Titus 2026-09-09 saw this tile as an empty tan box in a recording. It renders in
+              every browser we can drive, so the fix is defensive: the darkest tokens on the tan
+              and a real link, so the tile is never tan-on-tan decoration. */}
+          <Link
+            to="/availability"
+            className="flex flex-col items-center justify-center rounded-sm bg-secondary-container p-6 text-center transition-colors duration-300 hover:bg-secondary-fixed-dim md:col-span-1 md:row-span-1"
+          >
+            <span className="material-symbols-outlined mb-3 text-3xl text-on-secondary-fixed">
               calendar_month
             </span>
-            <h3 className="mb-2 font-['Newsreader'] text-lg text-on-secondary-container">
+            <h3 className="mb-2 font-['Newsreader'] text-lg text-on-secondary-fixed">
               Weekly Availability
             </h3>
             <p className="mb-4 font-body-md text-xs text-on-secondary-fixed-variant">
               See what's available.
             </p>
-          </div>
+          </Link>
           <div className="flex flex-col items-center justify-center rounded-sm bg-primary p-6 text-center text-on-primary md:col-span-1 md:row-span-1">
             <span className="material-symbols-outlined mb-3 text-3xl">handshake</span>
             <h3 className="mb-2 font-['Newsreader'] text-lg">Work With Us</h3>
