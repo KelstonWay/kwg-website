@@ -87,15 +87,10 @@ export default function Home() {
           <span className="mb-4 block font-label-caps text-label-caps text-secondary">
             WHOLESALE GROWER · WACO, TEXAS AREA
           </span>
-          <h1 className="mb-6 font-['Newsreader'] text-3xl text-on-surface md:mb-8 md:text-display-lg">
+          <h1 className="mb-8 font-['Newsreader'] text-3xl text-on-surface md:mb-10 md:text-display-lg">
             A <span className="italic text-primary">family-owned</span> greenhouse, growing annuals,
             perennials, and seasonal color.
           </h1>
-          {/* Titus 2026-09-09: the subhead carries the headline's serif and italic accent so it
-              reads as part of it, not as body copy. Wording unchanged. */}
-          <p className="mb-8 max-w-lg font-['Newsreader'] text-xl leading-snug text-on-surface-variant md:mb-10 md:text-2xl">
-            Grown for <em className="italic text-primary">garden centers and landscapers.</em>
-          </p>
           <div className="flex flex-wrap gap-3 md:gap-4">
             <Link
               to="/availability"

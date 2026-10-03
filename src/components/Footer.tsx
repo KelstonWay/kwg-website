@@ -14,7 +14,7 @@ export default function Footer() {
           </Link>
           <p className="max-w-xs font-body-md text-base leading-relaxed text-stone-600">
             A family-owned wholesale grower in the Waco area, supplying annuals, perennials, and
-            seasonal color to garden centers and landscapers.
+            seasonal color.
           </p>
         </div>
         <div className="md:col-span-2">
