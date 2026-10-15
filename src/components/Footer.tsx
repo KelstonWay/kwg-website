@@ -16,6 +16,22 @@ export default function Footer() {
             A family-owned wholesale grower in the Waco area, supplying annuals, perennials, and
             seasonal color.
           </p>
+          {/* Titus 2026-10-15: GO TEXAN certified partner (TDA). Black mark on the light
+              footer; files from the TDA welcome email, mark guidelines in that email. */}
+          <a
+            href="https://gotexan.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-block opacity-90 transition-opacity hover:opacity-100"
+          >
+            <img
+              src="/go-texan-black.webp"
+              alt="GO TEXAN certified partner"
+              width={197}
+              height={256}
+              className="h-20 w-auto"
+            />
+          </a>
         </div>
         <div className="md:col-span-2">
           <h4 className="mb-6 font-label-caps text-label-caps text-on-surface">WHOLESALE</h4>
